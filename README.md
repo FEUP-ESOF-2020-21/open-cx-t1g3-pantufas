@@ -84,6 +84,14 @@ A user story is a description of desired functionality told from the perspective
 
 *As a < user role >, I want < goal > so that < reason >.*
 
+*As a customer, I want order food so that i can save time between/during conferences.
+    As a customer, I want to consult the products database so that i can choose my preferred products
+As a customer, I want to change my order.
+    As a customer, I want to consult the products database so that i can choose my preferred products
+As a customer, I want to cancel my order.
+
+As a customer, I want to choose my payment method
+
 
 **INVEST in good user stories**. 
 You may add more details after, but the shorter and complete, the better. In order to decide if the user story is good, please follow the [INVEST guidelines](https://xp123.com/articles/invest-in-good-stories-and-smart-tasks/).
