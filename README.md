@@ -1,4 +1,4 @@
-# openCX-*your module name* Development Report
+# openCX-DroneYourFood Development Report
 
 Welcome to the documentation pages of the *your (sub)product name* of **openCX**!
 
