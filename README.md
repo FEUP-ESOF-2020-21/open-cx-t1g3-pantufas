@@ -66,23 +66,24 @@ Briefly describe each use case mentioning the following:
 * **Alternative Flows and Exceptions**. Document other, legitimate usage scenarios that can take place within this use case, stating any differences in the sequence of steps that take place. In addition, describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions. 
 
 ### User stories
-This section will contain the requirements of the product described as **user stories**, organized in a global **[user story map](https://plan.io/blog/user-story-mapping/)** with **user roles** or **themes**.
 
-For each theme, or role, you may add a small description. User stories should be detailed in the tool you decided to use for project management (e.g. trello or github projects).
+Phase 1:
+  - As a customer, I want to consult the products available for sale. **Value = XL**. **Effort = M**.
+  ![interface mockup](mockups/interface_mockup.png)
+  - As a customer, I must login into my account to place orders.
+  - As a customer, I want to be able to order food/drinks from the available products.
 
-A user story is a description of desired functionality told from the perspective of the user or customer. A starting template for the description of a user story is 
+Phase 2:
+  - As a customer, I want to have food delivered to me so I don't have to get up
+  from my seat.
+  - As a customer, I want to have multiple payment methods available to me.
 
-*As a < user role >, I want < goal > so that < reason >.*
+Phase 3:
+  - As a customer, I want to be able to choose the delivery spot for my orders.
+  - As a customer, I want to be able to change my  order.
+  - As a customer, I want to be able to cancel my order.
 
-*As a customer, I want order food so that i can save time between/during conferences.
-    As a customer, I want to consult the products database so that i can choose my preferred products
-As a customer, I want to change my order.
-    As a customer, I want to consult the products database so that i can choose my preferred products
-As a customer, I want to cancel my order.
-
-As a customer, I want to choose my payment method
-
-
+// TODO
 **INVEST in good user stories**. 
 You may add more details after, but the shorter and complete, the better. In order to decide if the user story is good, please follow the [INVEST guidelines](https://xp123.com/articles/invest-in-good-stories-and-smart-tasks/).
 
