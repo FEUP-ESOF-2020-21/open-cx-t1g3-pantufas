@@ -67,21 +67,21 @@ Briefly describe each use case mentioning the following:
 
 ### User stories
 
-Phase 1:
-  - As a customer, I want to consult the products available for sale. **Value = XL**. **Effort = M**.
+**Phase 1**:
+  - _As a customer, I want to consult the products available for sale_. **Value = XL**. **Effort = M**.
   ![interface mockup](mockups/interface_mockup.png)
-  - As a customer, I must login into my account to place orders.
-  - As a customer, I want to be able to order food/drinks from the available products.
+  - _As a customer, I must login into my account to place orders_.
+  - _As a customer, I want to be able to order food/drinks from the available products_.
 
-Phase 2:
-  - As a customer, I want to have food delivered to me so I don't have to get up
-  from my seat.
-  - As a customer, I want to have multiple payment methods available to me.
+**Phase 2**:
+  - _As a customer, I want to have food delivered to me so I don't have to get up
+  from my seat_.
+  - _As a customer, I want to have multiple payment methods available to me_.
 
-Phase 3:
-  - As a customer, I want to be able to choose the delivery spot for my orders.
-  - As a customer, I want to be able to change my  order.
-  - As a customer, I want to be able to cancel my order.
+**Phase 3**:
+  - _As a customer, I want to be able to choose the delivery spot for my orders_.
+  - _As a customer, I want to be able to change my  order_.
+  - _As a customer, I want to be able to cancel my order_.
 
 // TODO
 **INVEST in good user stories**. 
