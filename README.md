@@ -67,20 +67,27 @@ Briefly describe each use case mentioning the following:
 
 ### User stories
 
-**Phase 1**:
+**Must have**:
   - _As a customer, I want to consult the products available for sale_. **Value = XL**. **Effort = M**.
+  ```gherkin
+  Feature: Consulting available products.
+  Given: I am a DroneYourFood user.
+  And: I am logged in.
+  When: I am on the products page.
+  Then: I see the available products.
+  ```
   ![interface mockup](mockups/interface_mockup.png)
-  - _As a customer, I must login into my account to place orders_.
+  - _As a customer, I must log in into my account to place orders_.
   - _As a customer, I want to be able to order food/drinks from the available products_.
 
-**Phase 2**:
-  - _As a customer, I want to have food delivered to me so I don't have to get up
+**Should have**:
+  - _As a customer, I want to have food delivered to me, so I don't have to get up
   from my seat_.
   - _As a customer, I want to have multiple payment methods available to me_.
 
-**Phase 3**:
+**Could have**:
   - _As a customer, I want to be able to choose the delivery spot for my orders_.
-  - _As a customer, I want to be able to change my  order_.
+  - _As a customer, I want to be able to change my order_.
   - _As a customer, I want to be able to cancel my order_.
 
 // TODO
