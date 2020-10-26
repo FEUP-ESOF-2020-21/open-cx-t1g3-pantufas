@@ -71,24 +71,72 @@ Briefly describe each use case mentioning the following:
   - _As a customer, I want to consult the products available for sale_. **Value = XL**. **Effort = M**.
   ```gherkin
   Feature: Consulting available products.
-  Given: I am a DroneYourFood user.
+  Given: I am a DroneYourFood user. 
   And: I am logged in.
   When: I am on the products page.
   Then: I see the available products.
   ```
   ![interface mockup](mockups/interface_mockup.png)
-  - _As a customer, I must log in into my account to place orders_.
-  - _As a customer, I want to be able to order food/drinks from the available products_.
+  - _As a customer, I must log in into my account to place orders_.  
+ ```gherkin
+  Feature: Login functionality.
+  Given: I have a registered account in DroneYourFood.
+  When: I enter username as username.
+  And: I enter the password as the password
+  Then: I should be redirected to the products page of DroneYourFood.
+  ```
+
+  - _As a customer, I want to be able to order food/drinks from the available products_. 
+ ```gherkin
+  Feature: Select orders.
+  Given: I am logged in.
+  When: I am on the products page.
+  Then: Selected products must be added to cart.
+  ```
 
 **Should have**:
   - _As a customer, I want to have food delivered to me, so I don't have to get up
   from my seat_.
+ ```gherkin
+  Feature: Deliver the order.
+  Given: The order has been placed.
+  When: The order is ready for delivery.
+  Then: The drone brings the food to the selected place.
+  ```
+  
   - _As a customer, I want to have multiple payment methods available to me_.
+ ```gherkin
+  Feature: Select payment method.
+  Given: I have specified my order details.
+  When: I am on the checkout page.
+  Then: I can select the payment method.
+  And: I can finish paying for my order.
+  ```
 
 **Could have**:
   - _As a customer, I want to be able to choose the delivery spot for my orders_.
+ ```gherkin
+  Feature: Select delivery place.
+  Given: I have finished selecting all the products I want to order.
+  When: I am on the checkout page.
+  Then: I register the order delivery spot.
+  ```
+  
   - _As a customer, I want to be able to change my order_.
+ ```gherkin
+  Feature: Change order.
+  Given: I have placed an order.
+  When: I am on the checkout page.
+  Then: I go back to the objects page.
+```
+
   - _As a customer, I want to be able to cancel my order_.
+ ```gherkin
+  Feature: Cancel order.
+  Given: I have placed an order.
+  When: I am on the checkout page.
+  Then: I cancel my order.
+```
 
 // TODO
 **INVEST in good user stories**. 
