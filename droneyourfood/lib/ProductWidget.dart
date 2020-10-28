@@ -29,20 +29,18 @@ class ProductListWidget extends StatelessWidget {
       builder: (context, productPromise) {
         if (productPromise.connectionState == ConnectionState.none &&
             productPromise.hasData == null) {
-          //print('project snapshot data is: ${projectSnap.data}');
           return Container();
         }
         return Column(
           children: <Widget>[
-            Expanded(child:
-            ListView.builder(
+            Expanded(
+                child: ListView.builder(
               itemCount: productPromise.data.length,
               itemBuilder: (context, index) {
                 Product product = productPromise.data[index];
-                return Text(product.name);
+                return ProductWidgetText(product);
               },
-            )
-            )
+            ))
           ],
         );
       },
@@ -52,11 +50,35 @@ class ProductListWidget extends StatelessWidget {
 }
 
 class ProductWidgetText extends StatelessWidget {
-    @override
-    Widget build(BuildContext context) {
-        return Container(
-            margin: new EdgeInsets.all(8.0),
-            child: new Text('nada')
-        );
-    }
+  final Product product;
+
+  ProductWidgetText(Product product) : product = product;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.all(Radius.circular(12.0))),
+        padding: new EdgeInsets.all(8.0),
+        margin: new EdgeInsets.all(8.0),
+        child: new Row(
+          children: <Widget>[
+            Expanded(
+                child: SizedBox(
+                    width: 80.0,
+                    height: 80.0,
+                    child: Image(
+                      image: AssetImage('resources/logo.png'),
+                      alignment: Alignment.centerLeft,
+                    ))),
+            Expanded(
+                child: Text(
+              this.product.name,
+              textAlign: TextAlign.right,
+              style: TextStyle(color: Colors.white, fontSize: 30),
+            ))
+          ],
+        ));
+  }
 }

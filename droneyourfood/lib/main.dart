@@ -7,23 +7,32 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
+  final swatch = const MaterialColor(0xFF202124, const <int, Color>{
+    50: const Color(0xFFCFD3D8),
+    100: const Color(0xFFCFD3D8),
+    200: const Color(0xFFABAFB1),
+    300: const Color(0xFF929597),
+    400: const Color(0xFF6D7172),
+    500: const Color(0xFF4E5254),
+    600: const Color(0xFF3c4042),
+    700: const Color(0xFF202124),
+    800: const Color(0xFF1D1D1D),
+    900: const Color(0xFF121212),
+  });
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Drone your food',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
+        primaryColor: swatch.shade800,
+        accentColor: swatch.shade800,
+        primarySwatch: swatch,
+        scaffoldBackgroundColor: swatch.shade900,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Drone your food'),
     );
   }
 }
@@ -47,7 +56,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -72,15 +80,15 @@ class _MyHomePageState extends State<MyHomePage> {
               'DroneYourFood',
             ),
             RaisedButton(
-              color: Colors.red,
-              child: Text('List Products'),
-              onPressed: () {
-                //Use`Navigator` widget to pop oir go back to previous route / screen
-                Navigator.of(context).push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+                color: Colors.red,
+                child: Text('List Products'),
+                onPressed: () {
+                  //Use`Navigator` widget to pop oir go back to previous route / screen
+                  Navigator.of(context).push(
+                      MaterialPageRoute<Null>(builder: (BuildContext context) {
                     return new ProductListScreen();
-                }));
-              }
-            ),
+                  }));
+                }),
           ],
         ),
       ),
