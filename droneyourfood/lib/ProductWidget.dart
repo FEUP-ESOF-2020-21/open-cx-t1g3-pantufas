@@ -35,7 +35,7 @@ class ProductListWidget extends StatelessWidget {
           children: <Widget>[
             Expanded(
                 child: ListView.builder(
-              itemCount: productPromise.data.length,
+              itemCount: productPromise.data == null ? 0 :productPromise.data.length,
               itemBuilder: (context, index) {
                 Product product = productPromise.data[index];
                 return ProductWidgetText(product);
