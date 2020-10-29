@@ -18,10 +18,13 @@ class ProductListScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 padding: new EdgeInsets.all(10.0),
                 child: Text(
-                  "Food list category",
+                  "Placeholder category",
                   textAlign: TextAlign.left,
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, color: textColor),
+                  style: TextStyle(
+                      height: 2,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: textColor),
                 )),
             Expanded(child: ProductListWidget())
           ],
