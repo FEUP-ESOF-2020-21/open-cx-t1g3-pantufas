@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
   final swatch = const MaterialColor(0xFF202124, const <int, Color>{
-    50: const Color(0xFFCFD3D8),
+    50: const Color(0xFF32674C),
     100: const Color(0xFFCFD3D8),
     200: const Color(0xFFABAFB1),
     300: const Color(0xFF929597),
@@ -30,6 +30,13 @@ class MyApp extends StatelessWidget {
         primaryColor: swatch.shade800,
         accentColor: swatch.shade800,
         primarySwatch: swatch,
+        colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: swatch,
+            primaryColorDark: swatch.shade800,
+            accentColor: swatch.shade50,
+            cardColor: swatch.shade500,
+            backgroundColor: swatch.shade800,
+            brightness: Brightness.dark),
         scaffoldBackgroundColor: swatch.shade900,
       ),
       home: MyHomePage(title: 'Drone your food'),
@@ -68,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Center(child: Text(widget.title, textAlign: TextAlign.center)),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it

@@ -76,7 +76,7 @@ class ProductWidgetText extends StatelessWidget {
                 child: Text(
               this.product.name,
               textAlign: TextAlign.right,
-              style: TextStyle(color: Colors.white, fontSize: 30),
+              style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 30),
             ))
           ],
         ));
