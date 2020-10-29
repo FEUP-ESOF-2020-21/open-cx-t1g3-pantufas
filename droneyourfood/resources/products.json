@@ -1,148 +1,156 @@
 {
-    "products": [
-        {
-            "id": 1,
-            "name": "Cola",
-            "price": 1.2,
-            "image": "cola.png",
-            "category": [
-                "drinks"
-            ]
-        },
-        {
-            "id": 2,
-            "name": "Iced Tea",
-            "price": 1.3,
-            "image": "icedtea.png",
-            "category": [
-                "drinks"
-            ]
-        },
-        {
-            "id": 3,
-            "name": "Beer",
-            "price": 1.5,
-            "image": "beer.png",
-            "category": [
-                "drinks"
-            ]
-        },
-        {
-            "id": 4,
-            "name": "Water",
-            "price": 0.9,
-            "image": "water.png",
-            "category": [
-                "drinks"
-            ]
-        },
-        {
-            "id": 5,
-            "name": "Hot-dog",
-            "price": 3.5,
-            "image": "hotdog.png",
-            "category": [
-                "Snacks"
-            ]
-        },
-        {
-            "id": 6,
-            "name": "Hamburger",
-            "price": 4.5,
-            "image": "hamburger.png",
-            "category": [
-                "Snacks"
-            ]
-        },
-        {
-            "id": 7,
-            "name": "Kebab",
-            "price": 5,
-            "image": "kebab.png",
-            "category": [
-                "Snacks"
-            ]
-        },
-        {
-            "id": 8,
-            "name": "Hot-dog",
-            "price": 3.5,
-            "image": "hotdog.png",
-            "category": [
-                "Sandwiches"
-            ]
-        },
-        {
-            "id": 9,
-            "name": "Fries",
-            "price": 1.5,
-            "image": "fries.png",
-            "category": [
-                "Snacks"
-            ]
-        },
-        {
-            "id": 10,
-            "name": "Chocolate Cake",
-            "price": 1.4,
-            "image": "chocolate_cake.png",
-            "category": [
-                "Pastries"
-            ]
-        },
-        {
-            "id": 11,
-            "name": "Tuna Sandwich",
-            "price": 3.9,
-            "image": "tuna_sandwich.png",
-            "category": [
-                "Sandwiches"
-            ]
-        },
-        {
-            "id": 12,
-            "name": "Chicken Sandwich",
-            "price": 3.5,
-            "image": "chicken_sandwich.png",
-            "category": [
-                "Sandwiches"
-            ]
-        },
-        {
-            "id": 13,
-            "name": "Apple pie",
-            "price": 1,
-            "image": "apple_pie.png",
-            "category": [
-                "Pastries"
-            ]
-        },
-        {
-            "id": 14,
-            "name": "Croissant",
-            "price": 1.1,
-            "image": "croissant.png",
-            "category": [
-                "Pastries"
-            ]
-        },
-        {
-            "id": 15,
-            "name": "Éclair",
-            "price": 0.9,
-            "image": "eclair.png",
-            "category": [
-                "Pastries"
-            ]
-        },
-        {
-            "id": 16,
-            "name": "Scones",
-            "price": 0.9,
-            "image": "scones.png",
-            "category": [
-                "Pastries"
-            ]
-        }
-    ]
+  "products": [
+    {
+      "id": 1,
+      "name": "Cola",
+      "price": 1.2,
+      "image": "cola.png",
+      "category": [
+        "drinks"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Iced Tea",
+      "price": 1.3,
+      "image": "icedtea.png",
+      "category": [
+        "drinks"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Beer",
+      "price": 1.5,
+      "image": "beer.png",
+      "category": [
+        "drinks"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Water",
+      "price": 0.9,
+      "image": "water.png",
+      "category": [
+        "drinks"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Hot-dog",
+      "price": 3.5,
+      "image": "hotdog.png",
+      "category": [
+        "Snacks"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Hamburger",
+      "price": 4.5,
+      "image": "hamburger.png",
+      "category": [
+        "Snacks"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Kebab",
+      "price": 5,
+      "image": "kebab.png",
+      "category": [
+        "Snacks"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Hot-dog",
+      "price": 3.5,
+      "image": "hotdog.png",
+      "category": [
+        "Sandwiches"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Fries",
+      "price": 1.5,
+      "image": "fries.png",
+      "category": [
+        "Snacks"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Chocolate Cake",
+      "price": 1.4,
+      "image": "chocolate_cake.png",
+      "category": [
+        "Pastries"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Tuna Sandwich",
+      "price": 3.9,
+      "image": "tuna_sandwich.png",
+      "category": [
+        "Sandwiches"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Chicken Sandwich",
+      "price": 3.5,
+      "image": "chicken_sandwich.png",
+      "category": [
+        "Sandwiches"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Apple pie",
+      "price": 1,
+      "image": "apple_pie.png",
+      "category": [
+        "Pastries"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Croissant",
+      "price": 1.1,
+      "image": "croissant.png",
+      "category": [
+        "Pastries"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Éclair",
+      "price": 0.9,
+      "image": "eclair.png",
+      "category": [
+        "Pastries"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Scones",
+      "price": 0.9,
+      "image": "scones.png",
+      "category": [
+        "Pastries"
+      ]
+    }
+  ],
+  "categories": [
+    "Drinks",
+    "Cakes",
+    "Pastries",
+    "Snacks",
+    "Sandwiches"
+  ]
 }
+

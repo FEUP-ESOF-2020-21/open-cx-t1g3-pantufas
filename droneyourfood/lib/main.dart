@@ -1,3 +1,4 @@
+import 'package:droneyourfood/CategoryListScreen.dart';
 import 'package:flutter/material.dart';
 import 'listProduct.dart';
 
@@ -96,6 +97,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     return new ProductListScreen();
                   }));
                 }),
+            RaisedButton(
+                color: Colors.orange,
+                child: Text('List Categories'),
+                onPressed: () {
+                  //Use`Navigator` widget to pop oir go back to previous route / screen
+                  Navigator.of(context).push(
+                      MaterialPageRoute<Null>(builder: (BuildContext context) {
+                        return new CategoryListScreen();
+                      }));
+                })
           ],
         ),
       ),
