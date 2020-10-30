@@ -3,12 +3,6 @@ class Product {
   String name, image = "images/404.png";
   List<String> categories;
 
-  //Product(String name, int id, String image, String category) {
-  //this.name = name;
-  //this.id = id;
-  //this.image = image;
-  //this.category = category;
-  //}
   Product({this.id, this.name, this.image, this.categories});
 
   void addCategory(String category) {
