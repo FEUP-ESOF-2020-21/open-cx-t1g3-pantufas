@@ -5,6 +5,10 @@ import 'Product.dart';
 import 'dart:convert';
 
 class ProductListWidget extends StatelessWidget {
+  final String category;
+
+  ProductListWidget(String category) : this.category = category;
+
   Future<String> loadFile(String fileName) async {
     return await rootBundle.loadString(fileName);
   }
@@ -16,10 +20,21 @@ class ProductListWidget extends StatelessWidget {
 
     if (json != null) {
       dynamic productJson = json['products'];
-      productJson.forEach((element) {
-        list.add(Product.fromJson(element));
-      });
+
+      if (this.category == "All") {
+        productJson.forEach((element) {
+          list.add(Product.fromJson(element));
+        });
+      } else {
+        productJson.forEach((element) {
+          Product aux = Product.fromJson(element);
+          if (aux.categories.contains(this.category)) {
+            list.add(aux);
+          }
+        });
+      }
     }
+
     return list;
   }
 

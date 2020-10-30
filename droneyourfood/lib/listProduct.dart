@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'ProductWidget.dart';
 
 class ProductListScreen extends StatelessWidget {
+  final String category;
+
+  ProductListScreen(String category) : this.category = category;
+
   @override
   Widget build(BuildContext context) {
     final textColor = Color(0xFFCFD3D8);
@@ -18,7 +22,7 @@ class ProductListScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 padding: new EdgeInsets.all(10.0),
                 child: Text(
-                  "Placeholder category",
+                  this.category,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       height: 2,
@@ -26,7 +30,7 @@ class ProductListScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: textColor),
                 )),
-            Expanded(child: ProductListWidget())
+            Expanded(child: ProductListWidget(this.category))
           ],
         ));
   }

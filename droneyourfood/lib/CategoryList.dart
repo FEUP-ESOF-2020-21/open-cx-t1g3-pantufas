@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
+import 'listProduct.dart';
+
 class CategoryListWidget extends StatelessWidget {
   Future<String> loadFile(String fileName) async {
     return await rootBundle.loadString(fileName);
@@ -41,7 +43,7 @@ class CategoryListWidget extends StatelessWidget {
                     : categoryPromise.data.length,
                 itemBuilder: (context, index) {
                   String c = categoryPromise.data[index];
-                  return Text(c);
+                  return CategoryListItem(c);
                 },
               ))
             ],
@@ -50,36 +52,35 @@ class CategoryListWidget extends StatelessWidget {
   }
 }
 
-// class ProductWidgetText extends StatelessWidget {
-//   final Product product;
-//
-//   ProductWidgetText(Product product) : product = product;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//         decoration: BoxDecoration(
-//             color: Theme.of(context).primaryColor,
-//             borderRadius: BorderRadius.all(Radius.circular(12.0))),
-//         padding: new EdgeInsets.all(8.0),
-//         margin: new EdgeInsets.all(8.0),
-//         child: new Row(
-//           children: <Widget>[
-//             Expanded(
-//                 child: SizedBox(
-//                     width: 80.0,
-//                     height: 80.0,
-//                     child: Image(
-//                       image: AssetImage('resources/logo.png'),
-//                       alignment: Alignment.centerLeft,
-//                     ))),
-//             Expanded(
-//                 child: Text(
-//               this.product.name,
-//               textAlign: TextAlign.right,
-//               style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 30),
-//             ))
-//           ],
-//         ));
-//   }
-// }
+class CategoryListItem extends StatelessWidget {
+  final String category;
+
+  CategoryListItem(String category) : this.category = category;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+            return new ProductListScreen(this.category);
+          }));
+        },
+        child: Container(
+            decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.all(Radius.circular(12.0))),
+            padding: new EdgeInsets.all(8.0),
+            margin: new EdgeInsets.all(8.0),
+            child: new Row(
+              children: <Widget>[
+                Expanded(
+                    child: Text(
+                  this.category,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 30),
+                ))
+              ],
+            )));
+  }
+}
