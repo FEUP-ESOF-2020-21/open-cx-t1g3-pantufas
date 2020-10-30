@@ -26,7 +26,11 @@ Please contact us!
 
 Thank you!
 
-*team members names*
+Made By: 
+- Ana Barros
+- João Martims
+- João Costa
+- Ricardo Fontão 
 
 ---
 
@@ -50,13 +54,10 @@ In this section, you should describe all kinds of requirements for your module: 
 
 Start by contextualizing your module, describing the main concepts, terms, roles, scope and boundaries of the application domain addressed by the project.
 
-### Use case diagram 
+### Use case diagram
 
-Create a use-case diagram in UML with all high-level use cases possibly addressed by your module.
+ ![interface mockup](images/use_case_diagram.png)
 
-Give each use case a concise, results-oriented name. Use cases should reflect the tasks the user needs to be able to accomplish using the system. Include an action verb and a noun. 
-
-Briefly describe each use case mentioning the following:
 
 * **Actor**. Name only the actor that will be initiating this use case, i.e. a person or other entity external to the software system being specified who interacts with the system and performs use cases to accomplish tasks. 
 * **Description**. Provide a brief description of the reason for and outcome of this use case, or a high-level description of the sequence of actions and the outcome of executing the use case. 
@@ -215,17 +216,7 @@ For the purpose of ESOF, we will use a very simple approach, just to manage feat
 
 ## Project management
 
-Software project management is an art and science of planning and leading software projects, in which software projects are planned, implemented, monitored and controlled.
-
-In the context of ESOF, we expect that each team adopts a project management tool capable of registering tasks, assign tasks to people, add estimations to tasks, monitor tasks progress, and therefore being able to track their projects.
-
-Example of tools to do this are:
-  * [Trello.com](https://trello.com)
-  * [Github Projects](https://github.com/features/project-management/com)
-  * [Pivotal Tracker](https://www.pivotaltracker.com)
-  * [Jira](https://www.atlassian.com/software/jira)
-
-We recommend to use the simplest tool that can possibly work for the team.
+We are using *Github Projects* to manage our tasks. Use this [link](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/projects/1) to check what we are up to.
 
 
 ---
