@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "748596599791",
+    "firebase_url": "https://drone-your-food.firebaseio.com",
+    "project_id": "drone-your-food",
+    "storage_bucket": "drone-your-food.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748596599791:android:5feabb28512db89347b41a",
+        "android_client_info": {
+          "package_name": "com.example.droneyourfood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "748596599791-b832ogrun5gqmgs9htd95jf7sagondk4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAZDDQQ1tbHG1Zwl6uoRmgl5EfycqgrbY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "748596599791-b832ogrun5gqmgs9htd95jf7sagondk4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
