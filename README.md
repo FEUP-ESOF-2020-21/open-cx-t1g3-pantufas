@@ -1,44 +1,48 @@
 # openCX-DroneYourFood Development Report
 
-Welcome to the documentation pages of the *your (sub)product name* of **openCX**!
+Welcome to the documentation pages of the _your (sub)product name_ of **openCX**!
 
-You can find here detailed about the (sub)product, hereby mentioned as module, from a high-level vision to low-level implementation decisions, a kind of Software Development Report (see [template](https://github.com/softeng-feup/open-cx/blob/master/docs/templates/Development-Report.md)), organized by discipline (as of RUP): 
+You can find here detailed about the (sub)product, hereby mentioned as module, from a high-level vision to low-level implementation decisions, a kind of Software Development Report (see [template](https://github.com/softeng-feup/open-cx/blob/master/docs/templates/Development-Report.md)), organized by discipline (as of RUP):
 
-* Business modeling 
-  * [Product Vision](#Product-Vision)
-  * [Elevator Pitch](#Elevator-Pitch)
-* Requirements
-  * [Use Case Diagram](#Use-case-diagram)
-  * [User stories](#User-stories)
-  * [Domain model](#Domain-model)
-* Architecture and Design
-  * [Logical architecture](#Logical-architecture)
-  * [Physical architecture](#Physical-architecture)
-  * [Prototype](#Prototype)
-* [Implementation](#Implementation)
-* [Test](#Test)
-* [Configuration and change management](#Configuration-and-change-management)
-* [Project management](#Project-management)
+- Business modeling
+  - [Product Vision](#Product-Vision)
+  - [Elevator Pitch](#Elevator-Pitch)
+- Requirements
+  - [Use Case Diagram](#Use-case-diagram)
+  - [User stories](#User-stories)
+  - [Domain model](#Domain-model)
+- Architecture and Design
+  - [Logical architecture](#Logical-architecture)
+  - [Physical architecture](#Physical-architecture)
+  - [Prototype](#Prototype)
+- [Implementation](#Implementation)
+- [Test](#Test)
+- [Configuration and change management](#Configuration-and-change-management)
+- [Project management](#Project-management)
 
-So far, contributions are exclusively made by the initial team, but we hope to open them to the community, in all areas and topics: requirements, technologies, development, experimentation, testing, etc.
+So far, contributions are exclusively made by the initial team, but we hope to
+open them to the community, in all areas and topics: requirements, technologies,
+development, experimentation, testing, etc.
 
-Please contact us! 
+Please contact us!
 
 Thank you!
 
-Made By: 
+Made By:
+
 - Ana Barros
 - João Martims
 - João Costa
-- Ricardo Fontão 
+- Ricardo Fontão
 
 ---
 
 ## Product Vision
 
-Deliver food quickly and  seamlessly to conference participants.
+Deliver food quickly and seamlessly to conference participants.
 
 ---
+
 ## Elevator Pitch
 
 Conference participants waste a lot of time in lines and changing seats when getting
@@ -48,6 +52,7 @@ and changing seats. What makes our approach unique is the use of new drone techn
 to bypass any obstacle and make deliveries as fast as possible.
 
 ---
+
 ## Requirements
 
 In this section, you should describe all kinds of requirements for your module: functional and non-functional requirements.
@@ -56,171 +61,98 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 ### Use case diagram
 
- ![interface mockup](images/use_case_diagram.png)
-
-
-* **Actor**. Name only the actor that will be initiating this use case, i.e. a person or other entity external to the software system being specified who interacts with the system and performs use cases to accomplish tasks. 
-* **Description**. Provide a brief description of the reason for and outcome of this use case, or a high-level description of the sequence of actions and the outcome of executing the use case. 
-* **Preconditions and Postconditions**. Include any activities that must take place, or any conditions that must be true, before the use case can be started (preconditions). Describe also the state of the system at the conclusion of the use case execution (postconditions). 
-
-* **Normal Flow**. Provide a detailed description of the user actions and system responses that will take place during execution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. This is best done as a numbered list of actions performed by the actor, alternating with responses provided by the system. 
-* **Alternative Flows and Exceptions**. Document other, legitimate usage scenarios that can take place within this use case, stating any differences in the sequence of steps that take place. In addition, describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions. 
+![interface mockup](images/use_case_diagram.png)
 
 ### User stories
 
 **Must have**:
-  - _As a customer, I want to consult the products available for sale_. **Value = XL**. **Effort = M**.
-  ```gherkin
-  Feature: Consulting available products.
-  Given: I am a DroneYourFood user. 
-  And: I am logged in.
-  When: I am on the products page.
-  Then: I see the available products.
-  ```
-  ![interface mockup](mockups/interface_mockup.png)
-  - _As a customer, I must log in into my account to place orders_.  
- ```gherkin
-  Feature: Login functionality.
-  Given: I have a registered account in DroneYourFood.
-  When: I enter username as username.
-  And: I enter the password as the password
-  Then: I should be redirected to the products page of DroneYourFood.
-  ```
 
-  - _As a customer, I want to be able to order food/drinks from the available products_. 
- ```gherkin
-  Feature: Select orders.
-  Given: I am logged in.
-  When: I am on the products page.
-  Then: Selected products must be added to cart.
-  ```
+- _As a customer, I want to consult the products available for sale_. **Value = XL**. **Effort = M**.
+
+```gherkin
+Feature: Consulting available products.
+Given: I am a DroneYourFood user.
+And: I am logged in.
+When: I am on the products page.
+Then: I see the available products.
+```
+
+![interface mockup](mockups/interface_mockup.png)
+
+- _As a customer, I must log in into my account to place orders_.
+
+```gherkin
+ Feature: Login functionality.
+ Given: I have a registered account in DroneYourFood.
+ When: I enter username as username.
+ And: I enter the password as the password
+ Then: I should be redirected to the products page of DroneYourFood.
+```
+
+- _As a customer, I want to be able to order food/drinks from the available products_.
+
+```gherkin
+ Feature: Select orders.
+ Given: I am logged in.
+ When: I am on the products page.
+ Then: Selected products must be added to cart.
+```
 
 **Should have**:
-  - _As a customer, I want to have food delivered to me, so I don't have to get up
+
+- _As a customer, I want to have food delivered to me, so I don't have to get up
   from my seat_.
- ```gherkin
-  Feature: Deliver the order.
-  Given: The order has been placed.
-  When: The order is ready for delivery.
-  Then: The drone brings the food to the selected place.
-  ```
-  
-  - _As a customer, I want to have multiple payment methods available to me_.
- ```gherkin
-  Feature: Select payment method.
-  Given: I have specified my order details.
-  When: I am on the checkout page.
-  Then: I can select the payment method.
-  And: I can finish paying for my order.
-  ```
+
+```gherkin
+ Feature: Deliver the order.
+ Given: The order has been placed.
+ When: The order is ready for delivery.
+ Then: The drone brings the food to the selected place.
+```
+
+- _As a customer, I want to have multiple payment methods available to me_.
+
+```gherkin
+ Feature: Select payment method.
+ Given: I have specified my order details.
+ When: I am on the checkout page.
+ Then: I can select the payment method.
+ And: I can finish paying for my order.
+```
 
 **Could have**:
-  - _As a customer, I want to be able to choose the delivery spot for my orders_.
- ```gherkin
-  Feature: Select delivery place.
-  Given: I have finished selecting all the products I want to order.
-  When: I am on the checkout page.
-  Then: I register the order delivery spot.
-  ```
-  
-  - _As a customer, I want to be able to change my order_.
- ```gherkin
-  Feature: Change order.
-  Given: I have placed an order.
-  When: I am on the checkout page.
-  Then: I go back to the objects page.
+
+- _As a customer, I want to be able to choose the delivery spot for my orders_.
+
+```gherkin
+ Feature: Select delivery place.
+ Given: I have finished selecting all the products I want to order.
+ When: I am on the checkout page.
+ Then: I register the order delivery spot.
 ```
 
-  - _As a customer, I want to be able to cancel my order_.
- ```gherkin
-  Feature: Cancel order.
-  Given: I have placed an order.
-  When: I am on the checkout page.
-  Then: I cancel my order.
+- _As a customer, I want to be able to change my order_.
+
+```gherkin
+ Feature: Change order.
+ Given: I have placed an order.
+ When: I am on the checkout page.
+ Then: I go back to the objects page.
 ```
 
-// TODO
-**INVEST in good user stories**. 
-You may add more details after, but the shorter and complete, the better. In order to decide if the user story is good, please follow the [INVEST guidelines](https://xp123.com/articles/invest-in-good-stories-and-smart-tasks/).
+- _As a customer, I want to be able to cancel my order_.
 
-**User interface mockups**.
-After the user story text, you should add a draft of the corresponding user interfaces, a simple mockup or draft, if applicable.
-
-**Acceptance tests**.
-For each user story you should write also the acceptance tests (textually in Gherkin), i.e., a description of scenarios (situations) that will help to confirm that the system satisfies the requirements addressed by the user story.
-
-**Value and effort**.
-At the end, it is good to add a rough indication of the value of the user story to the customers (e.g. [MoSCoW](https://en.wikipedia.org/wiki/MoSCoW_method) method) and the team should add an estimation of the effort to implement it, for example, using t-shirt sizes (XS, S, M, L, XL).
-
-### Domain model
-
-To better understand the context of the software system, it is very useful to have a simple UML class diagram with all the key concepts (names, attributes) and relationships involved of the problem domain addressed by your module.
-
----
-
-## Architecture and Design
-The architecture of a software system encompasses the set of key decisions about its overall organization. 
-
-A well written architecture document is brief but reduces the amount of time it takes new programmers to a project to understand the code to feel able to make modifications and enhancements.
-
-To document the architecture requires describing the decomposition of the system in their parts (high-level components) and the key behaviors and collaborations between them. 
-
-In this section you should start by briefly describing the overall components of the project and their interrelations. You should also describe how you solved typical problems you may have encountered, pointing to well-known architectural and design patterns, if applicable.
-
-### Logical architecture
-The purpose of this subsection is to document the high-level logical structure of the code, using a UML diagram with logical packages, without the worry of allocating to components, processes or machines.
-
-It can be beneficial to present the system both in a horizontal or vertical decomposition:
-* horizontal decomposition may define layers and implementation concepts, such as the user interface, business logic and concepts; 
-* vertical decomposition can define a hierarchy of subsystems that cover all layers of implementation.
-
-### Physical architecture
-The goal of this subsection is to document the high-level physical structure of the software system (machines, connections, software components installed, and their dependencies) using UML deployment diagrams or component diagrams (separate or integrated), showing the physical structure of the system.
-
-It should describe also the technologies considered and justify the selections made. Examples of technologies relevant for openCX are, for example, frameworks for mobile applications (Flutter vs ReactNative vs ...), languages to program with microbit, and communication with things (beacons, sensors, etc.).
-
-### Prototype
-To help on validating all the architectural, design and technological decisions made, we usually implement a vertical prototype, a thin vertical slice of the system.
-
-In this subsection please describe in more detail which, and how, user(s) story(ies) were implemented.
-
----
-
-## Implementation
-Regular product increments are a good practice of product management. 
-
-While not necessary, sometimes it might be useful to explain a few aspects of the code that have the greatest potential to confuse software engineers about how it works. Since the code should speak by itself, try to keep this section as short and simple as possible.
-
-Use cross-links to the code repository and only embed real fragments of code when strictly needed, since they tend to become outdated very soon.
-
----
-## Test
-
-There are several ways of documenting testing activities, and quality assurance in general, being the most common: a strategy, a plan, test case specifications, and test checklists.
-
-In this section it is only expected to include the following:
-* test plan describing the list of features to be tested and the testing methods and tools;
-* test case specifications to verify the functionalities, using unit tests and acceptance tests.
- 
-A good practice is to simplify this, avoiding repetitions, and automating the testing actions as much as possible.
-
----
-## Configuration and change management
-
-Configuration and change management are key activities to control change to, and maintain the integrity of, a project’s artifacts (code, models, documents).
-
-For the purpose of ESOF, we will use a very simple approach, just to manage feature requests, bug fixes, and improvements, using GitHub issues and following the [GitHub flow](https://guides.github.com/introduction/flow/).
-
+```gherkin
+ Feature: Cancel order.
+ Given: I have placed an order.
+ When: I am on the checkout page.
+ Then: I cancel my order.
+```
 
 ---
 
 ## Project management
 
-We are using *Github Projects* to manage our tasks. Use this [link](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/projects/1) to check what we are up to.
-
-
----
-
-## Evolution - contributions to open-cx
-
-Describe your contribution to open-cx (iteration 5), linking to the appropriate pull requests, issues, documentation.
+We are using _Github Projects_ to manage our tasks. Use this
+[link](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/projects/1)
+to check what we are up to.
