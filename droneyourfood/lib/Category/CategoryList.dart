@@ -28,14 +28,12 @@ class CategoryListWidget extends StatelessWidget {
 
   Future<List<String>> getCategoriesFromFirebase() async {
     List<String> list = new List();
-    print(FirebaseFirestore.instance);
     FirebaseFirestore.instance
         .collection('categories')
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         list.add(doc["name"]);
-        print(doc["name"]);
       });
     });
 

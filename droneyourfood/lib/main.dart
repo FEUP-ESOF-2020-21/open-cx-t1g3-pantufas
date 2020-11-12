@@ -58,9 +58,9 @@ class MyApp extends StatelessWidget {
             home: MyHomePage(title: 'Drone your food'),
           );
         }
-        return Container();
         // Otherwise, show something whilst waiting for initialization to complete
         // return Loading();
+        return Container();
       },
     );
   }
