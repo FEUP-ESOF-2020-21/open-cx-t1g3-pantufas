@@ -1,66 +1,80 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'Product.dart';
-import 'dart:convert';
 
 class ProductListWidget extends StatelessWidget {
   final String category;
 
   ProductListWidget(String category) : this.category = category;
 
-  Future<String> loadFile(String fileName) async {
-    return await rootBundle.loadString(fileName);
-  }
+  // Future<String> loadFile(String fileName) async {
+  //   return await rootBundle.loadString(fileName);
+  // }
+  //
+  // Future<List<Product>> getProducts(String fileName) async {
+  //   List<Product> list = new List();
+  //   String fileContent = await loadFile(fileName);
+  //   final Map<String, dynamic> json = jsonDecode(fileContent);
+  //
+  //   if (json != null) {
+  //     dynamic productJson = json['products'];
+  //
+  //     if (this.category == "All") {
+  //       productJson.forEach((element) {
+  //         list.add(Product.fromJson(element));
+  //       });
+  //     } else {
+  //       productJson.forEach((element) {
+  //         Product aux = Product.fromJson(element);
+  //         if (aux.categories.contains(this.category)) {
+  //           list.add(aux);
+  //         }
+  //       });
+  //     }
+  //   }
+  //
+  //   return list;
+  // }
 
-  Future<List<Product>> getProducts(String fileName) async {
-    List<Product> list = new List();
-    String fileContent = await loadFile(fileName);
-    final Map<String, dynamic> json = jsonDecode(fileContent);
+  Future<List<Product>> getProductsFromFirebase() async {
+    QuerySnapshot qShot;
 
-    if (json != null) {
-      dynamic productJson = json['products'];
-
-      if (this.category == "All") {
-        productJson.forEach((element) {
-          list.add(Product.fromJson(element));
-        });
-      } else {
-        productJson.forEach((element) {
-          Product aux = Product.fromJson(element);
-          if (aux.categories.contains(this.category)) {
-            list.add(aux);
-          }
-        });
-      }
+    if (this.category == "All") {
+      qShot = await FirebaseFirestore.instance.collection('products').get();
+    } else {
+      qShot = await FirebaseFirestore.instance
+          .collection('products')
+          .where("category", isEqualTo: this.category)
+          .get();
     }
-
-    return list;
+    return qShot.docs
+        .map((doc) => Product(doc["name"], doc["image"], doc["category"]))
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
+      future: getProductsFromFirebase(),
       builder: (context, productPromise) {
-        if (productPromise.connectionState == ConnectionState.none &&
-            productPromise.hasData == null) {
-          return Container();
+        if (productPromise.connectionState == ConnectionState.done) {
+          return Column(
+            children: <Widget>[
+              Expanded(
+                  child: ListView.builder(
+                itemCount: productPromise.data.length,
+                itemBuilder: (context, index) {
+                  Product product = productPromise.data[index];
+                  return ProductWidgetText(product);
+                },
+              ))
+            ],
+          );
+        } else {
+          return Text("Loading...");
         }
-        return Column(
-          children: <Widget>[
-            Expanded(
-                child: ListView.builder(
-              itemCount:
-                  productPromise.data == null ? 0 : productPromise.data.length,
-              itemBuilder: (context, index) {
-                Product product = productPromise.data[index];
-                return ProductWidgetText(product);
-              },
-            ))
-          ],
-        );
       },
-      future: getProducts("resources/products.json"),
     );
   }
 }

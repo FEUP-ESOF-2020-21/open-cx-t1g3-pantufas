@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,36 +5,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:droneyourfood/Products/ListProduct.dart';
 
 class CategoryListWidget extends StatelessWidget {
-  Future<String> loadFile(String fileName) async {
-    return await rootBundle.loadString(fileName);
-  }
-
-  Future<List<String>> getCategories(String fileName) async {
-    List<String> list = new List();
-    String fileContent = await loadFile(fileName);
-    final Map<String, dynamic> json = jsonDecode(fileContent);
-
-    if (json != null) {
-      dynamic productJson = json['categories'];
-      productJson.forEach((element) {
-        list.add(element);
-      });
-    }
-    return list;
-  }
+  // Future<String> loadFile(String fileName) async {
+  //   return await rootBundle.loadString(fileName);
+  // }
+  //
+  // Future<List<String>> getCategories(String fileName) async {
+  //   List<String> list = new List();
+  //   String fileContent = await loadFile(fileName);
+  //   final Map<String, dynamic> json = jsonDecode(fileContent);
+  //
+  //   if (json != null) {
+  //     dynamic productJson = json['categories'];
+  //     productJson.forEach((element) {
+  //       list.add(element);
+  //     });
+  //   }
+  //   return list;
+  // }
 
   Future<List<String>> getCategoriesFromFirebase() async {
-    List<String> list = new List();
-    FirebaseFirestore.instance
-        .collection('categories')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        list.add(doc["name"]);
-      });
-    });
+    QuerySnapshot qShot =
+        await FirebaseFirestore.instance.collection('categories').get();
 
-    return list;
+    return qShot.docs.map((doc) => doc["name"].toString()).toList();
   }
 
   @override
@@ -45,24 +35,22 @@ class CategoryListWidget extends StatelessWidget {
     return FutureBuilder(
         future: getCategoriesFromFirebase(),
         builder: (context, categoryPromise) {
-          if (categoryPromise.connectionState == ConnectionState.none &&
-              categoryPromise.hasData == null) {
-            return Container();
+          if (categoryPromise.connectionState == ConnectionState.done) {
+            return Column(
+              children: <Widget>[
+                Expanded(
+                    child: ListView.builder(
+                  itemCount: categoryPromise.data.length,
+                  itemBuilder: (context, index) {
+                    String c = categoryPromise.data[index];
+                    return CategoryListItem(c);
+                  },
+                ))
+              ],
+            );
+          } else {
+            return Text("Loading...");
           }
-          return Column(
-            children: <Widget>[
-              Expanded(
-                  child: ListView.builder(
-                itemCount: categoryPromise.data == null
-                    ? 0
-                    : categoryPromise.data.length,
-                itemBuilder: (context, index) {
-                  String c = categoryPromise.data[index];
-                  return CategoryListItem(c);
-                },
-              ))
-            ],
-          );
         });
   }
 }
