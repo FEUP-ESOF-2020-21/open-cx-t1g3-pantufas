@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:droneyourfood/Products/ListProduct.dart';
 
@@ -25,10 +26,26 @@ class CategoryListWidget extends StatelessWidget {
     return list;
   }
 
+  Future<List<String>> getCategoriesFromFirebase() async {
+    List<String> list = new List();
+    print(FirebaseFirestore.instance);
+    FirebaseFirestore.instance
+        .collection('categories')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        list.add(doc["name"]);
+        print(doc["name"]);
+      });
+    });
+
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getCategories("resources/products.json"),
+        future: getCategoriesFromFirebase(),
         builder: (context, categoryPromise) {
           if (categoryPromise.connectionState == ConnectionState.none &&
               categoryPromise.hasData == null) {

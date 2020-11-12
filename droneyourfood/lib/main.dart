@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:droneyourfood/Category/CategoryListScreen.dart';
 import 'package:droneyourfood/Products/ListProduct.dart';
@@ -25,23 +26,42 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Drone your food',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: swatch.shade800,
-        accentColor: swatch.shade800,
-        primarySwatch: swatch,
-        colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: swatch,
-            primaryColorDark: swatch.shade800,
-            accentColor: swatch.shade50,
-            cardColor: swatch.shade500,
-            backgroundColor: swatch.shade800,
-            brightness: Brightness.dark),
-        scaffoldBackgroundColor: swatch.shade900,
-      ),
-      home: MyHomePage(title: 'Drone your food'),
+    final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) {
+        // Check for errors
+        // if (snapshot.hasError) {
+        //   return SomethingWentWrong();
+        // }
+
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MaterialApp(
+            title: 'Drone your food',
+            theme: ThemeData(
+              brightness: Brightness.dark,
+              primaryColor: swatch.shade800,
+              accentColor: swatch.shade800,
+              primarySwatch: swatch,
+              colorScheme: ColorScheme.fromSwatch(
+                  primarySwatch: swatch,
+                  primaryColorDark: swatch.shade800,
+                  accentColor: swatch.shade50,
+                  cardColor: swatch.shade500,
+                  backgroundColor: swatch.shade800,
+                  brightness: Brightness.dark),
+              scaffoldBackgroundColor: swatch.shade900,
+            ),
+            home: MyHomePage(title: 'Drone your food'),
+          );
+        }
+        return Container();
+        // Otherwise, show something whilst waiting for initialization to complete
+        // return Loading();
+      },
     );
   }
 }
