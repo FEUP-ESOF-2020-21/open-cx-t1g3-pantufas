@@ -31,7 +31,7 @@ class ProductListWidget extends StatelessWidget {
       builder: (context, productPromise) {
         if (productPromise.connectionState == ConnectionState.done) {
           return Column(
-            children: <Widget>[
+            children: [
               Expanded(
                   child: ListView.builder(
                 itemCount: productPromise.data.length,
@@ -64,10 +64,10 @@ class ProductWidgetText extends StatelessWidget {
         decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.all(Radius.circular(12.0))),
-        padding: new EdgeInsets.all(8.0),
-        margin: new EdgeInsets.all(8.0),
-        child: new Row(
-          children: <Widget>[
+        padding: EdgeInsets.all(8.0),
+        margin: EdgeInsets.all(8.0),
+        child: Row(
+          children: [
             Expanded(
                 child: SizedBox(
                     width: 80.0,

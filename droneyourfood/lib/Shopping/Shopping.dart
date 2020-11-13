@@ -7,12 +7,23 @@ class ShoppingCart {
   Map<Product, int> items;
 
   factory ShoppingCart() {
-    // TODO get shit from firebase
     return _instance;
   }
 
   ShoppingCart._internal() {
     this.items = new Map(); // :(
+    getCartFromFirebase();
+  }
+
+  void getCartFromFirebase() async {
+    QuerySnapshot qShot;
+    qShot = await FirebaseFirestore.instance.collection('products').get();
+    qShot.docs
+        .map((doc) => Product(doc["name"], doc["image"], doc["category"]))
+        .toList()
+        .forEach((prod) {
+      this.items[prod] = 1;
+    });
   }
 
   Widget getButton(BuildContext context) {
@@ -21,12 +32,16 @@ class ShoppingCart {
         image: AssetImage('resources/shopping_cart.png'),
       ),
       onPressed: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
-          return new ShoppingScreen(this);
-        }));
+        this.openShoppingPage(context);
       },
     );
+  }
+
+  void openShoppingPage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+      return new ShoppingScreen(this);
+    }));
   }
 
   addItem(Product prod, int quant) {
@@ -35,6 +50,14 @@ class ShoppingCart {
 
   rmItem(Product prod) {
     items.remove(prod);
+  }
+
+  incrementItem(Product prod) {
+    items[prod] += 1;
+  }
+
+  decrementItem(Product prod) {
+    items[prod] -= 1;
   }
 }
 
@@ -58,37 +81,145 @@ class ShoppingScreen extends StatelessWidget {
   }
 }
 
-class ShoppingItem extends StatelessWidget {
+class ShoppingItem extends StatefulWidget {
+  final _ShoppingListWidgetState parentState;
+  final ShoppingCart shoppingCart;
   final Product prod;
-  final int quant;
 
-  ShoppingItem(this.prod, this.quant);
+  ShoppingItem(this.shoppingCart, this.prod, this.parentState);
+
+  @override
+  _ShoppingItemState createState() => _ShoppingItemState();
+}
+
+class _ShoppingItemState extends State<ShoppingItem> {
+  Widget getDecorated(Color color, Widget child) {
+    return Container(
+      decoration: BoxDecoration(
+          color: color, borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      padding: new EdgeInsets.all(8.0),
+      margin: new EdgeInsets.all(8.0),
+      child: child,
+    );
+  }
+
+  Widget getContent() {
+    return getDecorated(
+        Theme.of(context).primaryColor,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+                width: 80.0,
+                height: 80.0,
+                child: Image(
+                  image: AssetImage('resources/logo.png'),
+                )),
+            Column(
+              children: [
+                Text(
+                  widget.prod.name,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  // TODO product price
+                  "30.00 €",
+                  style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 12),
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove),
+                      onPressed: decrementItem,
+                    ),
+                    Text(
+                      widget.shoppingCart.items[widget.prod].toString(),
+                      style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 14),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: incrementItem,
+                    ),
+                  ],
+                )
+              ],
+            ),
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: rmItem,
+            )
+          ],
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [Text(prod.name), Text(quant.toString())],
+    return Dismissible(
+      key: UniqueKey(),
+      onDismissed: rmItemDD,
+      direction: DismissDirection.endToStart,
+      child: getContent(),
+      background: getDecorated(Colors.red, null),
     );
+  }
+
+  void decrementItem() {
+    print("removing 1 from prod: " + widget.prod.name);
+    setState(() {
+      widget.shoppingCart.decrementItem(widget.prod);
+    });
+    print("removed 1 from prod: " + widget.prod.name);
+  }
+
+  void incrementItem() {
+    print("adding 1 to prod: " + widget.prod.name);
+    setState(() {
+      widget.shoppingCart.incrementItem(widget.prod);
+    });
+    print("added 1 to prod: " + widget.prod.name);
+  }
+
+  void rmItem() {
+    print("Deleting prod: " + widget.prod.name);
+    widget.parentState.setState(() {
+      widget.shoppingCart.rmItem(widget.prod);
+    });
+    print("Deleted prod: " + widget.prod.name);
+  }
+
+  void rmItemDD(DismissDirection dd) {
+    rmItem();
   }
 }
 
-class ShoppingListWidget extends StatelessWidget {
+class ShoppingListWidget extends StatefulWidget {
   final ShoppingCart shoppingCart;
 
   ShoppingListWidget(this.shoppingCart);
 
+  @override
+  _ShoppingListWidgetState createState() => _ShoppingListWidgetState();
+}
+
+class _ShoppingListWidgetState extends State<ShoppingListWidget> {
   List<ShoppingItem> getShoppingItems() {
     List<ShoppingItem> shopItems = new List();
-    this.shoppingCart.items.forEach((prod, quant) {
-      shopItems.add(new ShoppingItem(prod, quant));
+    widget.shoppingCart.items.forEach((prod, quant) {
+      shopItems.add(new ShoppingItem(widget.shoppingCart, prod, this));
     });
     return shopItems;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: this.getShoppingItems(),
-    );
+    return Column(children: [
+      Expanded(
+          child: ListView(
+        children: this.getShoppingItems(),
+      ))
+    ]);
   }
 }
