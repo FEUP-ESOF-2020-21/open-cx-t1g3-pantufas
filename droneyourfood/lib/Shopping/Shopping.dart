@@ -3,10 +3,16 @@ import 'package:droneyourfood/Products/Product.dart';
 import 'package:flutter/material.dart';
 
 class ShoppingCart {
-  Map<Product, int> items = new Map(); // :(
+  static final ShoppingCart _instance = ShoppingCart._internal();
+  Map<Product, int> items;
 
-  ShoppingCart() {
+  factory ShoppingCart() {
     // TODO get shit from firebase
+    return _instance;
+  }
+
+  ShoppingCart._internal() {
+    this.items = new Map(); // :(
   }
 
   Widget getButton(BuildContext context) {

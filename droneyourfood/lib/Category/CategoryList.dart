@@ -48,8 +48,11 @@ class CategoryListWidget extends StatelessWidget {
                 ))
               ],
             );
-          } else {
+          } else if (categoryPromise.connectionState ==
+              ConnectionState.waiting) {
             return Text("Loading...");
+          } else {
+            return Text("Died...");
           }
         });
   }

@@ -69,7 +69,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   final String title;
-  final ShoppingCart shoppingCart = new ShoppingCart();
 
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -95,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
                 child: Align(
                     alignment: Alignment.centerRight,
-                    child: widget.shoppingCart.getButton(context)))
+                    child: ShoppingCart().getButton(context)))
           ],
         ),
       ),

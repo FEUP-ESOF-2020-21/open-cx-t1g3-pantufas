@@ -42,8 +42,11 @@ class ProductListWidget extends StatelessWidget {
               ))
             ],
           );
-        } else {
+        } else if (productPromise.connectionState == ConnectionState.waiting){
           return Text("Loading...");
+        }
+        else {
+          return Text("Died...");
         }
       },
     );
