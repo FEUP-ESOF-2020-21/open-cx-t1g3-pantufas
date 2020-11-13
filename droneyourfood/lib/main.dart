@@ -1,3 +1,4 @@
+import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -68,15 +69,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   final String title;
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  final ShoppingCart shoppingCart = new ShoppingCart();
 
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -87,17 +80,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Center(child: Text(widget.title, textAlign: TextAlign.center)),
+        title: Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget.title,
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Expanded(
+                child: Align(
+                    alignment: Alignment.centerRight,
+                    child: widget.shoppingCart.getButton(context)))
+          ],
+        ),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -105,11 +105,17 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'DroneYourFood',
-            ),
-            RaisedButton(
-                color: Colors.red,
+            ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (!states.contains(MaterialState.pressed))
+                        return Colors.red;
+                      return Colors.red
+                          .withOpacity(0.8); // Use the component's default.
+                    },
+                  ),
+                ),
                 child: Text('List Products'),
                 onPressed: () {
                   //Use`Navigator` widget to pop oir go back to previous route / screen
@@ -118,8 +124,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     return new ProductListScreen("All");
                   }));
                 }),
-            RaisedButton(
-                color: Colors.orange,
+            ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (!states.contains(MaterialState.pressed))
+                        return Colors.orange;
+                      return Colors.orange
+                          .withOpacity(0.8); // Use the component's default.
+                    },
+                  ),
+                ),
                 child: Text('List Categories'),
                 onPressed: () {
                   //Use`Navigator` widget to pop oir go back to previous route / screen

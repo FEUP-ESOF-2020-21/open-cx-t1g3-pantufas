@@ -8,35 +8,6 @@ class ProductListWidget extends StatelessWidget {
 
   ProductListWidget(String category) : this.category = category;
 
-  // Future<String> loadFile(String fileName) async {
-  //   return await rootBundle.loadString(fileName);
-  // }
-  //
-  // Future<List<Product>> getProducts(String fileName) async {
-  //   List<Product> list = new List();
-  //   String fileContent = await loadFile(fileName);
-  //   final Map<String, dynamic> json = jsonDecode(fileContent);
-  //
-  //   if (json != null) {
-  //     dynamic productJson = json['products'];
-  //
-  //     if (this.category == "All") {
-  //       productJson.forEach((element) {
-  //         list.add(Product.fromJson(element));
-  //       });
-  //     } else {
-  //       productJson.forEach((element) {
-  //         Product aux = Product.fromJson(element);
-  //         if (aux.categories.contains(this.category)) {
-  //           list.add(aux);
-  //         }
-  //       });
-  //     }
-  //   }
-  //
-  //   return list;
-  // }
-
   Future<List<Product>> getProductsFromFirebase() async {
     QuerySnapshot qShot;
 
@@ -82,7 +53,7 @@ class ProductListWidget extends StatelessWidget {
 class ProductWidgetText extends StatelessWidget {
   final Product product;
 
-  ProductWidgetText(Product product) : product = product;
+  ProductWidgetText(this.product);
 
   @override
   Widget build(BuildContext context) {

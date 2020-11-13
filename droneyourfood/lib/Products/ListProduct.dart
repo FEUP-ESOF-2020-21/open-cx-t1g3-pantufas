@@ -4,7 +4,7 @@ import 'ProductWidget.dart';
 class ProductListScreen extends StatelessWidget {
   final String category;
 
-  ProductListScreen(String category) : this.category = category;
+  ProductListScreen(this.category);
 
   @override
   Widget build(BuildContext context) {
