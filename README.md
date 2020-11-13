@@ -67,7 +67,8 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 **Must have**:
 
-- _As a customer, I want to consult the products available for sale_. **Value = XL**. **Effort = M**.
+- _As a customer, I want to consult the products available for sale_.
+**Value = XL**. **Effort = M**.
 
 ```gherkin
 Feature: Consulting available products.
