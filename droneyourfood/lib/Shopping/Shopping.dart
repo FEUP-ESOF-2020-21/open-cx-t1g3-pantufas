@@ -16,14 +16,15 @@ class ShoppingCart {
   }
 
   void getCartFromFirebase() async {
-    QuerySnapshot qShot;
-    qShot = await FirebaseFirestore.instance.collection('products').get();
-    qShot.docs
-        .map((doc) =>
-            Product(doc["name"], doc["image"], doc["category"], doc["price"]))
-        .toList()
-        .forEach((prod) {
-      this.items[prod] = 1;
+    QuerySnapshot qShot =
+        await FirebaseFirestore.instance.collection('users').get();
+    qShot.docs.forEach((doc) {
+      doc["items"].forEach((item) async {
+        DocumentSnapshot dShot = await item.get();
+        Map<String, dynamic> d = dShot.data();
+        this.items[Product(d["name"], d["image"], d["category"], d["price"])] =
+            1;
+      });
     });
   }
 
