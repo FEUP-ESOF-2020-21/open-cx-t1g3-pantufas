@@ -45,25 +45,33 @@ class ShoppingCart {
     }));
   }
 
-  addItem(Product prod, int quant) {
+  void addItem(Product prod, int quant) {
     items[prod] = quant;
   }
 
-  rmItem(Product prod) {
+  void rmItem(Product prod) {
     items.remove(prod);
   }
 
-  rmEmptyItems() {
+  void rmEmptyItems() {
     // remove items with 0 in quantity from cart
     items.removeWhere((prod, quant) => quant == 0);
   }
 
-  incrementItem(Product prod) {
+  void incrementItem(Product prod) {
     items[prod] += 1;
   }
 
-  decrementItem(Product prod) {
+  void decrementItem(Product prod) {
     if (items[prod] > 0) items[prod] -= 1;
+  }
+
+  int getTotalPrice() {
+    int ret = 0;
+    items.forEach((prod, quant) {
+      ret += prod.getPrice(quant);
+    });
+    return ret;
   }
 
   int operator [](Product prod) => this.items[prod];
@@ -100,7 +108,7 @@ class ShoppingItem extends StatefulWidget {
   _ShoppingItemState createState() => _ShoppingItemState();
 
   String getPrice() {
-    return prod.getPrice(shoppingCart[prod]).toString() + "€";
+    return (prod.getPrice(shoppingCart[prod]) / 100.0).toString() + "€";
   }
 }
 
@@ -202,7 +210,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
     setState(() {
       widget.shoppingCart.decrementItem(widget.prod);
     });
-    print("removed 1 from prod: " + widget.prod.name);
+    widget.parentState.setState(() {});
   }
 
   void incrementItem() {
@@ -210,7 +218,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
     setState(() {
       widget.shoppingCart.incrementItem(widget.prod);
     });
-    print("added 1 to prod: " + widget.prod.name);
+    widget.parentState.setState(() {});
   }
 
   void rmItem() {
@@ -218,7 +226,6 @@ class _ShoppingItemState extends State<ShoppingItem> {
     widget.parentState.setState(() {
       widget.shoppingCart.rmItem(widget.prod);
     });
-    print("Deleted prod: " + widget.prod.name);
   }
 
   void rmItemDD(DismissDirection dd) {
@@ -236,6 +243,12 @@ class ShoppingListWidget extends StatefulWidget {
 }
 
 class _ShoppingListWidgetState extends State<ShoppingListWidget> {
+  String getTotalPrice() {
+    return "Total cost: " +
+        (widget.shoppingCart.getTotalPrice() / 100.0).toString() +
+        "€";
+  }
+
   List<ShoppingItem> getShoppingItems() {
     List<ShoppingItem> shopItems = new List();
     widget.shoppingCart.items.forEach((prod, quant) {
@@ -246,7 +259,16 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(
+        padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
+        child: Text(
+          /* TOTAL PRICE OF CART */
+          getTotalPrice(),
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
       Expanded(
           child: ListView(
         children: this.getShoppingItems(),

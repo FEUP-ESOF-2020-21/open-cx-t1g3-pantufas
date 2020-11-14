@@ -10,7 +10,7 @@ class Product {
     return 'Product: {name = $name, prive = $price, category = $category, image = $image}';
   }
 
-  double getPrice(int quant) {
-    return (price * quant) / 100.0;
+  int getPrice(int quant) {
+    return price * quant;
   }
 }
