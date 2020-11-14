@@ -38,20 +38,18 @@ class ShoppingCart {
   void updateFirebaseCart() async {
     rmEmptyItems(); // cleanup our data
 
+    // TODO change to auth
     FirebaseFirestore.instance
         .collection('users')
         .doc('8GCK1J3XwOQBHvBblX9Wc2JDWHI2')
         .update({"items": items.values.toList()});
   }
 
-  void addItem(Product prod, int quant) async {
-    FirebaseFirestore.instance
-        .collection('products')
-        .doc(prod.name)
-        .get()
-        .then((DocumentSnapshot dShot) {
-      items[prod] = {"prod": dShot.reference, "quant": quant};
-    });
+  void addItem(Product prod, int quant) {
+    if (items[prod] == null)
+      items[prod] = {"prod": prod.ref, "quant": quant};
+    else
+      items[prod]["quant"] += quant;
   }
 
   void rmItem(Product prod) {

@@ -75,6 +75,8 @@ class ProductWidget extends StatefulWidget {
 // TODO onLongPressed() add multiple
 class _ProductWidgetState extends State<ProductWidget> {
   bool isClicked = false;
+  bool isLongClicked = false;
+  int howMany2Add = 0;
 
   void addItem() {
     setState(() {
@@ -87,6 +89,13 @@ class _ProductWidgetState extends State<ProductWidget> {
       setState(() {
         this.isClicked = false;
       });
+    });
+  }
+
+  void addMultipleItem() {
+    setState(() {
+      this.isLongClicked = true;
+      this.howMany2Add = 0;
     });
   }
 
@@ -118,15 +127,64 @@ class _ProductWidgetState extends State<ProductWidget> {
                   EdgeInsets.all(8.0))),
           child: getContent(),
           onPressed: addItem,
+          onLongPress: addMultipleItem,
+        ));
+  }
+
+  Widget buildLongClickedState(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+        margin: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(4.0),
+        height: 76.0, // 60 + 8 + 8
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.remove),
+              onPressed: () {
+                setState(() {
+                  --this.howMany2Add;
+                });
+              },
+            ),
+            Text(
+              this.howMany2Add.toString(),
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            ),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                setState(() {
+                  ++this.howMany2Add;
+                });
+              },
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.red)),
+              child: Text("Add"),
+              onPressed: () {
+                setState(() {
+                  ShoppingCart.instance
+                      .addItem(widget.product, this.howMany2Add);
+                  this.isLongClicked = false;
+                });
+              },
+            )
+          ],
         ));
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!this.isClicked)
-      return buildNormalState(context);
-    else
+    if (this.isClicked)
       return buildClickedState(context);
+    else if (this.isLongClicked)
+      return buildLongClickedState(context);
+    else
+      return buildNormalState(context);
   }
 
   Widget getContent() {

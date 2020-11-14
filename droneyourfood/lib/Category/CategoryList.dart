@@ -51,28 +51,35 @@ class CategoryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
-            return new ProductListScreen(this.category);
-          }));
-        },
-        child: Container(
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.all(Radius.circular(12.0))),
-            padding: new EdgeInsets.all(8.0),
-            margin: new EdgeInsets.all(8.0),
-            child: new Row(
-              children: <Widget>[
-                Expanded(
-                    child: Text(
+    return Container(
+        margin: EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).primaryColor),
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.all(8.0))),
+          child: SizedBox(
+              height: 60.0,
+              child: Center(
+                child: Text(
                   this.category.name,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 30),
-                ))
-              ],
-            )));
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+          onPressed: () {
+            goToProdPage(context);
+          },
+        ));
+  }
+
+  void goToProdPage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+      return new ProductListScreen(this.category);
+    }));
   }
 }
