@@ -53,6 +53,11 @@ class ShoppingCart {
     items.remove(prod);
   }
 
+  rmEmptyItems() {
+    // remove items with 0 in quantity from cart
+    items.removeWhere((prod, quant) => quant == 0);
+  }
+
   incrementItem(Product prod) {
     items[prod] += 1;
   }
@@ -247,5 +252,14 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
         children: this.getShoppingItems(),
       ))
     ]);
+  }
+
+  @override
+  void dispose() {
+    // cleanup shopping cart
+    widget.shoppingCart.rmEmptyItems();
+    // backup shopping cart
+
+    super.dispose();
   }
 }
