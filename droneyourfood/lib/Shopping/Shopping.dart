@@ -87,7 +87,7 @@ class ShoppingScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Shopping List',
+            'Shopping Cart',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
@@ -212,7 +212,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
   }
 
   void decrementItem() {
-    print("removing 1 from prod: " + widget.prod.name);
+    debugPrint("removing 1 from prod: " + widget.prod.name);
     setState(() {
       widget.shoppingCart.decrementItem(widget.prod);
     });
@@ -220,7 +220,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
   }
 
   void incrementItem() {
-    print("adding 1 to prod: " + widget.prod.name);
+    debugPrint("adding 1 to prod: " + widget.prod.name);
     setState(() {
       widget.shoppingCart.incrementItem(widget.prod);
     });
@@ -228,7 +228,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
   }
 
   void rmItem() {
-    print("Deleting prod: " + widget.prod.name);
+    debugPrint("Deleting prod: " + widget.prod.name);
     widget.parentState.setState(() {
       widget.shoppingCart.rmItem(widget.prod);
     });
@@ -265,22 +265,53 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
     return shopItems;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
-        child: Text(
+  Widget getCheckoutWidget(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
           /* TOTAL PRICE OF CART */
           getTotalPrice(),
           style: TextStyle(
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
         ),
-      ),
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+                if (!states.contains(MaterialState.pressed))
+                  return Colors.red.withOpacity(0.8);
+                return Colors.red; // Use the component's default.
+              },
+            ),
+          ),
+          child: Text("Checkout"),
+          onPressed: () {
+            debugPrint("TODO: CHECKOUT processes");
+          },
+        )
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(
           child: ListView(
         children: this.getShoppingItems(),
-      ))
+      )),
+      Container(
+        decoration:
+            BoxDecoration(color: Theme.of(context).primaryColor, boxShadow: [
+          BoxShadow(
+            color: Colors.black,
+            spreadRadius: 1.0,
+          ),
+        ]),
+        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        child: getCheckoutWidget(context),
+      ),
     ]);
   }
 
