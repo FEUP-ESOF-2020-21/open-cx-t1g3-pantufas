@@ -63,44 +63,99 @@ class ProductListWidget extends StatelessWidget {
   }
 }
 
-class ProductWidget extends StatelessWidget {
+class ProductWidget extends StatefulWidget {
   final Product product;
 
   ProductWidget(this.product);
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(product.name),
-      leading: Image(image: AssetImage('resources/logo.png')),
-      onTap: () {
-        ShoppingCart.instance.addItem(this.product, 1);
-      },
-    );
+  _ProductWidgetState createState() => _ProductWidgetState();
+}
 
-    // return Container(
-    // decoration: BoxDecoration(
-    // color: Theme.of(context).primaryColor,
-    // borderRadius: BorderRadius.all(Radius.circular(12.0))),
-    // padding: EdgeInsets.all(8.0),
-    // margin: EdgeInsets.all(8.0),
-    // child: Row(
-    // children: [
-    // Expanded(
-    // child: SizedBox(
-    // width: 80.0,
-    // height: 80.0,
-    // child: Image(
-    // image: AssetImage('resources/logo.png'),
-    // alignment: Alignment.centerLeft,
-    // ))),
-    // Expanded(
-    // child: Text(
-    // this.product.name,
-    // textAlign: TextAlign.right,
-    // style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 30),
-    // ))
-    // ],
-    // ));
+// TODO onLongPressed() add multiple
+class _ProductWidgetState extends State<ProductWidget> {
+  bool isClicked = false;
+
+  void addItem() {
+    setState(() {
+      ShoppingCart.instance.addItem(widget.product, 1);
+      this.isClicked = true;
+    });
+
+    // restore state after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        this.isClicked = false;
+      });
+    });
+  }
+
+  Widget buildClickedState(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+      margin: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
+      height: 76.0, // 60 + 8 + 8
+      child: Center(
+          child: Text(
+        "Added " + widget.product.name,
+        style: TextStyle(
+            color: Color(0xFFCFD3D8),
+            fontSize: 20,
+            fontWeight: FontWeight.bold),
+      )),
+    );
+  }
+
+  Widget buildNormalState(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).primaryColor),
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.all(8.0))),
+          child: getContent(),
+          onPressed: addItem,
+        ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!this.isClicked)
+      return buildNormalState(context);
+    else
+      return buildClickedState(context);
+  }
+
+  Widget getContent() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+            width: 60.0,
+            height: 60.0,
+            child: Image(
+              image: AssetImage('resources/logo.png'),
+            )),
+        Expanded(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Text(
+            widget.product.name,
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+          Text(
+            getPrice(),
+            style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 14),
+          )
+        ]))
+      ],
+    );
+  }
+
+  String getPrice() {
+    return (widget.product.getPrice(1) / 100.0).toString() + "€";
   }
 }

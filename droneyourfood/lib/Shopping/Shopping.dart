@@ -159,7 +159,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
           /* ITEM */
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
+            SizedBox(
                 /* ITEM ICON */
                 width: 80.0,
                 height: 80.0,
