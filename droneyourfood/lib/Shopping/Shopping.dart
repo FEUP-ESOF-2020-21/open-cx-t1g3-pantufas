@@ -3,11 +3,11 @@ import 'package:droneyourfood/Products/Product.dart';
 import 'package:flutter/material.dart';
 
 class ShoppingCart {
-  static final ShoppingCart _instance = ShoppingCart._internal();
-  Map<Product, int> items;
+  static final ShoppingCart instance = ShoppingCart._internal();
+  Map<Product, Map<String, dynamic>> items;
 
   factory ShoppingCart() {
-    return _instance;
+    return instance;
   }
 
   ShoppingCart._internal() {
@@ -15,17 +15,67 @@ class ShoppingCart {
     getCartFromFirebase();
   }
 
+  int operator [](Product prod) => this.items[prod]["quant"];
+
   void getCartFromFirebase() async {
-    QuerySnapshot qShot =
-        await FirebaseFirestore.instance.collection('users').get();
-    qShot.docs.forEach((doc) {
-      doc["items"].forEach((item) async {
-        DocumentSnapshot dShot = await item.get();
-        Map<String, dynamic> d = dShot.data();
-        this.items[Product(d["name"], d["image"], d["category"], d["price"])] =
-            1;
+    FirebaseFirestore.instance
+        .collection('users')
+        .get()
+        .then((QuerySnapshot qShot) {
+      qShot.docs.forEach((doc) {
+        doc["items"].forEach((item) async {
+          // TODO keep await?
+          DocumentSnapshot dShot = await item["prod"].get();
+          Map<String, dynamic> d = dShot.data();
+          this.items[
+              Product(d["name"], d["image"], d["category"], d["price"])] = item;
+        });
       });
     });
+  }
+
+  void updateFirebaseCart() async {
+    rmEmptyItems(); // cleanup our data
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc('8GCK1J3XwOQBHvBblX9Wc2JDWHI2')
+        .update({"items": items.values.toList()});
+  }
+
+  void addItem(Product prod, int quant) async {
+    FirebaseFirestore.instance
+        .collection('products')
+        .doc(prod.name)
+        .get()
+        .then((DocumentSnapshot dShot) {
+      items[prod] = {"prod": dShot.reference, "quant": quant};
+    });
+  }
+
+  void rmItem(Product prod) {
+    items.remove(prod);
+  }
+
+  void rmEmptyItems() {
+    // remove items with 0 in quantity from cart
+    items.removeWhere((prod, item) => item["quant"] == 0);
+  }
+
+  void incrementItem(Product prod) {
+    items[prod]["quant"] += 1;
+  }
+
+  void decrementItem(Product prod) {
+    if (items[prod]["quant"] > 0) items[prod]["quant"] -= 1;
+  }
+
+  int getTotalPrice() {
+    int ret = 0;
+    items.forEach((prod, item) {
+      ret += prod.getPrice(item["quant"]);
+    });
+    return ret;
   }
 
   Widget getButton(BuildContext context) {
@@ -42,47 +92,12 @@ class ShoppingCart {
   void openShoppingPage(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
-      return new ShoppingScreen(this);
+      return new ShoppingScreen();
     }));
   }
-
-  void addItem(Product prod, int quant) {
-    items[prod] = quant;
-  }
-
-  void rmItem(Product prod) {
-    items.remove(prod);
-  }
-
-  void rmEmptyItems() {
-    // remove items with 0 in quantity from cart
-    items.removeWhere((prod, quant) => quant == 0);
-  }
-
-  void incrementItem(Product prod) {
-    items[prod] += 1;
-  }
-
-  void decrementItem(Product prod) {
-    if (items[prod] > 0) items[prod] -= 1;
-  }
-
-  int getTotalPrice() {
-    int ret = 0;
-    items.forEach((prod, quant) {
-      ret += prod.getPrice(quant);
-    });
-    return ret;
-  }
-
-  int operator [](Product prod) => this.items[prod];
 }
 
 class ShoppingScreen extends StatelessWidget {
-  final ShoppingCart shoppingCart;
-
-  ShoppingScreen(this.shoppingCart);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,23 +108,22 @@ class ShoppingScreen extends StatelessWidget {
           ),
         ),
         body: Column(
-          children: [Expanded(child: ShoppingListWidget(this.shoppingCart))],
+          children: [Expanded(child: ShoppingListWidget())],
         ));
   }
 }
 
 class ShoppingItem extends StatefulWidget {
   final _ShoppingListWidgetState parentState;
-  final ShoppingCart shoppingCart;
   final Product prod;
 
-  ShoppingItem(this.shoppingCart, this.prod, this.parentState);
+  ShoppingItem(this.prod, this.parentState);
 
   @override
   _ShoppingItemState createState() => _ShoppingItemState();
 
   String getPrice() {
-    return (prod.getPrice(shoppingCart[prod]) / 100.0).toString() + "€";
+    return (prod.getPrice(ShoppingCart.instance[prod]) / 100.0).toString() + "€";
   }
 }
 
@@ -177,7 +191,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
                     ),
                     Text(
                       /* QUANTITY */
-                      widget.shoppingCart[widget.prod].toString(),
+                      ShoppingCart.instance[widget.prod].toString(),
                       style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 14),
                     ),
                     IconButton(
@@ -215,7 +229,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
   void decrementItem() {
     debugPrint("removing 1 from prod: " + widget.prod.name);
     setState(() {
-      widget.shoppingCart.decrementItem(widget.prod);
+      ShoppingCart.instance.decrementItem(widget.prod);
     });
     widget.parentState.setState(() {});
   }
@@ -223,7 +237,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
   void incrementItem() {
     debugPrint("adding 1 to prod: " + widget.prod.name);
     setState(() {
-      widget.shoppingCart.incrementItem(widget.prod);
+      ShoppingCart.instance.incrementItem(widget.prod);
     });
     widget.parentState.setState(() {});
   }
@@ -231,7 +245,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
   void rmItem() {
     debugPrint("Deleting prod: " + widget.prod.name);
     widget.parentState.setState(() {
-      widget.shoppingCart.rmItem(widget.prod);
+      ShoppingCart.instance.rmItem(widget.prod);
     });
   }
 
@@ -241,17 +255,13 @@ class _ShoppingItemState extends State<ShoppingItem> {
 }
 
 class ShoppingListWidget extends StatefulWidget {
-  final ShoppingCart shoppingCart;
-
-  ShoppingListWidget(this.shoppingCart);
-
   @override
   _ShoppingListWidgetState createState() => _ShoppingListWidgetState();
 }
 
 class _ShoppingListWidgetState extends State<ShoppingListWidget> {
   String getTotalPrice() {
-    double totPrice = widget.shoppingCart.getTotalPrice() / 100.0;
+    double totPrice = ShoppingCart.instance.getTotalPrice() / 100.0;
     if (totPrice == 0.0)
       return "Your cart is empty.";
     else
@@ -260,8 +270,8 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
 
   List<ShoppingItem> getShoppingItems() {
     List<ShoppingItem> shopItems = new List();
-    widget.shoppingCart.items.forEach((prod, quant) {
-      shopItems.add(new ShoppingItem(widget.shoppingCart, prod, this));
+    ShoppingCart.instance.items.forEach((prod, item) {
+      shopItems.add(new ShoppingItem(prod, this));
     });
     return shopItems;
   }
@@ -319,8 +329,9 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
   @override
   void dispose() {
     // cleanup shopping cart
-    widget.shoppingCart.rmEmptyItems();
+    ShoppingCart.instance.rmEmptyItems();
     // backup shopping cart
+    ShoppingCart.instance.updateFirebaseCart();
 
     super.dispose();
   }
