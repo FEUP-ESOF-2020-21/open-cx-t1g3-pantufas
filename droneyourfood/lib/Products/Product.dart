@@ -1,16 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Product {
-  String name, image = "images/404.png";
-  String category;
+  String name, image;
+  DocumentReference category, ref;
   int price;
 
-  Product(this.name, this.image, this.category, this.price);
+  Product(this.name, this.image, this.category, this.price, this.ref);
+
+  int getPrice(int quant) {
+    return price * quant;
+  }
 
   @override
   String toString() {
     return 'Product: {name = $name, prive = $price, category = $category, image = $image}';
-  }
-
-  int getPrice(int quant) {
-    return price * quant;
   }
 }

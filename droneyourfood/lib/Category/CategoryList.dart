@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:droneyourfood/Products/ListProduct.dart';
+import 'package:droneyourfood/Category/Category.dart';
 
 class CategoryListWidget extends StatelessWidget {
-  Future<List<String>> getCategoriesFromFirebase() async {
-    QuerySnapshot qShot =
-        await FirebaseFirestore.instance.collection('categories').get();
+  Future<List<Category>> getCategoriesFromFirebase() async {
+    Future<QuerySnapshot> qShot =
+        FirebaseFirestore.instance.collection('categories').get();
 
-    return qShot.docs.map((doc) => doc["name"].toString()).toList();
+    return qShot.then((QuerySnapshot qShot) {
+      return qShot.docs
+          .map((doc) => Category(doc["name"], doc["ref"]))
+          .toList();
+    });
   }
 
   @override
@@ -19,13 +24,12 @@ class CategoryListWidget extends StatelessWidget {
         builder: (context, categoryPromise) {
           if (categoryPromise.connectionState == ConnectionState.done) {
             return Column(
-              children: <Widget>[
+              children: [
                 Expanded(
                     child: ListView.builder(
                   itemCount: categoryPromise.data.length,
                   itemBuilder: (context, index) {
-                    String c = categoryPromise.data[index];
-                    return CategoryListItem(c);
+                    return CategoryListItem(categoryPromise.data[index]);
                   },
                 ))
               ],
@@ -41,9 +45,9 @@ class CategoryListWidget extends StatelessWidget {
 }
 
 class CategoryListItem extends StatelessWidget {
-  final String category;
+  final Category category;
 
-  CategoryListItem(String category) : this.category = category;
+  CategoryListItem(this.category);
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +68,7 @@ class CategoryListItem extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                     child: Text(
-                  this.category,
+                  this.category.name,
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 30),
                 ))

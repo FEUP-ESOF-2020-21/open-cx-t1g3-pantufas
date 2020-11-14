@@ -1,24 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Category {
   String name;
-  List<Category> categories;
+  DocumentReference ref;
 
-  Category({this.name, this.categories});
-
-  factory Category.fromJson(Map<String, dynamic> json) {
-    Category res;
-
-    res = new Category(name: json['name'], categories: null);
-    res.categories = new List();
-
-    for (var category in json['subcategories']) {
-      res.categories.add(Category.fromJson(category));
-    }
-
-    return res;
-  }
+  Category(this.name, this.ref);
 
   @override
   String toString() {
-    return 'Category{name: $name, categories: $categories}';
+    return 'Category{name: $name}';
   }
 }

@@ -27,8 +27,9 @@ class ShoppingCart {
           // TODO keep await?
           DocumentSnapshot dShot = await item["prod"].get();
           Map<String, dynamic> d = dShot.data();
-          this.items[
-              Product(d["name"], d["image"], d["category"], d["price"])] = item;
+          this.items[Product(
+                  d["name"], d["image"], d["category"], d["price"], d["ref"])] =
+              item;
         });
       });
     });
@@ -123,7 +124,8 @@ class ShoppingItem extends StatefulWidget {
   _ShoppingItemState createState() => _ShoppingItemState();
 
   String getPrice() {
-    return (prod.getPrice(ShoppingCart.instance[prod]) / 100.0).toString() + "€";
+    return (prod.getPrice(ShoppingCart.instance[prod]) / 100.0).toString() +
+        "€";
   }
 }
 

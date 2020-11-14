@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   //Use`Navigator` widget to pop oir go back to previous route / screen
                   Navigator.of(context).push(
                       MaterialPageRoute<Null>(builder: (BuildContext context) {
-                    return new ProductListScreen("All");
+                    return new ProductListScreen(null);
                   }));
                 }),
             ElevatedButton(
