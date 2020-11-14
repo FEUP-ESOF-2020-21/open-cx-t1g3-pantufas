@@ -5,24 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:droneyourfood/Products/ListProduct.dart';
 
 class CategoryListWidget extends StatelessWidget {
-  // Future<String> loadFile(String fileName) async {
-  //   return await rootBundle.loadString(fileName);
-  // }
-  //
-  // Future<List<String>> getCategories(String fileName) async {
-  //   List<String> list = new List();
-  //   String fileContent = await loadFile(fileName);
-  //   final Map<String, dynamic> json = jsonDecode(fileContent);
-  //
-  //   if (json != null) {
-  //     dynamic productJson = json['categories'];
-  //     productJson.forEach((element) {
-  //       list.add(element);
-  //     });
-  //   }
-  //   return list;
-  // }
-
   Future<List<String>> getCategoriesFromFirebase() async {
     QuerySnapshot qShot =
         await FirebaseFirestore.instance.collection('categories').get();

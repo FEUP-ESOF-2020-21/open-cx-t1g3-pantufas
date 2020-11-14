@@ -20,7 +20,8 @@ class ProductListWidget extends StatelessWidget {
           .get();
     }
     return qShot.docs
-        .map((doc) => Product(doc["name"], doc["image"], doc["category"]))
+        .map((doc) =>
+            Product(doc["name"], doc["image"], doc["category"], doc["price"]))
         .toList();
   }
 
@@ -42,10 +43,9 @@ class ProductListWidget extends StatelessWidget {
               ))
             ],
           );
-        } else if (productPromise.connectionState == ConnectionState.waiting){
+        } else if (productPromise.connectionState == ConnectionState.waiting) {
           return Text("Loading...");
-        }
-        else {
+        } else {
           return Text("Died...");
         }
       },

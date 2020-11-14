@@ -19,7 +19,8 @@ class ShoppingCart {
     QuerySnapshot qShot;
     qShot = await FirebaseFirestore.instance.collection('products').get();
     qShot.docs
-        .map((doc) => Product(doc["name"], doc["image"], doc["category"]))
+        .map((doc) =>
+            Product(doc["name"], doc["image"], doc["category"], doc["price"]))
         .toList()
         .forEach((prod) {
       this.items[prod] = 1;
@@ -57,8 +58,10 @@ class ShoppingCart {
   }
 
   decrementItem(Product prod) {
-    items[prod] -= 1;
+    if (items[prod] > 0) items[prod] -= 1;
   }
+
+  int operator [](Product prod) => this.items[prod];
 }
 
 class ShoppingScreen extends StatelessWidget {
@@ -90,10 +93,17 @@ class ShoppingItem extends StatefulWidget {
 
   @override
   _ShoppingItemState createState() => _ShoppingItemState();
+
+  String getPrice() {
+    return prod.getPrice(shoppingCart[prod]).toString() + "€";
+  }
 }
 
 class _ShoppingItemState extends State<ShoppingItem> {
   Widget getDecorated(Color color, Widget child) {
+    /*
+     *  Returns content of shopping cart list decoration (box/bg/colors)
+     */
     return Container(
       decoration: BoxDecoration(
           color: color, borderRadius: BorderRadius.all(Radius.circular(12.0))),
@@ -104,42 +114,54 @@ class _ShoppingItemState extends State<ShoppingItem> {
   }
 
   Widget getContent() {
+    /*
+     *  Returns content of shopping cart list
+     */
     return getDecorated(
         Theme.of(context).primaryColor,
         Row(
+          /* ITEM */
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
+                /* ITEM ICON */
                 width: 80.0,
                 height: 80.0,
                 child: Image(
                   image: AssetImage('resources/logo.png'),
                 )),
             Column(
+              /* ITEM CONTROLS/INFO */
               children: [
                 Text(
+                  /* TITLE */
                   widget.prod.name,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.bold),
                 ),
+                SizedBox(height: 8), // space between title & price
                 Text(
-                  // TODO product price
-                  "30.00 €",
+                  /* PRICE */
+                  widget.getPrice(),
                   style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 12),
                 ),
                 Row(
+                  /* QUANTITY CONTROLS */
                   children: [
                     IconButton(
+                      /* DECREMENT */
                       icon: Icon(Icons.remove),
                       onPressed: decrementItem,
                     ),
                     Text(
-                      widget.shoppingCart.items[widget.prod].toString(),
+                      /* QUANTITY */
+                      widget.shoppingCart[widget.prod].toString(),
                       style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 14),
                     ),
                     IconButton(
+                      /* INCREMENT */
                       icon: Icon(Icons.add),
                       onPressed: incrementItem,
                     ),
@@ -148,6 +170,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
               ],
             ),
             IconButton(
+              /* DELETE */
               icon: Icon(Icons.delete),
               onPressed: rmItem,
             )
@@ -157,6 +180,9 @@ class _ShoppingItemState extends State<ShoppingItem> {
 
   @override
   Widget build(BuildContext context) {
+    /*
+     *  Returns shopping cart item
+     */
     return Dismissible(
       key: UniqueKey(),
       onDismissed: rmItemDD,
