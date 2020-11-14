@@ -117,12 +117,18 @@ class _ShoppingItemState extends State<ShoppingItem> {
     /*
      *  Returns content of shopping cart list decoration (box/bg/colors)
      */
+    // TODO this is a shitty workaround
     return Container(
       decoration: BoxDecoration(
-          color: color, borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      padding: new EdgeInsets.all(8.0),
-      margin: new EdgeInsets.all(8.0),
-      child: child,
+        color: color,
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+      ),
+      padding: EdgeInsets.all(8.0),
+      margin: EdgeInsets.all(8.0),
+      child: Material(
+        color: color,
+        child: child,
+      ),
     );
   }
 
@@ -244,9 +250,11 @@ class ShoppingListWidget extends StatefulWidget {
 
 class _ShoppingListWidgetState extends State<ShoppingListWidget> {
   String getTotalPrice() {
-    return "Total cost: " +
-        (widget.shoppingCart.getTotalPrice() / 100.0).toString() +
-        "€";
+    double totPrice = widget.shoppingCart.getTotalPrice() / 100.0;
+    if (totPrice == 0.0)
+      return "Your cart is empty.";
+    else
+      return "Total cost: " + totPrice.toString() + "€";
   }
 
   List<ShoppingItem> getShoppingItems() {
