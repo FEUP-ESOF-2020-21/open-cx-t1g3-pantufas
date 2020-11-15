@@ -1,17 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:droneyourfood/Products/Product.dart';
 import 'package:flutter/material.dart';
+import 'dart:collection';
+
+// ! fu tiago >:)
 
 class ShoppingCart {
   static final ShoppingCart instance = ShoppingCart._internal();
-  Map<Product, Map<String, dynamic>> items;
+  HashMap<Product, Map<String, dynamic>> items;
 
   factory ShoppingCart() {
     return instance;
   }
 
   ShoppingCart._internal() {
-    this.items = new Map(); // :(
+    this.items = new HashMap(); // :(
     getCartFromFirebase();
   }
 
@@ -46,10 +49,10 @@ class ShoppingCart {
   }
 
   void addItem(Product prod, int quant) {
-    if (items[prod] == null)
-      items[prod] = {"prod": prod.ref, "quant": quant};
-    else
+    if (items.containsKey(prod))
       items[prod]["quant"] += quant;
+    else
+      items[prod] = {"prod": prod.ref, "quant": quant};
   }
 
   void rmItem(Product prod) {
@@ -328,8 +331,6 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
 
   @override
   void dispose() {
-    // cleanup shopping cart
-    ShoppingCart.instance.rmEmptyItems();
     // backup shopping cart
     ShoppingCart.instance.updateFirebaseCart();
 

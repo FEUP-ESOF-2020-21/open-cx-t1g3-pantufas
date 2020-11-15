@@ -76,7 +76,8 @@ class ProductWidget extends StatefulWidget {
 class _ProductWidgetState extends State<ProductWidget> {
   bool isClicked = false;
   bool isLongClicked = false;
-  int howMany2Add = 0;
+  int howMany2Add = 1;
+  bool isAlive = true;
 
   void addItem() {
     setState(() {
@@ -86,16 +87,18 @@ class _ProductWidgetState extends State<ProductWidget> {
 
     // restore state after 2 seconds
     Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        this.isClicked = false;
-      });
+      if (isAlive) {
+        setState(() {
+          this.isClicked = false;
+        });
+      }
     });
   }
 
   void addMultipleItem() {
     setState(() {
       this.isLongClicked = true;
-      this.howMany2Add = 0;
+      this.howMany2Add = 1;
     });
   }
 
@@ -145,6 +148,7 @@ class _ProductWidgetState extends State<ProductWidget> {
               onPressed: () {
                 setState(() {
                   --this.howMany2Add;
+                  if (this.howMany2Add <= 0) this.isLongClicked = false;
                 });
               },
             ),
@@ -163,7 +167,7 @@ class _ProductWidgetState extends State<ProductWidget> {
             ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.red)),
+                      MaterialStateProperty.all<Color>(Colors.green)),
               child: Text("Add"),
               onPressed: () {
                 setState(() {
@@ -172,7 +176,18 @@ class _ProductWidgetState extends State<ProductWidget> {
                   this.isLongClicked = false;
                 });
               },
-            )
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.red)),
+              child: Text("Go back"),
+              onPressed: () {
+                setState(() {
+                  this.isLongClicked = false;
+                });
+              },
+            ),
           ],
         ));
   }
@@ -204,6 +219,7 @@ class _ProductWidgetState extends State<ProductWidget> {
             widget.product.name,
             style: TextStyle(color: Colors.white, fontSize: 18),
           ),
+          SizedBox(height: 2.0),
           Text(
             getPrice(),
             style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 14),
@@ -215,5 +231,11 @@ class _ProductWidgetState extends State<ProductWidget> {
 
   String getPrice() {
     return (widget.product.getPrice(1) / 100.0).toString() + "€";
+  }
+
+  @override
+  void dispose() {
+    this.isAlive = false;
+    super.dispose();
   }
 }
