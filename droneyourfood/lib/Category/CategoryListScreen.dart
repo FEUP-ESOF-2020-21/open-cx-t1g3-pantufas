@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'CategoryList.dart';
 
+import 'package:droneyourfood/Shopping/Shopping.dart';
+
 class CategoryListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -8,9 +10,16 @@ class CategoryListScreen extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Food List',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          title: Row(
+            children: [
+              Expanded(
+                child: Text("Category List"),
+              ),
+              Expanded(
+                  child: Align(
+                      alignment: Alignment.centerRight,
+                      child: ShoppingCart.instance.getButton(context)))
+            ],
           ),
         ),
         body: Column(
@@ -19,7 +28,7 @@ class CategoryListScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 padding: new EdgeInsets.all(10.0),
                 child: Text(
-                  "Placeholder category",
+                  "Category List",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       height: 2,

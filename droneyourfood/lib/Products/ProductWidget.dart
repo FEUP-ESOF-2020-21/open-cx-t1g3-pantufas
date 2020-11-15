@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'Product.dart';
+
+import 'package:droneyourfood/Shopping/Shopping.dart';
 
 class ProductListWidget extends StatelessWidget {
   final DocumentReference category; // null => list all
@@ -72,7 +73,6 @@ class ProductWidget extends StatefulWidget {
   _ProductWidgetState createState() => _ProductWidgetState();
 }
 
-// TODO onLongPressed() add multiple
 class _ProductWidgetState extends State<ProductWidget> {
   bool isClicked = false;
   bool isLongClicked = false;
@@ -152,9 +152,20 @@ class _ProductWidgetState extends State<ProductWidget> {
                 });
               },
             ),
-            Text(
-              this.howMany2Add.toString(),
-              style: TextStyle(color: Colors.white, fontSize: 14),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  this.howMany2Add.toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                SizedBox(height: 2.0),
+                Text(
+                  "(" + getPrice() + ")",
+                  style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 12),
+                ),
+              ],
             ),
             IconButton(
               icon: Icon(Icons.add),
@@ -230,7 +241,7 @@ class _ProductWidgetState extends State<ProductWidget> {
   }
 
   String getPrice() {
-    return (widget.product.getPrice(1) / 100.0).toString() + "€";
+    return (widget.product.getPrice(this.howMany2Add) / 100.0).toString() + "€";
   }
 
   @override
