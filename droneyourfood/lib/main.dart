@@ -1,8 +1,8 @@
-import 'package:droneyourfood/Authentication/Authentication.dart';
-import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'package:droneyourfood/Authentication/Authentication.dart';
+import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:droneyourfood/Category/CategoryListScreen.dart';
 import 'package:droneyourfood/Products/ListProduct.dart';
 
@@ -11,8 +11,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-
   final swatch = const MaterialColor(0xFF202124, const <int, Color>{
     50: const Color(0xFF32674C),
     100: const Color(0xFFCFD3D8),
@@ -88,10 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Row(
           children: [
             Expanded(
-              child: Text(
-                widget.title,
-                textAlign: TextAlign.left,
-              ),
+              child: Text(widget.title),
             ),
             Expanded(
                 child: Align(
@@ -105,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // in the middle of the parent.
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
