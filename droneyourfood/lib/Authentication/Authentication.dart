@@ -105,7 +105,7 @@ class _SignInState extends State<SignIn> {
                 child: MaterialButton(
                     onPressed: () async {
                       try {
-                        await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        UserCredential user = await FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: _emailField.text,
                             password: _passwordField.text);
                         //Only works if the user signs in
@@ -157,6 +157,7 @@ class _SignInState extends State<SignIn> {
                     onPressed: () async {
                       try {
                         await signInWithGoogle();
+                        // debugPrint(FirebaseAuth.instance.currentUser.displayName);
                         //Only works if the user signs in
                         navigateToHomeScreen(context);
                       } on FirebaseAuthException catch (e) {
@@ -178,7 +179,7 @@ class _SignInState extends State<SignIn> {
                         }
                       }
                     },
-                    child: Text("Login"))),
+                    child: Text("Google"))),
           ],
         )));
   }
@@ -256,10 +257,13 @@ class _RegisterState extends State<Register> {
                 child: MaterialButton(
                     onPressed: () async {
                       try {
-                        await FirebaseAuth.instance
+                        UserCredential userCredential = await FirebaseAuth.instance
                             .createUserWithEmailAndPassword(
                                 email: _emailField.text,
                                 password: _passwordField.text);
+                        await userCredential.user.updateProfile(displayName: "AAAAAAA");
+
+                        debugPrint(FirebaseAuth.instance.currentUser.displayName);
                         //Only works if the user signs in
                         navigateToHomeScreen(context);
                       } on FirebaseAuthException catch (e) {
