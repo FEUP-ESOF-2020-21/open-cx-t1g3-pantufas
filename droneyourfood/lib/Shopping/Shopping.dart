@@ -7,75 +7,104 @@ import 'dart:collection';
 
 class ShoppingCart {
   static final ShoppingCart instance = ShoppingCart._internal();
-  HashMap<Product, Map<String, dynamic>> items;
+  HashMap<Product, Map<String, dynamic>> _items;
+  bool _failed = false, _updated = false;
+  Future<QuerySnapshot> qShot;
 
   factory ShoppingCart() {
     return instance;
   }
 
   ShoppingCart._internal() {
-    this.items = new HashMap(); // :(
-    getCartFromFirebase();
+    this._items = HashMap(); // :(
+    _getCartFromFirebase();
   }
 
-  int operator [](Product prod) => this.items[prod]["quant"];
+  int operator [](Product prod) => this._items[prod]["quant"];
 
-  void getCartFromFirebase() async {
-    FirebaseFirestore.instance
-        .collection('users')
-        .get()
-        .then((QuerySnapshot qShot) {
+  void _getCartFromFirebase() async {
+    this.qShot = FirebaseFirestore.instance.collection('users').get();
+    this.qShot.then((QuerySnapshot qShot) {
       qShot.docs.forEach((doc) {
-        doc["items"].forEach((item) async {
-          // TODO keep await?
-          DocumentSnapshot dShot = await item["prod"].get();
-          Map<String, dynamic> d = dShot.data();
-          this.items[Product(
-                  d["name"], d["image"], d["category"], d["price"], d["ref"])] =
-              item;
+        doc["items"].forEach((item) {
+          Future<DocumentSnapshot> dShot = item["prod"].get();
+          dShot.then((dShot) {
+            Map<String, dynamic> d = dShot.data();
+            this._items[Product(d["name"], d["image"], d["category"],
+                d["price"], d["ref"])] = item;
+          }, onError: (dShot) {
+            debugPrint("Cart init failed (died).");
+            this._failed = true;
+          });
         });
       });
+    }, onError: (qShot) {
+      debugPrint("Cart init failed (died).");
+      this._failed = true;
     });
   }
 
-  void updateFirebaseCart() async {
-    rmEmptyItems(); // cleanup our data
+  HashMap<Product, Map<String, dynamic>> getItems() {
+    if (_failed)
+      return HashMap();
+    else
+      return this._items;
+  }
+
+  void updateFirebaseCart() {
+    _rmEmptyItems(); // cleanup our data
+    if (!_updated) // if not updated, do nothing
+      return;
+    _updated = false;
 
     // TODO change to auth
     FirebaseFirestore.instance
         .collection('users')
         .doc('8GCK1J3XwOQBHvBblX9Wc2JDWHI2')
-        .update({"items": items.values.toList()});
+        .update({"items": _items.values.toList()});
   }
 
   void addItem(Product prod, int quant) {
+    _updated = true;
     debugPrint("Adding " + quant.toString() + " of " + prod.name);
-    if (items.containsKey(prod))
-      items[prod]["quant"] += quant;
+    if (_items.containsKey(prod))
+      _items[prod]["quant"] += quant;
     else
-      items[prod] = {"prod": prod.ref, "quant": quant};
+      _items[prod] = {"prod": prod.ref, "quant": quant};
   }
 
   void rmItem(Product prod) {
-    items.remove(prod);
+    if (_items.remove(prod) != null) _updated = true;
   }
 
-  void rmEmptyItems() {
+  void _rmEmptyItems() {
     // remove items with 0 in quantity from cart
-    items.removeWhere((prod, item) => item["quant"] == 0);
+    _items.removeWhere((prod, item) => item["quant"] == 0);
+
+    _items.values.forEach((v) {
+      if (v["quant"] == 0) {
+        _updated = true;
+        return;
+      }
+    });
   }
 
   void incrementItem(Product prod) {
-    items[prod]["quant"] += 1;
+    _updated = true;
+    if (_items.containsKey(prod))
+      _items[prod]["quant"] += 1;
+    else
+      _items[prod]["quant"] = 1;
   }
 
   void decrementItem(Product prod) {
-    if (items[prod]["quant"] > 0) items[prod]["quant"] -= 1;
+    _updated = true;
+    if (_items[prod]["quant"] > 0) _items[prod]["quant"] -= 1;
   }
 
   int getTotalPrice() {
     int ret = 0;
-    items.forEach((prod, item) {
+    _items.forEach((prod, item) {
       ret += prod.getPrice(item["quant"]);
     });
     return ret;
@@ -264,19 +293,31 @@ class ShoppingListWidget extends StatefulWidget {
 }
 
 class _ShoppingListWidgetState extends State<ShoppingListWidget> {
+  bool isEmpty = false, isInited = false;
+
   String getTotalPrice() {
-    double totPrice = ShoppingCart.instance.getTotalPrice() / 100.0;
-    if (totPrice == 0.0)
+    if (this.isEmpty) {
       return "Your cart is empty.";
-    else
+    } else {
+      double totPrice = ShoppingCart.instance.getTotalPrice() / 100.0;
       return "Total cost: " + totPrice.toString() + "€";
+    }
   }
 
   List<ShoppingItem> getShoppingItems() {
     List<ShoppingItem> shopItems = new List();
-    ShoppingCart.instance.items.forEach((prod, item) {
+    ShoppingCart.instance.getItems().forEach((prod, item) {
       shopItems.add(new ShoppingItem(prod, this));
     });
+    this.isEmpty = shopItems.isEmpty;
+
+    // update list when querry is done
+    if (!isInited) {
+      ShoppingCart.instance.qShot.whenComplete(() {
+        setState(() {});
+      });
+    }
+
     return shopItems;
   }
 
@@ -301,9 +342,11 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
             ),
           ),
           child: Text("Checkout"),
-          onPressed: () {
-            debugPrint("TODO: CHECKOUT processes");
-          },
+          onPressed: this.isEmpty
+              ? null
+              : () {
+                  debugPrint("TODO: CHECKOUT processes");
+                },
         )
       ],
     );
@@ -311,7 +354,8 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    Widget ret =
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(
           child: ListView(
         children: this.getShoppingItems(),
@@ -328,13 +372,15 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
         child: getCheckoutWidget(context),
       ),
     ]);
+
+    this.isInited = true;
+    return ret;
   }
 
   @override
   void dispose() {
     // backup shopping cart
     ShoppingCart.instance.updateFirebaseCart();
-
     super.dispose();
   }
 }
