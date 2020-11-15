@@ -49,6 +49,7 @@ class ShoppingCart {
   }
 
   void addItem(Product prod, int quant) {
+    debugPrint("Adding " + quant.toString() + " of " + prod.name);
     if (items.containsKey(prod))
       items[prod]["quant"] += quant;
     else

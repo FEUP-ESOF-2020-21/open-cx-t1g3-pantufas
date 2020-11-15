@@ -17,7 +17,7 @@ class Product {
   }
 
   @override
-  bool operator ==(o) {
+  bool operator ==(covariant Product o) {
     return hashCode == o.hashCode;
   }
 
