@@ -2,6 +2,7 @@ import 'package:droneyourfood/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -32,6 +33,24 @@ class _SignInState extends State<SignIn> {
       context,
       MaterialPageRoute(builder: (context) => Register()),
     );
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    // Create a new credential
+    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   @override
@@ -126,7 +145,40 @@ class _SignInState extends State<SignIn> {
             //Error displaying after failed signin
             Container(
               child: Text(error, style: TextStyle(color: Colors.red)),
-            )
+            ),
+            Container(
+                width: MediaQuery.of(context).size.width / 1.2,
+                height: 45,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  color: Colors.black,
+                ),
+                child: MaterialButton(
+                    onPressed: () async {
+                      try {
+                        await signInWithGoogle();
+                        //Only works if the user signs in
+                        navigateToHomeScreen(context);
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'user-not-found') {
+                          setState(() {
+                            error = "User not found";
+                          });
+                          debugPrint('No user found for that email.');
+                        } else if (e.code == 'wrong-password') {
+                          setState(() {
+                            error = "Wrong password";
+                          });
+                          debugPrint('Wrong password provided for that user.');
+                        } else {
+                          setState(() {
+                            error = "Unknown error";
+                          });
+                          debugPrint(e.code);
+                        }
+                      }
+                    },
+                    child: Text("Login"))),
           ],
         )));
   }
@@ -235,7 +287,7 @@ class _RegisterState extends State<Register> {
             //Error displaying after failed signin
             Container(
               child: Text(error, style: TextStyle(color: Colors.red)),
-            )
+            ),
           ],
         )));
   }
