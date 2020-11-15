@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'package:droneyourfood/Authentication/Authentication.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:droneyourfood/Category/CategoryListScreen.dart';
 import 'package:droneyourfood/Products/ListProduct.dart';
@@ -54,7 +55,8 @@ class MyApp extends StatelessWidget {
                   brightness: Brightness.dark),
               scaffoldBackgroundColor: swatch.shade900,
             ),
-            home: MyHomePage(title: 'Drone your food'),
+            //home: MyHomePage(title: 'Drone your food'),
+            home: SignIn(),
           );
         }
         // Otherwise, show something whilst waiting for initialization to complete
