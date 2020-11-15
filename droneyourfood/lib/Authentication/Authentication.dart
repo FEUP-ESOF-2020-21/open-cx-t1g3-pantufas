@@ -14,6 +14,7 @@ class _SignInState extends State<SignIn> {
   String error = "";
 
   void navigateToHomeScreen(context) {
+    Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -142,6 +143,7 @@ class _RegisterState extends State<Register> {
   String error = "";
 
   void navigateToHomeScreen(context) {
+    Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(
