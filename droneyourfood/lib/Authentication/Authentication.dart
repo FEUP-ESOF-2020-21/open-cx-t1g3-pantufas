@@ -4,17 +4,15 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:droneyourfood/main.dart';
 
-class SignIn extends StatefulWidget {
-  @override
-  _SignInState createState() => _SignInState();
-}
-
-class _SignInState extends State<SignIn> {
+abstract class AuthState<T extends StatefulWidget> extends State<T> {
   TextEditingController _emailField = TextEditingController();
   TextEditingController _passwordField = TextEditingController();
   String _error = "";
 
-  void navigateToHomeScreen(BuildContext context) {
+  List<Widget> genButtons(BuildContext context, final double fieldWidth);
+
+  void navigateToHomeScreen(context) {
+    Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
     Navigator.pop(context);
     Navigator.push(
       context,
@@ -24,6 +22,49 @@ class _SignInState extends State<SignIn> {
     );
   }
 
+  Widget genInputField(BuildContext context, TextEditingController ctrl,
+      String txt, bool isObscure) {
+    return TextFormField(
+      style: TextStyle(color: Colors.white),
+      controller: ctrl,
+      obscureText: isObscure,
+      decoration: InputDecoration(
+        hintText: txt,
+        hintStyle: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
+
+  List<Widget> genInputs(BuildContext context, final double fieldWidth) {
+    return [
+      SizedBox(
+        width: fieldWidth,
+        child: genInputField(context, _emailField, "Email", false),
+      ),
+      SizedBox(
+        width: fieldWidth,
+        child: genInputField(context, _passwordField, "Password", true),
+      ),
+    ];
+  }
+
+  Widget genError(BuildContext context) {
+    /* ERROR DISPLAYING AFTER FAILURE */
+    return Container(
+      child: Text(this._error,
+          textAlign: TextAlign.center, style: TextStyle(color: Colors.red)),
+    );
+  }
+}
+
+class SignIn extends StatefulWidget {
+  @override
+  _SignInState createState() => _SignInState();
+}
+
+class _SignInState extends AuthState<SignIn> {
   void navigateToRegisterScreen(BuildContext context) {
     Navigator.push(
       context,
@@ -31,7 +72,7 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  Future<UserCredential> signInWithGoogle() async {
+  void signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
@@ -46,7 +87,10 @@ class _SignInState extends State<SignIn> {
     );
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    await FirebaseAuth.instance.signInWithCredential(credential);
+
+    // fogao -> >:(
+    navigateToHomeScreen(context);
   }
 
   void login() async {
@@ -62,39 +106,7 @@ class _SignInState extends State<SignIn> {
     }
   }
 
-  List<Widget> getInputs(BuildContext context, final double fieldWidth) {
-    return [
-      SizedBox(
-        width: fieldWidth,
-        child: TextFormField(
-          style: TextStyle(color: Colors.white),
-          controller: _emailField,
-          decoration: InputDecoration(
-            hintText: "Email",
-            hintStyle: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
-        ),
-      ),
-      SizedBox(
-        width: fieldWidth,
-        child: TextFormField(
-          style: TextStyle(color: Colors.white),
-          controller: _passwordField,
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: "password",
-            hintStyle: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
-        ),
-      ),
-    ];
-  }
-
-  List<Widget> getButtons(BuildContext context, final double fieldWidth) {
+  List<Widget> genButtons(BuildContext context, final double fieldWidth) {
     final double fontSize = 16;
 
     return [
@@ -108,6 +120,15 @@ class _SignInState extends State<SignIn> {
         child: Text("Log in", style: TextStyle(fontSize: fontSize)),
         onPressed: login,
       ),
+      ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+            minimumSize:
+                MaterialStateProperty.all<Size>(Size(fieldWidth, fontSize * 2)),
+          ),
+          child:
+              Text("Sign In with Google", style: TextStyle(fontSize: fontSize)),
+          onPressed: signInWithGoogle),
       /* REGISTER BUTTON */
       ElevatedButton(
         style: ButtonStyle(
@@ -119,11 +140,7 @@ class _SignInState extends State<SignIn> {
           navigateToRegisterScreen(context);
         },
       ),
-      /* ERROR DISPLAYING AFTER FAILED SIGNIN */
-      Container(
-        child: Text(this._error,
-            textAlign: TextAlign.center, style: TextStyle(color: Colors.red)),
-      )
+      genError(context)
     ];
   }
 
@@ -141,7 +158,7 @@ class _SignInState extends State<SignIn> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children:
-              getInputs(context, fieldWidth) + getButtons(context, fieldWidth),
+              genInputs(context, fieldWidth) + genButtons(context, fieldWidth),
         )));
   }
 }
@@ -151,26 +168,15 @@ class Register extends StatefulWidget {
   _RegisterState createState() => _RegisterState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegisterState extends AuthState<Register> {
   TextEditingController _userNameField = TextEditingController();
-  TextEditingController _emailField = TextEditingController();
-  TextEditingController _passwordField = TextEditingController();
-  String _error = "";
-
-  void navigateToHomeScreen(context) {
-    Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MyHomePage(title: "Drone your food"),
-      ),
-    );
-  }
 
   void register() async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailField.text, password: _passwordField.text);
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailField.text, password: _passwordField.text);
+      await userCredential.user.updateProfile(displayName: _userNameField.text);
       //Only works if the user signs in
       navigateToHomeScreen(context);
     } on FirebaseAuthException catch (e) {
@@ -180,39 +186,18 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  List<Widget> getInputs(BuildContext context, final double fieldWidth) {
-    return [
-      SizedBox(
-        width: fieldWidth,
-        child: TextFormField(
-          style: TextStyle(color: Colors.white),
-          controller: _emailField,
-          decoration: InputDecoration(
-            hintText: "Email",
-            hintStyle: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
-        ),
-      ),
-      SizedBox(
-        width: fieldWidth,
-        child: TextFormField(
-          style: TextStyle(color: Colors.white),
-          controller: _passwordField,
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: "password",
-            hintStyle: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
-        ),
-      ),
-    ];
+  @override
+  List<Widget> genInputs(BuildContext context, final double fieldWidth) {
+    return <Widget>[
+          SizedBox(
+            width: fieldWidth,
+            child: genInputField(context, _userNameField, "Username", false),
+          )
+        ] +
+        super.genInputs(context, fieldWidth);
   }
 
-  List<Widget> getButtons(BuildContext context, final double fieldWidth) {
+  List<Widget> genButtons(BuildContext context, final double fieldWidth) {
     final double fontSize = 16;
 
     /*
@@ -233,11 +218,7 @@ class _RegisterState extends State<Register> {
         child: Text("Sign Up", style: TextStyle(fontSize: fontSize)),
         onPressed: register,
       ),
-      /* ERROR DISPLAYING AFTER FAILED SIGNIN */
-      Container(
-        child: Text(this._error,
-            textAlign: TextAlign.center, style: TextStyle(color: Colors.red)),
-      )
+      genError(context)
     ];
   }
 
@@ -257,7 +238,7 @@ class _RegisterState extends State<Register> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children:
-              getInputs(context, fieldWidth) + getButtons(context, fieldWidth),
+              genInputs(context, fieldWidth) + genButtons(context, fieldWidth),
         )));
   }
 }
