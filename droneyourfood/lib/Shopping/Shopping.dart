@@ -1,15 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:droneyourfood/Products/Product.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
+import 'dart:async';
 
 // ! fu tiago >:)
 
 class ShoppingCart {
   static final ShoppingCart instance = ShoppingCart._internal();
+
   HashMap<Product, Map<String, dynamic>> _items;
+  Future<DocumentSnapshot> _dShot;
   bool _failed = false, _updated = false;
-  Future<QuerySnapshot> qShot;
 
   factory ShoppingCart() {
     return instance;
@@ -23,25 +26,37 @@ class ShoppingCart {
   int operator [](Product prod) => this._items[prod]["quant"];
 
   void _getCartFromFirebase() async {
-    this.qShot = FirebaseFirestore.instance.collection('users').get();
-    this.qShot.then((QuerySnapshot qShot) {
-      qShot.docs.forEach((doc) {
-        doc["items"].forEach((item) {
-          Future<DocumentSnapshot> dShot = item["prod"].get();
-          dShot.then((dShot) {
-            Map<String, dynamic> d = dShot.data();
-            this._items[Product(d["name"], d["image"], d["category"],
-                d["price"], d["ref"])] = item;
-          }, onError: (dShot) {
-            debugPrint("Cart init failed (died).");
-            this._failed = true;
-          });
+    this._dShot = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get();
+    this._dShot.then((doc) {
+      // stop here if we don't have a cart
+      if (doc.data() == null) {
+        debugPrint("Cart is empty.");
+        return;
+      }
+
+      doc.data()["items"].forEach((item) {
+        Future<DocumentSnapshot> dShotProd = item["prod"].get();
+        dShotProd.then((prod) {
+          Map<String, dynamic> p = prod.data();
+          this._items[Product(
+                  p["name"], p["image"], p["category"], p["price"], p["ref"])] =
+              item;
+        }, onError: (dShot) {
+          debugPrint("Cart init failed (died).");
+          this._failed = true;
         });
       });
     }, onError: (qShot) {
       debugPrint("Cart init failed (died).");
       this._failed = true;
     });
+  }
+
+  void notifyWhenLoaded(FutureOr<void> Function() action) {
+    this._dShot.whenComplete(action);
   }
 
   HashMap<Product, Map<String, dynamic>> getItems() {
@@ -60,7 +75,7 @@ class ShoppingCart {
     // TODO change to auth
     FirebaseFirestore.instance
         .collection('users')
-        .doc('8GCK1J3XwOQBHvBblX9Wc2JDWHI2')
+        .doc(FirebaseAuth.instance.currentUser.uid)
         .update({"items": _items.values.toList()});
   }
 
@@ -313,7 +328,7 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
 
     // update list when querry is done
     if (!isInited) {
-      ShoppingCart.instance.qShot.whenComplete(() {
+      ShoppingCart.instance.notifyWhenLoaded(() {
         setState(() {});
       });
     }
