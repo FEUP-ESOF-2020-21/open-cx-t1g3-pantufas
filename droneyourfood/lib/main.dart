@@ -32,11 +32,6 @@ class MyApp extends StatelessWidget {
       // Initialize FlutterFire:
       future: _initialization,
       builder: (context, snapshot) {
-        // Check for errors
-        // if (snapshot.hasError) {
-        //   return SomethingWentWrong();
-        // }
-
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
@@ -55,13 +50,12 @@ class MyApp extends StatelessWidget {
                   brightness: Brightness.dark),
               scaffoldBackgroundColor: swatch.shade900,
             ),
-            //home: MyHomePage(title: 'Drone your food'),
             home: SignIn(),
           );
         }
+
         // Otherwise, show something whilst waiting for initialization to complete
-        // return Loading();
-        return Container();
+        return Center(child: Text("Loading..."));
       },
     );
   }
@@ -77,6 +71,44 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  MaterialStateProperty<Color> _buttonColorFunction(MaterialColor c) {
+    return MaterialStateProperty.resolveWith<Color>(
+      (Set<MaterialState> states) {
+        if (!states.contains(MaterialState.pressed)) return c;
+        return c.withOpacity(0.8); // Use the component's default.
+      },
+    );
+  }
+
+  List<Widget> genButtons(BuildContext context) {
+    return [
+      ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: _buttonColorFunction(Colors.red),
+          ),
+          child: Text('List Products'),
+          onPressed: () {
+            //Use`Navigator` widget to pop oir go back to previous route / screen
+            Navigator.of(context)
+                .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+              return ProductListScreen(null);
+            }));
+          }),
+      ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: _buttonColorFunction(Colors.orange),
+          ),
+          child: Text('List Categories'),
+          onPressed: () {
+            //Use`Navigator` widget to pop oir go back to previous route / screen
+            Navigator.of(context)
+                .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+              return CategoryListScreen();
+            }));
+          })
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,46 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // in the middle of the parent.
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (!states.contains(MaterialState.pressed))
-                        return Colors.red;
-                      return Colors.red
-                          .withOpacity(0.8); // Use the component's default.
-                    },
-                  ),
-                ),
-                child: Text('List Products'),
-                onPressed: () {
-                  //Use`Navigator` widget to pop oir go back to previous route / screen
-                  Navigator.of(context).push(
-                      MaterialPageRoute<Null>(builder: (BuildContext context) {
-                    return new ProductListScreen(null);
-                  }));
-                }),
-            ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (!states.contains(MaterialState.pressed))
-                        return Colors.orange;
-                      return Colors.orange
-                          .withOpacity(0.8); // Use the component's default.
-                    },
-                  ),
-                ),
-                child: Text('List Categories'),
-                onPressed: () {
-                  //Use`Navigator` widget to pop oir go back to previous route / screen
-                  Navigator.of(context).push(
-                      MaterialPageRoute<Null>(builder: (BuildContext context) {
-                    return new CategoryListScreen();
-                  }));
-                })
-          ],
+          children: genButtons(context),
         ),
       ),
     );
