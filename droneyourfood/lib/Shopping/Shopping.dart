@@ -1,9 +1,10 @@
+import 'dart:async';
+import 'dart:collection';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:droneyourfood/Products/Product.dart';
-import 'package:flutter/material.dart';
-import 'dart:collection';
-import 'dart:async';
 
 // ! fu tiago >:)
 
@@ -151,7 +152,6 @@ class ShoppingScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             'Shopping Cart',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
         body: Column(

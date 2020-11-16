@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:droneyourfood/Authentication/Authentication.dart';
+import 'package:droneyourfood/Authentication/Profile.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:droneyourfood/Category/CategoryListScreen.dart';
 import 'package:droneyourfood/Products/ListProduct.dart';
@@ -77,23 +78,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Widget genAppBarTitle(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(widget.title),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ShoppingCart().getButton(context),
+            ProfileButton(),
+          ],
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Row(
-          children: [
-            Expanded(
-              child: Text(widget.title),
-            ),
-            Expanded(
-                child: Align(
-                    alignment: Alignment.centerRight,
-                    child: ShoppingCart().getButton(context)))
-          ],
-        ),
+        title: genAppBarTitle(context),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it

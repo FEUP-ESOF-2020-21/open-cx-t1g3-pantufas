@@ -11,9 +11,14 @@ abstract class AuthState<T extends StatefulWidget> extends State<T> {
 
   List<Widget> genButtons(BuildContext context, final double fieldWidth);
 
-  void navigateToHomeScreen(context) {
+  // TODO APPBAR TOOLS
+  static void navigatorPopAll(BuildContext context) {
     Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
     Navigator.pop(context);
+  }
+
+  void navigateToHomeScreen(context) {
+    AuthState.navigatorPopAll(context);
     Navigator.push(
       context,
       MaterialPageRoute(
