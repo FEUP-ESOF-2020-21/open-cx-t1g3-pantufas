@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:droneyourfood/main.dart';
+import 'package:droneyourfood/Tools.dart';
 
 abstract class AuthState<T extends StatefulWidget> extends State<T> {
   TextEditingController _emailField = TextEditingController();
@@ -11,15 +12,8 @@ abstract class AuthState<T extends StatefulWidget> extends State<T> {
 
   List<Widget> genButtons(BuildContext context, final double fieldWidth);
 
-  // TODO APPBAR TOOLS
-  static void navigatorPopAll(BuildContext context) {
-    Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-    Navigator.pop(context);
-  }
-
   void navigateToHomeScreen(context) {
-    AuthState.navigatorPopAll(context);
-    Navigator.push(
+    Tools.navigatorPopAllPush(
       context,
       MaterialPageRoute(
         builder: (context) => MyHomePage(title: "Drone your food"),
@@ -80,11 +74,9 @@ class _SignInState extends AuthState<SignIn> {
   void signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
-
     // Create a new credential
     final GoogleAuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
@@ -93,7 +85,6 @@ class _SignInState extends AuthState<SignIn> {
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
-
     // fogao -> >:(
     navigateToHomeScreen(context);
   }
@@ -154,11 +145,7 @@ class _SignInState extends AuthState<SignIn> {
     final double fieldWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text("Drone your food - Log In"),
-        ),
+        appBar: AppBar(title: Text("Drone your food - Log In")),
         body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -232,13 +219,7 @@ class _RegisterState extends AuthState<Register> {
     final double fieldWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(
-            "Drone your food - Sign Up",
-          ),
-        ),
+        appBar: AppBar(title: Text("Drone your food - Sign Up")),
         body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

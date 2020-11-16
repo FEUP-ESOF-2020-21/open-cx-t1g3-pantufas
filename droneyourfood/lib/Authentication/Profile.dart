@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:droneyourfood/Authentication/Authentication.dart';
+import 'package:droneyourfood/Tools.dart';
 
 class ProfileButton extends StatelessWidget {
   void openProfile(BuildContext context) {
@@ -41,11 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            getUsername(),
-          ),
-        ),
+        appBar: AppBar(title: Text(getUsername())),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
     debugPrint("Sign-out");
     await FirebaseAuth.instance.signOut();
 
-    AuthState.navigatorPopAll(context);
+    Tools.navigatorPopAll(context);
     Navigator.push(
       context,
       MaterialPageRoute(

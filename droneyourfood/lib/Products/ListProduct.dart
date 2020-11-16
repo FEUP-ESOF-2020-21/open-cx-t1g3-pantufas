@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'ProductWidget.dart';
 
-import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:droneyourfood/Category/Category.dart';
+import 'package:droneyourfood/Tools.dart';
 
 class ProductListScreen extends StatelessWidget {
   final textColor = Color(0xFFCFD3D8);
@@ -13,19 +13,7 @@ class ProductListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              Expanded(
-                child: Text('Food List'),
-              ),
-              Expanded(
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: ShoppingCart.instance.getButton(context)))
-            ],
-          ),
-        ),
+        appBar: Tools.genAppBar(context, "Product List"),
         body: Column(
           children: [
             getTitle(),
