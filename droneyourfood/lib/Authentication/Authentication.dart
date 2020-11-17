@@ -1,3 +1,4 @@
+import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -13,7 +14,8 @@ abstract class AuthState<T extends StatefulWidget> extends State<T> {
   List<Widget> genButtons(BuildContext context, final double fieldWidth);
 
   void navigateToHomeScreen(context) {
-    Tools.navigatorPopAllPush(
+    ShoppingCart.instance.getCartFromFirebase(); // reload cart (if needed)
+    Tools.navigatorPushAsRoot(
       context,
       MaterialPageRoute(
         builder: (context) => MyHomePage(title: "Drone your food"),

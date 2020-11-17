@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:droneyourfood/Authentication/Profile.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
@@ -9,7 +10,7 @@ class Tools {
     Navigator.pop(context);
   }
 
-  static void navigatorPopAllPush(BuildContext context, Route route) {
+  static void navigatorPushAsRoot(BuildContext context, Route route) {
     navigatorPopAll(context);
     Navigator.push(context, route);
   }
@@ -30,5 +31,13 @@ class Tools {
         ],
       ),
     );
+  }
+
+  static void signout(BuildContext context) async {
+    debugPrint("Sign-out");
+    ShoppingCart.instance.updateFirebaseCart();
+
+    await FirebaseAuth.instance.signOut();
+    ShoppingCart.instance.clearCart(); // reload
   }
 }
