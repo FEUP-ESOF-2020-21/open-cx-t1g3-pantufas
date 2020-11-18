@@ -1,28 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Product {
-  int id;
-  String name, image = "images/404.png";
-  List<String> categories;
+  String name, image;
+  DocumentReference category, ref;
+  int price;
 
-  Product({this.id, this.name, this.image, this.categories});
+  Product(this.name, this.image, this.category, this.price, this.ref);
 
-  void addCategory(String category) {
-    this.categories.add(category);
-  }
-
-  factory Product.fromJson(Map<String, dynamic> json) {
-    Product res = new Product(
-        id: json['id'], name: json['name'], image: 'images/' + json['image']);
-    res.categories = new List();
-
-    for (String category in json['category']) {
-      res.addCategory(category);
-    }
-
-    return res;
+  int getPrice(int quant) {
+    return price * quant;
   }
 
   @override
   String toString() {
-    return 'Product: {id = $id, name = $name, categories = $categories, image = $image}';
+    return 'Product: {name = $name, prive = $price, category = $category, image = $image}';
   }
+
+  @override
+  bool operator ==(covariant Product o) {
+    return hashCode == o.hashCode;
+  }
+
+  @override
+  int get hashCode => ref.id.hashCode;
 }

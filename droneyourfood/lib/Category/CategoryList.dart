@@ -1,86 +1,85 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:droneyourfood/Products/ListProduct.dart';
+import 'package:droneyourfood/Category/Category.dart';
 
 class CategoryListWidget extends StatelessWidget {
-  Future<String> loadFile(String fileName) async {
-    return await rootBundle.loadString(fileName);
-  }
+  Future<List<Category>> getCategoriesFromFirebase() async {
+    Future<QuerySnapshot> qShot =
+        FirebaseFirestore.instance.collection('categories').get();
 
-  Future<List<String>> getCategories(String fileName) async {
-    List<String> list = new List();
-    String fileContent = await loadFile(fileName);
-    final Map<String, dynamic> json = jsonDecode(fileContent);
-
-    if (json != null) {
-      dynamic productJson = json['categories'];
-      productJson.forEach((element) {
-        list.add(element);
-      });
-    }
-    return list;
+    return qShot.then((QuerySnapshot qShot) {
+      return qShot.docs
+          .map((doc) => Category(doc["name"], doc["ref"]))
+          .toList();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getCategories("resources/products.json"),
+        future: getCategoriesFromFirebase(),
         builder: (context, categoryPromise) {
-          if (categoryPromise.connectionState == ConnectionState.none &&
-              categoryPromise.hasData == null) {
-            return Container();
+          if (categoryPromise.connectionState == ConnectionState.done) {
+            return Column(
+              children: [
+                Expanded(
+                    child: ListView.builder(
+                  itemCount: categoryPromise.data.length,
+                  itemBuilder: (context, index) {
+                    return CategoryListItem(categoryPromise.data[index]);
+                  },
+                ))
+              ],
+            );
+          } else if (categoryPromise.connectionState ==
+              ConnectionState.waiting) {
+            return Text("Loading...");
+          } else {
+            return Text("Died...");
           }
-          return Column(
-            children: <Widget>[
-              Expanded(
-                  child: ListView.builder(
-                itemCount: categoryPromise.data == null
-                    ? 0
-                    : categoryPromise.data.length,
-                itemBuilder: (context, index) {
-                  String c = categoryPromise.data[index];
-                  return CategoryListItem(c);
-                },
-              ))
-            ],
-          );
         });
   }
 }
 
 class CategoryListItem extends StatelessWidget {
-  final String category;
+  final Category category;
 
-  CategoryListItem(String category) : this.category = category;
+  CategoryListItem(this.category);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
-            return new ProductListScreen(this.category);
-          }));
-        },
-        child: Container(
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.all(Radius.circular(12.0))),
-            padding: new EdgeInsets.all(8.0),
-            margin: new EdgeInsets.all(8.0),
-            child: new Row(
-              children: <Widget>[
-                Expanded(
-                    child: Text(
-                  this.category,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 30),
-                ))
-              ],
-            )));
+    return Container(
+        margin: EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).primaryColor),
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.all(8.0))),
+          child: SizedBox(
+              height: 60.0,
+              child: Center(
+                child: Text(
+                  this.category.name,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+          onPressed: () {
+            goToProdPage(context);
+          },
+        ));
+  }
+
+  void goToProdPage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+      return new ProductListScreen(this.category);
+    }));
   }
 }
