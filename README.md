@@ -42,9 +42,8 @@ Deliver food quickly and  seamlessly to conference participants.
 ## Elevator Pitch
 
 Conference participants waste a lot of time in lines and changing seats when getting
-food. Our company helps them feel more immersed in the various talks by quickly
-and confortably delivering food and beverages, thus reducing time spent in lines
-and changing seats. What makes our approach unique is the use of new drone technology
+food. Our company helps them feel more immersed in the conference by quickly
+and confortably delivering food and beverages just with a few taps on their phones. What makes our approach unique is the use of new drone technology
 to bypass any obstacle and make deliveries as fast as possible.
 
 ---
