@@ -75,11 +75,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void signout(BuildContext context) async {
-    debugPrint("Sign-out");
-    await FirebaseAuth.instance.signOut();
+    Tools.signout(context);
 
-    Tools.navigatorPopAll(context);
-    Navigator.push(
+    Tools.navigatorPushAsRoot(
       context,
       MaterialPageRoute(
         builder: (context) => SignIn(),

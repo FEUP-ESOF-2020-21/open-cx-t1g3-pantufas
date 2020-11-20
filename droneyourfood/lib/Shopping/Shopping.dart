@@ -20,13 +20,17 @@ class ShoppingCart {
   }
 
   ShoppingCart._internal() {
+    clearCart();
+    getCartFromFirebase();
+  }
+
+  void clearCart() {
     this._items = HashMap(); // :(
-    _getCartFromFirebase();
   }
 
   int operator [](Product prod) => this._items[prod]["quant"];
 
-  void _getCartFromFirebase() async {
+  void getCartFromFirebase() async {
     this._dShot = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
@@ -73,11 +77,18 @@ class ShoppingCart {
       return;
     _updated = false;
 
-    // TODO change to auth
+    // FirebaseAuth.instance.authStateChanges().listen((User user) {
+    // if (user == null) {
+    // print('User is currently signed out!');
+    // } else {
+    // print('User is signed in!');
+    // }
+    // });
+
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
-        .update({"items": _items.values.toList()});
+        .set({"items": _items.values.toList()});
   }
 
   void addItem(Product prod, int quant) {
@@ -170,7 +181,11 @@ class ShoppingItem extends StatefulWidget {
   _ShoppingItemState createState() => _ShoppingItemState();
 
   String getPrice() {
-    return (prod.getPrice(ShoppingCart.instance[prod]) / 100.0).toString() +
+    return (prod.getPrice(1) / 100.0).toString() +
+        "€ x " +
+        ShoppingCart.instance[prod].toString() +
+        " = " +
+        (prod.getPrice(ShoppingCart.instance[prod]) / 100.0).toString() +
         "€";
   }
 }
