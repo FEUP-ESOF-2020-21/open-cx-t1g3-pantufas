@@ -147,6 +147,20 @@ from my seat._
 
 #### User story 5
 
+- **Value = Should Have**
+- **Effort = S**
+
+_As a customer, I want to be able to check my profile_.
+
+```gherkin
+ Feature: Cancel order.
+ Given: I have placed an order.
+ When: I am on the checkout page.
+ Then: I cancel my order.
+```
+
+#### User story 6
+
 _As a customer, I want to have multiple payment methods available to me._
 
 - **Value = Won't Have**
@@ -160,7 +174,7 @@ _As a customer, I want to have multiple payment methods available to me._
  And: I can finish paying for my order.
 ```
 
-#### User story 6
+#### User story 7
 
 _As a customer, I want to be able to choose the delivery spot for my orders._
 
@@ -174,7 +188,7 @@ _As a customer, I want to be able to choose the delivery spot for my orders._
  Then: I register the order delivery spot.
 ```
 
-#### User story 7
+#### User story 8
 
 _As a customer, I want to be able to change my order._
 
@@ -188,7 +202,7 @@ _As a customer, I want to be able to change my order._
  Then: I go back to the objects page.
 ```
 
-#### User story 8
+#### User story 9
 
 - **Value = Could Have**
 - **Effort = S**
