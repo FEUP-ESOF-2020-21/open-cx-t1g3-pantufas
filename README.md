@@ -147,10 +147,10 @@ from my seat._
 
 #### User story 5
 
+_As a customer, I want to be able to check my profile_.
+
 - **Value = Should Have**
 - **Effort = S**
-
-_As a customer, I want to be able to check my profile_.
 
 ```gherkin
  Feature: Cancel order.
