@@ -54,19 +54,28 @@ class Tools {
     });
   }
 
-  static void appendCurrUserInfo(
-      String field, Map<String, dynamic> data) async {
+  static void appendCurrUserInfo(String field, List<dynamic> data) async {
+    // first is the most recent (it's a pre-append)
     Future<DocumentSnapshot> dShot = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .get();
     dShot.then((doc) {
-      if (doc.data() == null) {
-        updateCurrUserInfo(data);
-        return;
+      if (doc.data() != null) {
+        Iterable<dynamic> it = doc.data()[field];
+        if (it != null) {
+          for (var elem in it) data.add(elem);
+        }
       }
 
-      data[field] += doc.data()[field];
+      updateCurrUserInfo({field: data});
     });
+  }
+
+  static void rmUserInfo() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .delete();
   }
 }

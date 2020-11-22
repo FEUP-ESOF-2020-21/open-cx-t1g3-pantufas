@@ -78,6 +78,8 @@ class ShoppingCart {
       return;
     _updated = false;
 
+    Tools.updateCurrUserInfo({"items": _items.values.toList()});
+
     // FirebaseAuth.instance.authStateChanges().listen((User user) {
     // if (user == null) {
     // print('User is currently signed out!');
@@ -85,8 +87,6 @@ class ShoppingCart {
     // print('User is signed in!');
     // }
     // });
-
-    Tools.updateCurrUserInfo({"items": _items.values.toList()});
   }
 
   void addItem(Product prod, int quant) {
@@ -112,6 +112,15 @@ class ShoppingCart {
         return;
       }
     });
+  }
+
+  void checkout() {
+    debugPrint("Checking out..");
+
+    this._updated = false;
+    Tools.appendCurrUserInfo("hist", [getTotalPrice()]); // append this purchase
+    clearCart();
+    Tools.updateCurrUserInfo({"items": []}); // clear upstream cart
   }
 
   void incrementItem(Product prod) {
@@ -373,7 +382,9 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
           onPressed: this.isEmpty
               ? null
               : () {
-                  debugPrint("TODO: CHECKOUT processes");
+                  setState(() {
+                    ShoppingCart.instance.checkout();
+                  });
                 },
         )
       ],
