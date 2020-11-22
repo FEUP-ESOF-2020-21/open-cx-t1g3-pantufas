@@ -103,18 +103,40 @@ class _ProfilePageState extends State<ProfilePage> {
     else
       avatarRad = s.height * 0.15;
 
+    Widget avatarPic;
     if (user.photoURL == null) {
       // user has no pfp
       final initials = getUsername()[0];
-      return CircleAvatar(
+      avatarPic = CircleAvatar(
         radius: avatarRad,
         backgroundColor: Colors.green.shade200,
         child: Text(initials, style: TextStyle(fontSize: avatarRad)),
       );
     }
-    return CircleAvatar(
+    avatarPic = CircleAvatar(
       radius: avatarRad,
+      backgroundColor: Theme.of(context).backgroundColor,
       backgroundImage: NetworkImage("https://i.imgur.com/4vwF28a.jpg"),
+    );
+
+    return Container(
+      width: avatarRad * 2,
+      height: avatarRad * 2,
+      child: Stack(
+        children: <Widget>[
+          avatarPic,
+          new Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              mini: true,
+              child: Icon(Icons.image),
+              onPressed: () {
+                print("cucu");
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
