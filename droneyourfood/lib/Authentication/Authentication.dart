@@ -99,7 +99,12 @@ class _SignInState extends AuthState<SignIn> {
       navigateToHomeScreen(context);
     } on FirebaseAuthException catch (e) {
       setState(() {
-        this._error = e.message;
+        if (e.code == 'user-not-found')
+          this._error = "No user found for that email.";
+        else if (e.code == 'wrong-password')
+          this._error = "Wrong password provided for that user.";
+        else
+          this._error = e.message;
       });
     }
   }
@@ -175,7 +180,12 @@ class _RegisterState extends AuthState<Register> {
       navigateToHomeScreen(context);
     } on FirebaseAuthException catch (e) {
       setState(() {
-        this._error = e.message;
+        if (e.code == 'weak-password')
+          this._error = "The password provided is too weak.";
+        else if (e.code == 'email-already-in-use')
+          this._error = "An account already exists for that email.";
+        else
+          this._error = e.message;
       });
     }
   }

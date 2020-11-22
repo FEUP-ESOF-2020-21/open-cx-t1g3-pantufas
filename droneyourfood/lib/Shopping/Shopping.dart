@@ -85,10 +85,18 @@ class ShoppingCart {
     // }
     // });
 
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .set({"items": _items.values.toList()});
+    try {
+      // this will fail on the first time the user adds anything to the cart
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .update({"items": _items.values.toList()});
+    } catch (e) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .set({"items": _items.values.toList()});
+    }
   }
 
   void addItem(Product prod, int quant) {
