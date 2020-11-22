@@ -57,34 +57,46 @@ class _ProfilePageState extends State<ProfilePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Row(
-                            children: [
-                              Icon(Icons.shopping_cart_outlined),
-                              Text(
-                                " 10",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                " orders",
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                              ),
-                            ],
+                          FlatButton.icon(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            icon: Icon(Icons.shopping_cart_outlined),
+                            label: Row(
+                              children: [
+                                Text(
+                                  " 10", // TODO placeholder
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  " orders",
+                                  style: TextStyle(fontWeight: FontWeight.w300),
+                                ),
+                              ],
+                            ),
+                            onPressed: () {
+                              debugPrint("cucu");
+                            },
                           ),
                           Text("·",
                               style: TextStyle(fontWeight: FontWeight.w900)),
-                          Row(
-                            children: [
-                              Icon(Icons.star_outline),
-                              Text(
-                                " 50",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                " rates",
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                              ),
-                            ],
-                          )
+                          FlatButton.icon(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            icon: Icon(Icons.star_outline),
+                            label: Row(
+                              children: [
+                                Text(
+                                  " 50", // TODO placeholder
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  " rates",
+                                  style: TextStyle(fontWeight: FontWeight.w300),
+                                ),
+                              ],
+                            ),
+                            onPressed: () {
+                              debugPrint("cucu");
+                            },
+                          ),
                         ],
                       ),
                     ] +
@@ -112,12 +124,13 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Colors.green.shade200,
         child: Text(initials, style: TextStyle(fontSize: avatarRad)),
       );
+    } else {
+      avatarPic = CircleAvatar(
+        radius: avatarRad,
+        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundImage: NetworkImage(user.photoURL),
+      );
     }
-    avatarPic = CircleAvatar(
-      radius: avatarRad,
-      backgroundColor: Theme.of(context).backgroundColor,
-      backgroundImage: NetworkImage("https://i.imgur.com/4vwF28a.jpg"),
-    );
 
     return Container(
       width: avatarRad * 2,
@@ -131,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
               mini: true,
               child: Icon(Icons.image),
               onPressed: () {
-                print("cucu");
+                debugPrint("pressed change pfp button");
               },
             ),
           ),
