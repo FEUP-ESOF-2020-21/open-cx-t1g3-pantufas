@@ -45,33 +45,105 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: AppBar(title: Text(getUsername())),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Name: " + getUsername()),
-              Text("Email: " + user.email),
-              Text("Creation time: " + user.metadata.creationTime.toString()),
-              Text("Last sign in: " + user.metadata.lastSignInTime.toString()),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: header(context) +
+                [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.shopping_cart_outlined),
+                          Text(
+                            " 10",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            " orders",
+                            style: TextStyle(fontWeight: FontWeight.w300),
+                          ),
+                        ],
                       ),
-                      child: Text("Sign out"),
-                      onPressed: () {
-                        signout(context);
-                      }),
-                  Text(
-                    "UID: " + user.uid,
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                      Text("·", style: TextStyle(fontWeight: FontWeight.w900)),
+                      Row(
+                        children: [
+                          Icon(Icons.star_outline),
+                          Text(
+                            " 50",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            " rates",
+                            style: TextStyle(fontWeight: FontWeight.w300),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
-                ],
-              ),
-            ],
+                ] +
+                footer(context),
           ),
         ));
+  }
+
+  Widget userAvatar(BuildContext context) {
+    final Size s = MediaQuery.of(context).size;
+    double avatarRad;
+    if (s.height > s.width)
+      avatarRad = s.width * 0.2;
+    else
+      avatarRad = s.height * 0.15;
+
+    // if (/* user doesn't have a pfp */) {
+    // return CircleAvatar(
+    // backgroundColor: Colors.green.shade800,
+    // child: Text(getUsername()[0]),
+    // );
+    // }
+    return CircleAvatar(
+      radius: avatarRad,
+      backgroundImage: NetworkImage("https://i.imgur.com/4vwF28a.jpg"),
+    );
+  }
+
+  List<Widget> header(BuildContext context) {
+    return [
+      SizedBox(height: 10),
+      userAvatar(context),
+      SizedBox(height: 8),
+      Text(getUsername(),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+      Text(user.email),
+      Spacer(),
+    ];
+  }
+
+  Widget signoutButton(BuildContext context) {
+    return ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+        ),
+        child: Text("Sign out"),
+        onPressed: () {
+          signout(context);
+        });
+  }
+
+  List<Widget> footer(BuildContext context) {
+    return [
+      Spacer(),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          signoutButton(context),
+          Text(
+            "UID: " + user.uid,
+            style: TextStyle(color: Colors.grey, fontSize: 12),
+          ),
+        ],
+      )
+    ];
   }
 
   void signout(BuildContext context) async {
