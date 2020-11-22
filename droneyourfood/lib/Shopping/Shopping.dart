@@ -160,14 +160,13 @@ class ShoppingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Shopping Cart',
-          ),
+      appBar: AppBar(
+        title: Text(
+          'Shopping Cart',
         ),
-        body: Column(
-          children: [Expanded(child: ShoppingListWidget())],
-        ));
+      ),
+      body: ShoppingListWidget(),
+    );
   }
 }
 

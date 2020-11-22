@@ -41,48 +41,56 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final double appBarHeight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
     return Scaffold(
         appBar: AppBar(title: Text(getUsername())),
-        body: Center(
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: header(context) +
-                [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
+        body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: appBarHeight),
+            child: IntrinsicHeight(
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: header(context) +
+                    [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Icon(Icons.shopping_cart_outlined),
-                          Text(
-                            " 10",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          Row(
+                            children: [
+                              Icon(Icons.shopping_cart_outlined),
+                              Text(
+                                " 10",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                " orders",
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                              ),
+                            ],
                           ),
-                          Text(
-                            " orders",
-                            style: TextStyle(fontWeight: FontWeight.w300),
-                          ),
+                          Text("·",
+                              style: TextStyle(fontWeight: FontWeight.w900)),
+                          Row(
+                            children: [
+                              Icon(Icons.star_outline),
+                              Text(
+                                " 50",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                " rates",
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                              ),
+                            ],
+                          )
                         ],
                       ),
-                      Text("·", style: TextStyle(fontWeight: FontWeight.w900)),
-                      Row(
-                        children: [
-                          Icon(Icons.star_outline),
-                          Text(
-                            " 50",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            " rates",
-                            style: TextStyle(fontWeight: FontWeight.w300),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ] +
-                footer(context),
+                    ] +
+                    footer(context),
+              ),
+            ),
           ),
         ));
   }
@@ -95,12 +103,15 @@ class _ProfilePageState extends State<ProfilePage> {
     else
       avatarRad = s.height * 0.15;
 
-    // if (/* user doesn't have a pfp */) {
-    // return CircleAvatar(
-    // backgroundColor: Colors.green.shade800,
-    // child: Text(getUsername()[0]),
-    // );
-    // }
+    if (user.photoURL == null) {
+      // user has no pfp
+      final initials = getUsername()[0];
+      return CircleAvatar(
+        radius: avatarRad,
+        backgroundColor: Colors.green.shade200,
+        child: Text(initials, style: TextStyle(fontSize: avatarRad)),
+      );
+    }
     return CircleAvatar(
       radius: avatarRad,
       backgroundImage: NetworkImage("https://i.imgur.com/4vwF28a.jpg"),
