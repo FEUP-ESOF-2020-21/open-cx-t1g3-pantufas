@@ -41,37 +41,155 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final double appBarHeight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
     return Scaffold(
         appBar: AppBar(title: Text(getUsername())),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Name: " + getUsername()),
-              Text("Email: " + user.email),
-              Text("Creation time: " + user.metadata.creationTime.toString()),
-              Text("Last sign in: " + user.metadata.lastSignInTime.toString()),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
+        body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: appBarHeight),
+            child: IntrinsicHeight(
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: header(context) +
+                    [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          FlatButton.icon(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            icon: Icon(Icons.shopping_cart_outlined),
+                            label: Row(
+                              children: [
+                                Text(
+                                  " 10", // TODO placeholder
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  " orders",
+                                  style: TextStyle(fontWeight: FontWeight.w300),
+                                ),
+                              ],
+                            ),
+                            onPressed: () {
+                              debugPrint("cucu");
+                            },
+                          ),
+                          Text("·",
+                              style: TextStyle(fontWeight: FontWeight.w900)),
+                          FlatButton.icon(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            icon: Icon(Icons.star_outline),
+                            label: Row(
+                              children: [
+                                Text(
+                                  " 50", // TODO placeholder
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  " rates",
+                                  style: TextStyle(fontWeight: FontWeight.w300),
+                                ),
+                              ],
+                            ),
+                            onPressed: () {
+                              debugPrint("cucu");
+                            },
+                          ),
+                        ],
                       ),
-                      child: Text("Sign out"),
-                      onPressed: () {
-                        signout(context);
-                      }),
-                  Text(
-                    "UID: " + user.uid,
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                ],
+                    ] +
+                    footer(context),
               ),
-            ],
+            ),
           ),
         ));
+  }
+
+  Widget userAvatar(BuildContext context) {
+    final Size s = MediaQuery.of(context).size;
+    double avatarRad;
+    if (s.height > s.width)
+      avatarRad = s.width * 0.2;
+    else
+      avatarRad = s.height * 0.15;
+
+    Widget avatarPic;
+    if (user.photoURL == null) {
+      // user has no pfp
+      final initials = getUsername()[0];
+      avatarPic = CircleAvatar(
+        radius: avatarRad,
+        backgroundColor: Colors.green.shade200,
+        child: Text(initials, style: TextStyle(fontSize: avatarRad)),
+      );
+    } else {
+      avatarPic = CircleAvatar(
+        radius: avatarRad,
+        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundImage: NetworkImage(user.photoURL),
+      );
+    }
+
+    return Container(
+      width: avatarRad * 2,
+      height: avatarRad * 2,
+      child: Stack(
+        children: <Widget>[
+          avatarPic,
+          new Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              mini: true,
+              child: Icon(Icons.image),
+              onPressed: () {
+                debugPrint("pressed change pfp button");
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> header(BuildContext context) {
+    return [
+      SizedBox(height: 10),
+      userAvatar(context),
+      SizedBox(height: 8),
+      Text(getUsername(),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+      Text(user.email),
+      Spacer(),
+    ];
+  }
+
+  Widget signoutButton(BuildContext context) {
+    return ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+        ),
+        child: Text("Sign out"),
+        onPressed: () {
+          signout(context);
+        });
+  }
+
+  List<Widget> footer(BuildContext context) {
+    return [
+      Spacer(),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          signoutButton(context),
+          Text(
+            "UID: " + user.uid,
+            style: TextStyle(color: Colors.grey, fontSize: 12),
+          ),
+        ],
+      )
+    ];
   }
 
   void signout(BuildContext context) async {

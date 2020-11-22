@@ -220,9 +220,7 @@ class _ProductWidgetState extends State<ProductWidget> {
         SizedBox(
             width: 60.0,
             height: 60.0,
-            child: Image(
-              image: AssetImage('resources/logo.png'),
-            )),
+            child: Image(image: AssetImage('resources/logo.png'))),
         Expanded(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
