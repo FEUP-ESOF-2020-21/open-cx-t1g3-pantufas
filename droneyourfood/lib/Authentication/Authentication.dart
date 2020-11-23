@@ -74,10 +74,10 @@ class _SignInState extends AuthState<SignIn> {
     );
   }
 
-  void navigateToPasswordRecoveryScreen(BuildContext context) {
+  void navigateToPasswordResetScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RecoverPassword()),
+      MaterialPageRoute(builder: (context) => ResetPassword()),
     );
   }
 
@@ -157,7 +157,7 @@ class _SignInState extends AuthState<SignIn> {
               text: "Forgot your password?",
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  navigateToPasswordRecoveryScreen(context);
+                  navigateToPasswordResetScreen(context);
                 })),
       genError(context)
     ];
@@ -257,20 +257,31 @@ class _RegisterState extends AuthState<Register> {
   }
 }
 
-class RecoverPassword extends StatefulWidget {
+class ResetPassword extends StatefulWidget {
   @override
-  _RecoverPasswordState createState() => _RecoverPasswordState();
+  _ResetPasswordState createState() => _ResetPasswordState();
 }
 
-class _RecoverPasswordState extends AuthState<RecoverPassword> {
+class _ResetPasswordState extends AuthState<ResetPassword> {
   TextEditingController _emailField = TextEditingController();
 
-  void recoverPassword() async {
+  void resetPassword() async {
+    //Error reset
+    this._error = "";
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: _emailField.text);
+      setState(() {
+        this._error = "Email sent";
+      });
     } on FirebaseAuthException catch (e) {
-      this._error = e.message;
+      setState(() {
+        if(e.code == "user-not-found"){
+          this._error = "Email sent";
+        } else {
+          this._error = e.message;
+        }
+      });
     }
   }
 
@@ -295,9 +306,9 @@ class _RecoverPasswordState extends AuthState<RecoverPassword> {
           minimumSize:
               MaterialStateProperty.all<Size>(Size(fieldWidth, fontSize * 2)),
         ),
-        child: Text("Send Password Recovery Email",
+        child: Text("Send password reset email",
             style: TextStyle(fontSize: fontSize)),
-        onPressed: recoverPassword,
+        onPressed: resetPassword,
       ),
       genError(context)
     ];
@@ -308,7 +319,7 @@ class _RecoverPasswordState extends AuthState<RecoverPassword> {
     final double fieldWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
-        appBar: AppBar(title: Text("Drone your food - Recover Password")),
+        appBar: AppBar(title: Text("Drone your food - Reset Password")),
         body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
