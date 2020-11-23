@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:droneyourfood/Products/Product.dart';
-import 'package:droneyourfood/Tools.dart';
 
 // ! fu tiago >:)
 
@@ -103,8 +102,6 @@ class ShoppingCart {
       return;
     _updated = false;
 
-    Tools.updateCurrUserInfo({"items": _items.values.toList()});
-
     // FirebaseAuth.instance.authStateChanges().listen((User user) {
     // if (user == null) {
     // print('User is currently signed out!');
@@ -112,6 +109,11 @@ class ShoppingCart {
     // print('User is signed in!');
     // }
     // });
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .set({"items": _items.values.toList()});
   }
 
   void addItem(Product prod, int quant) {
@@ -231,8 +233,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
     /*
      *  Returns content of shopping cart list decoration (box/bg/colors)
      */
-    // TODO this is a shitty workaround for the button ink well
-    // on top of container color
+    // TODO this is a shitty workaround
     return Container(
       decoration: BoxDecoration(
         color: color,
@@ -412,10 +413,7 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
           onPressed: this.isEmpty
               ? null
               : () {
-                  setState(() {
-                    ShoppingCart.instance.checkout();
-                    // TODO message that congratulates for checkout
-                  });
+                  debugPrint("TODO: CHECKOUT processes");
                 },
         )
       ],
