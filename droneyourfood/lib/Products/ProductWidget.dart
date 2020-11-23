@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'Product.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:droneyourfood/Shopping/Shopping.dart';
 
@@ -220,7 +221,24 @@ class _ProductWidgetState extends State<ProductWidget> {
         SizedBox(
             width: 60.0,
             height: 60.0,
-            child: Image(image: AssetImage('resources/logo.png'))),
+            child: FutureBuilder(
+              future: getImageUrl(),
+              builder: (context, snapshot){
+                ImageProvider image;
+                if(snapshot.hasData){
+                  image = NetworkImage(snapshot.data.toString());
+                }
+                else if (snapshot.hasError){
+                  print(snapshot.error);
+                  image = AssetImage("resources/logo.png");
+                }
+                else{
+                  image = AssetImage("resources/logo.png");
+                }
+
+                return Image(image: image);
+              },
+            )),
         Expanded(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
@@ -246,5 +264,11 @@ class _ProductWidgetState extends State<ProductWidget> {
   void dispose() {
     this.isAlive = false;
     super.dispose();
+  }
+
+  Future<dynamic> getImageUrl() async {
+    String path = "products/" + widget.product.image;
+    StorageReference ref = FirebaseStorage.instance.ref().child(path);
+    return ref.getDownloadURL();
   }
 }
