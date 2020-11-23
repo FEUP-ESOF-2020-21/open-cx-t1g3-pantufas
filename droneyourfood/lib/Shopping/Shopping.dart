@@ -118,7 +118,12 @@ class ShoppingCart {
     debugPrint("Checking out..");
 
     this._updated = false;
-    Tools.appendCurrUserInfo("hist", [getTotalPrice()]); // append this purchase
+    Tools.appendCurrUserInfo("hist", [
+      {
+        "time": DateTime.now().millisecondsSinceEpoch,
+        "price": getTotalPrice(),
+      }
+    ]); // append this purchase
     clearCart();
     Tools.updateCurrUserInfo({"items": []}); // clear upstream cart
   }
@@ -202,7 +207,8 @@ class _ShoppingItemState extends State<ShoppingItem> {
     /*
      *  Returns content of shopping cart list decoration (box/bg/colors)
      */
-    // TODO this is a shitty workaround
+    // TODO this is a shitty workaround for the button ink well
+    // on top of container color
     return Container(
       decoration: BoxDecoration(
         color: color,
@@ -384,6 +390,7 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
               : () {
                   setState(() {
                     ShoppingCart.instance.checkout();
+                    // TODO message that congratulates for checkout
                   });
                 },
         )
