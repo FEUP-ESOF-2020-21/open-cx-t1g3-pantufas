@@ -72,6 +72,31 @@ class ShoppingCart {
       return this._items;
   }
 
+  Future<List<Map<String, int>>> getPurchaseHist() async {
+    Future<DocumentSnapshot> dShot = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get();
+
+    return dShot.then((doc) {
+      if (doc.data() == null || doc.data()["hist"] == null) {
+        debugPrint("getPurchaseHist: no purchase history data.");
+        return List();
+      }
+
+      // ??????????????????????
+      List<Map<String, int>> ret = List();
+      doc.data()["hist"].forEach((mapElem) {
+        Map<String, int> m = Map();
+        mapElem.forEach((k, v) {
+          m[k] = v;
+        });
+        ret.add(m);
+      });
+      return ret;
+    });
+  }
+
   void updateFirebaseCart() {
     _rmEmptyItems(); // cleanup our data
     if (!_updated) // if not updated, do nothing
@@ -120,7 +145,7 @@ class ShoppingCart {
     this._updated = false;
     Tools.appendCurrUserInfo("hist", [
       {
-        "time": DateTime.now().millisecondsSinceEpoch,
+        "date": DateTime.now().millisecondsSinceEpoch,
         "price": getTotalPrice(),
       }
     ]); // append this purchase
