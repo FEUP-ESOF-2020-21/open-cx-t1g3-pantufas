@@ -1,4 +1,5 @@
 import 'package:droneyourfood/Shopping/Shopping.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -73,6 +74,13 @@ class _SignInState extends AuthState<SignIn> {
     );
   }
 
+  void navigateToPasswordResetScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ResetPassword()),
+    );
+  }
+
   void signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
@@ -93,10 +101,19 @@ class _SignInState extends AuthState<SignIn> {
 
   void login() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailField.text, password: _passwordField.text);
-      //Only works if the user signs in
-      navigateToHomeScreen(context);
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailField.text, password: _passwordField.text);
+
+      if (!userCredential.user.emailVerified) {
+        setState(() {
+          this._error = "Email not verified. Verification email sent";
+        });
+        await userCredential.user.sendEmailVerification();
+      } else {
+        //Only works if the user is verified
+        navigateToHomeScreen(context);
+      }
     } on FirebaseAuthException catch (e) {
       setState(() {
         if (e.code == 'user-not-found')
@@ -143,6 +160,14 @@ class _SignInState extends AuthState<SignIn> {
           navigateToRegisterScreen(context);
         },
       ),
+      RichText(
+          text: TextSpan(
+              style: TextStyle(color: Colors.grey),
+              text: "Forgot your password?",
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  navigateToPasswordResetScreen(context);
+                })),
       genError(context)
     ];
   }
@@ -176,8 +201,11 @@ class _RegisterState extends AuthState<Register> {
           .createUserWithEmailAndPassword(
               email: _emailField.text, password: _passwordField.text);
       await userCredential.user.updateProfile(displayName: _userNameField.text);
-      //Only works if the user signs in
-      navigateToHomeScreen(context);
+
+      setState(() {
+        this._error = "Verification email sent";
+      });
+      await userCredential.user.sendEmailVerification();
     } on FirebaseAuthException catch (e) {
       setState(() {
         if (e.code == 'weak-password')
@@ -232,6 +260,78 @@ class _RegisterState extends AuthState<Register> {
 
     return Scaffold(
         appBar: AppBar(title: Text("Drone your food - Sign Up")),
+        body: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:
+              genInputs(context, fieldWidth) + genButtons(context, fieldWidth),
+        )));
+  }
+}
+
+class ResetPassword extends StatefulWidget {
+  @override
+  _ResetPasswordState createState() => _ResetPasswordState();
+}
+
+class _ResetPasswordState extends AuthState<ResetPassword> {
+  TextEditingController _emailField = TextEditingController();
+
+  void resetPassword() async {
+    //Error reset
+    this._error = "";
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: _emailField.text);
+      setState(() {
+        this._error = "Email sent";
+      });
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        if (e.code == "user-not-found") {
+          this._error = "Email sent";
+        } else {
+          this._error = e.message;
+        }
+      });
+    }
+  }
+
+  @override
+  List<Widget> genInputs(BuildContext context, final double fieldWidth) {
+    return <Widget>[
+      SizedBox(
+        width: fieldWidth,
+        child: genInputField(context, _emailField, "Email", false),
+      )
+    ];
+  }
+
+  List<Widget> genButtons(BuildContext context, final double fieldWidth) {
+    final double fontSize = 16;
+
+    return [
+      /* REGISTER BUTTON */
+      ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+          minimumSize:
+              MaterialStateProperty.all<Size>(Size(fieldWidth, fontSize * 2)),
+        ),
+        child: Text("Send password reset email",
+            style: TextStyle(fontSize: fontSize)),
+        onPressed: resetPassword,
+      ),
+      genError(context)
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double fieldWidth = MediaQuery.of(context).size.width * 0.8;
+
+    return Scaffold(
+        appBar: AppBar(title: Text("Drone your food - Reset Password")),
         body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
