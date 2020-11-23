@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:droneyourfood/Products/Product.dart';
+import 'package:droneyourfood/Tools.dart';
 
 // ! fu tiago >:)
 
@@ -77,6 +78,8 @@ class ShoppingCart {
       return;
     _updated = false;
 
+    Tools.updateCurrUserInfo({"items": _items.values.toList()});
+
     // FirebaseAuth.instance.authStateChanges().listen((User user) {
     // if (user == null) {
     // print('User is currently signed out!');
@@ -84,19 +87,6 @@ class ShoppingCart {
     // print('User is signed in!');
     // }
     // });
-
-    try {
-      // this will fail on the first time the user adds anything to the cart
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser.uid)
-          .update({"items": _items.values.toList()});
-    } catch (e) {
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser.uid)
-          .set({"items": _items.values.toList()});
-    }
   }
 
   void addItem(Product prod, int quant) {
@@ -122,6 +112,20 @@ class ShoppingCart {
         return;
       }
     });
+  }
+
+  void checkout() {
+    debugPrint("Checking out..");
+
+    this._updated = false;
+    Tools.appendCurrUserInfo("hist", [
+      {
+        "time": DateTime.now().millisecondsSinceEpoch,
+        "price": getTotalPrice(),
+      }
+    ]); // append this purchase
+    clearCart();
+    Tools.updateCurrUserInfo({"items": []}); // clear upstream cart
   }
 
   void incrementItem(Product prod) {
@@ -202,7 +206,8 @@ class _ShoppingItemState extends State<ShoppingItem> {
     /*
      *  Returns content of shopping cart list decoration (box/bg/colors)
      */
-    // TODO this is a shitty workaround
+    // TODO this is a shitty workaround for the button ink well
+    // on top of container color
     return Container(
       decoration: BoxDecoration(
         color: color,
@@ -382,7 +387,10 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
           onPressed: this.isEmpty
               ? null
               : () {
-                  debugPrint("TODO: CHECKOUT processes");
+                  setState(() {
+                    ShoppingCart.instance.checkout();
+                    // TODO message that congratulates for checkout
+                  });
                 },
         )
       ],
