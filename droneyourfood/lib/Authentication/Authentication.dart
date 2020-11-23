@@ -101,10 +101,19 @@ class _SignInState extends AuthState<SignIn> {
 
   void login() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailField.text, password: _passwordField.text);
-      //Only works if the user signs in
-      navigateToHomeScreen(context);
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailField.text, password: _passwordField.text);
+
+      if (!userCredential.user.emailVerified) {
+        setState(() {
+          this._error = "Email not verified. Verification email sent";
+        });
+        await userCredential.user.sendEmailVerification();
+      } else {
+        //Only works if the user is verified
+        navigateToHomeScreen(context);
+      }
     } on FirebaseAuthException catch (e) {
       setState(() {
         if (e.code == 'user-not-found')
@@ -192,8 +201,11 @@ class _RegisterState extends AuthState<Register> {
           .createUserWithEmailAndPassword(
               email: _emailField.text, password: _passwordField.text);
       await userCredential.user.updateProfile(displayName: _userNameField.text);
-      //Only works if the user signs in
-      navigateToHomeScreen(context);
+
+      setState(() {
+        this._error = "Verification email sent";
+      });
+      await userCredential.user.sendEmailVerification();
     } on FirebaseAuthException catch (e) {
       setState(() {
         if (e.code == 'weak-password')
@@ -276,7 +288,7 @@ class _ResetPasswordState extends AuthState<ResetPassword> {
       });
     } on FirebaseAuthException catch (e) {
       setState(() {
-        if(e.code == "user-not-found"){
+        if (e.code == "user-not-found") {
           this._error = "Email sent";
         } else {
           this._error = e.message;
