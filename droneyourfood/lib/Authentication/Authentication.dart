@@ -1,4 +1,5 @@
 import 'package:droneyourfood/Shopping/Shopping.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -73,6 +74,13 @@ class _SignInState extends AuthState<SignIn> {
     );
   }
 
+  void navigateToPasswordRecoveryScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RecoverPassword()),
+    );
+  }
+
   void signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
@@ -143,6 +151,14 @@ class _SignInState extends AuthState<SignIn> {
           navigateToRegisterScreen(context);
         },
       ),
+      RichText(
+          text: TextSpan(
+              style: TextStyle(color: Colors.grey),
+              text: "Forgot your password?",
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  navigateToPasswordRecoveryScreen(context);
+                })),
       genError(context)
     ];
   }
@@ -232,6 +248,67 @@ class _RegisterState extends AuthState<Register> {
 
     return Scaffold(
         appBar: AppBar(title: Text("Drone your food - Sign Up")),
+        body: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:
+              genInputs(context, fieldWidth) + genButtons(context, fieldWidth),
+        )));
+  }
+}
+
+class RecoverPassword extends StatefulWidget {
+  @override
+  _RecoverPasswordState createState() => _RecoverPasswordState();
+}
+
+class _RecoverPasswordState extends AuthState<RecoverPassword> {
+  TextEditingController _emailField = TextEditingController();
+
+  void recoverPassword() async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: _emailField.text);
+    } on FirebaseAuthException catch (e) {
+      this._error = e.message;
+    }
+  }
+
+  @override
+  List<Widget> genInputs(BuildContext context, final double fieldWidth) {
+    return <Widget>[
+      SizedBox(
+        width: fieldWidth,
+        child: genInputField(context, _emailField, "Email", false),
+      )
+    ];
+  }
+
+  List<Widget> genButtons(BuildContext context, final double fieldWidth) {
+    final double fontSize = 16;
+
+    return [
+      /* REGISTER BUTTON */
+      ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+          minimumSize:
+              MaterialStateProperty.all<Size>(Size(fieldWidth, fontSize * 2)),
+        ),
+        child: Text("Send Password Recovery Email",
+            style: TextStyle(fontSize: fontSize)),
+        onPressed: recoverPassword,
+      ),
+      genError(context)
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double fieldWidth = MediaQuery.of(context).size.width * 0.8;
+
+    return Scaffold(
+        appBar: AppBar(title: Text("Drone your food - Recover Password")),
         body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
