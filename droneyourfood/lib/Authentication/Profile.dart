@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 import 'package:droneyourfood/Authentication/Authentication.dart';
+import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:droneyourfood/Tools.dart';
 
 class ProfileButton extends StatelessWidget {
@@ -31,6 +33,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   User user = FirebaseAuth.instance.currentUser;
+  Future<List<Map<String, int>>> purscHist =
+      ShoppingCart.instance.getPurchaseHist();
 
   String getUsername() {
     if (user == null || user.displayName == null)
@@ -57,46 +61,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          FlatButton.icon(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            icon: Icon(Icons.shopping_cart_outlined),
-                            label: Row(
-                              children: [
-                                Text(
-                                  " 10", // TODO placeholder
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  " orders",
-                                  style: TextStyle(fontWeight: FontWeight.w300),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                              debugPrint("cucu");
-                            },
-                          ),
+                          purchaseHistButton(context),
                           Text("·",
                               style: TextStyle(fontWeight: FontWeight.w900)),
-                          FlatButton.icon(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            icon: Icon(Icons.star_outline),
-                            label: Row(
-                              children: [
-                                Text(
-                                  " 50", // TODO placeholder
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  " rates",
-                                  style: TextStyle(fontWeight: FontWeight.w300),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                              debugPrint("cucu");
-                            },
-                          ),
+                          rateHistButton(context),
                         ],
                       ),
                     ] +
@@ -105,6 +73,64 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         ));
+  }
+
+  Widget purchaseHistButton(BuildContext context) {
+    return FlatButton.icon(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      icon: Icon(Icons.shopping_cart_outlined),
+      label: Row(
+        children: [
+          FutureBuilder(
+            future: this.purscHist,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              String ret;
+              if (snapshot.hasData)
+                ret = snapshot.data.length.toString();
+              else if (snapshot.hasError)
+                ret = "0";
+              else
+                ret = "..";
+
+              return Text(ret, style: TextStyle(fontWeight: FontWeight.bold));
+            },
+          ),
+          Text(
+            " orders",
+            style: TextStyle(fontWeight: FontWeight.w300),
+          ),
+        ],
+      ),
+      onPressed: () {
+        debugPrint("Open purchase history.");
+        Navigator.of(context)
+            .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+          return PurchaseHistScreen(this.purscHist);
+        }));
+      },
+    );
+  }
+
+  Widget rateHistButton(BuildContext context) {
+    return FlatButton.icon(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      icon: Icon(Icons.star_outline),
+      label: Row(
+        children: [
+          Text(
+            " 50", // TODO placeholder
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(
+            " rates",
+            style: TextStyle(fontWeight: FontWeight.w300),
+          ),
+        ],
+      ),
+      onPressed: () {
+        debugPrint("WIP: rate history button.");
+      },
+    );
   }
 
   Widget userAvatar(BuildContext context) {
@@ -200,6 +226,52 @@ class _ProfilePageState extends State<ProfilePage> {
       MaterialPageRoute(
         builder: (context) => SignIn(),
       ),
+    );
+  }
+}
+
+class PurchaseHistScreen extends StatelessWidget {
+  final Future<List<Map<String, int>>> purscHist;
+
+  PurchaseHistScreen(this.purscHist);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Purchase history")),
+      body: FutureBuilder(
+        future: this.purscHist,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length == 0)
+              return Text("You have no purchases.");
+
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, i) {
+                return genHistEntry(context, snapshot.data[i]);
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Text("You have no purchases.");
+          }
+
+          return Text("Loading..");
+        },
+      ),
+    );
+  }
+
+  Widget genHistEntry(BuildContext context, Map<String, int> data) {
+    final DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(data["date"]).toLocal();
+    final dateStr = DateFormat("yyyy-MM-dd HH:mm").format(date);
+
+    final String price = (data["price"] / 100.0).toString() + "€";
+
+    return ListTile(
+      title: Text(dateStr),
+      subtitle: Text(price),
     );
   }
 }
