@@ -152,8 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Theme.of(context).backgroundColor,
         backgroundImage: FileImage(this._currImage),
       );
-    }
-    if (user.photoURL == null) {
+    } else if (user.photoURL == null) {
       // user has no pfp
       final initials = getUsername()[0];
       avatarPic = CircleAvatar(
