@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'package:droneyourfood/Authentication/Authentication.dart';
@@ -32,6 +35,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  File _currImage;
   User user = FirebaseAuth.instance.currentUser;
   Future<List<Map<String, int>>> purscHist =
       ShoppingCart.instance.getPurchaseHist();
@@ -142,6 +146,13 @@ class _ProfilePageState extends State<ProfilePage> {
       avatarRad = s.height * 0.15;
 
     Widget avatarPic;
+    if (this._currImage != null) {
+      avatarPic = CircleAvatar(
+        radius: avatarRad,
+        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundImage: FileImage(this._currImage),
+      );
+    }
     if (user.photoURL == null) {
       // user has no pfp
       final initials = getUsername()[0];
@@ -169,14 +180,43 @@ class _ProfilePageState extends State<ProfilePage> {
             child: FloatingActionButton(
               mini: true,
               child: Icon(Icons.image),
-              onPressed: () {
-                debugPrint("pressed change pfp button");
-              },
+              onPressed: changePfp,
             ),
           ),
         ],
       ),
     );
+  }
+
+  void changePfp() async {
+    debugPrint("changePfp: attempting to change profile picture.");
+
+    // choose image
+    final PickedFile pickedImage = await ImagePicker()
+        .getImage(source: ImageSource.gallery, imageQuality: 100);
+    if (pickedImage == null) {
+      debugPrint("changePfp: user canceled the pfp change.");
+      return;
+    }
+
+    try {
+      final File image = File(pickedImage.path);
+
+      // upload image
+      final String path = "userpfp/" + FirebaseAuth.instance.currentUser.uid;
+      await FirebaseStorage.instance.ref(path).putFile(image);
+
+      final Reference urlRef = FirebaseStorage.instance.ref(path);
+      final String url = (await urlRef.getDownloadURL()).toString();
+      await user.updateProfile(photoURL: url);
+
+      // update pic
+      setState(() {
+        this._currImage = image;
+      });
+    } catch (e) {
+      debugPrint("changePfp: " + e.toString());
+    }
   }
 
   List<Widget> header(BuildContext context) {
