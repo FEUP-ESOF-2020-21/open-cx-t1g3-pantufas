@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import 'package:droneyourfood/Authentication/Authentication.dart';
 import 'package:droneyourfood/Components/ScrollColumn.dart';
+import 'package:droneyourfood/Components/FloatingActionMenu.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:droneyourfood/Tools.dart';
 
@@ -159,18 +160,38 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
 
+    final List<Widget> pfpButtons = [
+      FloatingActionButton(
+        heroTag: "btn1",
+        mini: true,
+        child: Icon(Icons.image),
+        onPressed: () {
+          changePfp(false);
+        },
+      ),
+      FloatingActionButton(
+        heroTag: "btn2",
+        mini: true,
+        child: Icon(Icons.camera),
+        onPressed: () {
+          changePfp(true);
+        },
+      ),
+    ];
+
     return Container(
       width: avatarRad * 2,
       height: avatarRad * 2,
       child: Stack(
         children: <Widget>[
           avatarPic,
-          new Align(
+          Align(
             alignment: Alignment.bottomRight,
-            child: FloatingActionButton(
-              mini: true,
-              child: Icon(Icons.image),
-              onPressed: changePfp,
+            child: FloatingActionMenu(
+              isHorizontal: true,
+              buttonAtEnd: true,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: pfpButtons,
             ),
           ),
         ],
@@ -178,12 +199,13 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void changePfp() async {
+  void changePfp(bool isCam) async {
     debugPrint("changePfp: attempting to change profile picture.");
 
     // choose image
-    final PickedFile pickedImage = await ImagePicker()
-        .getImage(source: ImageSource.gallery, imageQuality: 100);
+    final PickedFile pickedImage = await ImagePicker().getImage(
+        source: isCam ? ImageSource.camera : ImageSource.gallery,
+        imageQuality: 100);
     if (pickedImage == null) {
       debugPrint("changePfp: user canceled the pfp change.");
       return;
