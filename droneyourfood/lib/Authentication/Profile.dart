@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'package:droneyourfood/Authentication/Authentication.dart';
+import 'package:droneyourfood/Components/ScrollColumn.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:droneyourfood/Tools.dart';
 
@@ -49,34 +50,24 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double appBarHeight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
     return Scaffold(
-        appBar: AppBar(title: Text(getUsername())),
-        body: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: appBarHeight),
-            child: IntrinsicHeight(
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: header(context) +
-                    [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          purchaseHistButton(context),
-                          Text("·",
-                              style: TextStyle(fontWeight: FontWeight.w900)),
-                          rateHistButton(context),
-                        ],
-                      ),
-                    ] +
-                    footer(context),
+      appBar: AppBar(title: Text(getUsername())),
+      body: ScrollColumn(
+        startHeight: Tools.getAppBarHeight(context),
+        children: header(context) +
+            [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  purchaseHistButton(context),
+                  Text("·", style: TextStyle(fontWeight: FontWeight.w900)),
+                  rateHistButton(context),
+                ],
               ),
-            ),
-          ),
-        ));
+            ] +
+            footer(context),
+      ),
+    );
   }
 
   Widget purchaseHistButton(BuildContext context) {

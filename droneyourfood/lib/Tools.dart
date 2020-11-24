@@ -16,6 +16,12 @@ class Tools {
     Navigator.push(context, route);
   }
 
+  static double getAppBarHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+  }
+
   static AppBar genAppBar(BuildContext context, String title) {
     return AppBar(
       title: Row(
