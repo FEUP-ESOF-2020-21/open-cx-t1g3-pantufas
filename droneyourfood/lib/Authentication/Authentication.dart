@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'package:droneyourfood/Components/ScrollColumn.dart';
 import 'package:droneyourfood/main.dart';
 import 'package:droneyourfood/Tools.dart';
 
@@ -111,9 +112,10 @@ class _SignInState extends AuthState<SignIn> {
         });
         await userCredential.user.sendEmailVerification();
       } else {
-        //Only works if the user is verified
+        // Only works if the user is verified
         navigateToHomeScreen(context);
       }
+      navigateToHomeScreen(context);
     } on FirebaseAuthException catch (e) {
       setState(() {
         if (e.code == 'user-not-found')
@@ -161,13 +163,15 @@ class _SignInState extends AuthState<SignIn> {
         },
       ),
       RichText(
-          text: TextSpan(
-              style: TextStyle(color: Colors.grey),
-              text: "Forgot your password?",
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  navigateToPasswordResetScreen(context);
-                })),
+        text: TextSpan(
+          style: TextStyle(color: Colors.grey),
+          text: "Forgot your password?",
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              navigateToPasswordResetScreen(context);
+            },
+        ),
+      ),
       genError(context)
     ];
   }
@@ -177,13 +181,15 @@ class _SignInState extends AuthState<SignIn> {
     final double fieldWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
-        appBar: AppBar(title: Text("Drone your food - Log In")),
-        body: Center(
-            child: Column(
+      appBar: AppBar(title: Text("Drone your food - Log In")),
+      body: Center(
+        child: ScrollColumn(
           mainAxisAlignment: MainAxisAlignment.center,
           children:
               genInputs(context, fieldWidth) + genButtons(context, fieldWidth),
-        )));
+        ),
+      ),
+    );
   }
 }
 
@@ -259,13 +265,15 @@ class _RegisterState extends AuthState<Register> {
     final double fieldWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
-        appBar: AppBar(title: Text("Drone your food - Sign Up")),
-        body: Center(
-            child: Column(
+      appBar: AppBar(title: Text("Drone your food - Sign Up")),
+      body: Center(
+        child: ScrollColumn(
           mainAxisAlignment: MainAxisAlignment.center,
           children:
               genInputs(context, fieldWidth) + genButtons(context, fieldWidth),
-        )));
+        ),
+      ),
+    );
   }
 }
 
@@ -333,7 +341,7 @@ class _ResetPasswordState extends AuthState<ResetPassword> {
     return Scaffold(
         appBar: AppBar(title: Text("Drone your food - Reset Password")),
         body: Center(
-            child: Column(
+            child: ScrollColumn(
           mainAxisAlignment: MainAxisAlignment.center,
           children:
               genInputs(context, fieldWidth) + genButtons(context, fieldWidth),

@@ -1,8 +1,13 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'package:droneyourfood/Authentication/Authentication.dart';
+import 'package:droneyourfood/Components/ScrollColumn.dart';
+import 'package:droneyourfood/Components/FloatingActionMenu.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:droneyourfood/Tools.dart';
 
@@ -32,6 +37,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  File _currImage;
   User user = FirebaseAuth.instance.currentUser;
   Future<List<Map<String, int>>> purscHist =
       ShoppingCart.instance.getPurchaseHist();
@@ -45,34 +51,24 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double appBarHeight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
     return Scaffold(
-        appBar: AppBar(title: Text(getUsername())),
-        body: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: appBarHeight),
-            child: IntrinsicHeight(
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: header(context) +
-                    [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          purchaseHistButton(context),
-                          Text("·",
-                              style: TextStyle(fontWeight: FontWeight.w900)),
-                          rateHistButton(context),
-                        ],
-                      ),
-                    ] +
-                    footer(context),
+      appBar: AppBar(title: Text(getUsername())),
+      body: ScrollColumn(
+        startHeight: Tools.getAppBarHeight(context),
+        children: header(context) +
+            [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  purchaseHistButton(context),
+                  Text("·", style: TextStyle(fontWeight: FontWeight.w900)),
+                  rateHistButton(context),
+                ],
               ),
-            ),
-          ),
-        ));
+            ] +
+            footer(context),
+      ),
+    );
   }
 
   Widget purchaseHistButton(BuildContext context) {
@@ -142,7 +138,13 @@ class _ProfilePageState extends State<ProfilePage> {
       avatarRad = s.height * 0.15;
 
     Widget avatarPic;
-    if (user.photoURL == null) {
+    if (this._currImage != null) {
+      avatarPic = CircleAvatar(
+        radius: avatarRad,
+        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundImage: FileImage(this._currImage),
+      );
+    } else if (user.photoURL == null) {
       // user has no pfp
       final initials = getUsername()[0];
       avatarPic = CircleAvatar(
@@ -158,25 +160,75 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
 
+    final List<Widget> pfpButtons = [
+      FloatingActionButton(
+        heroTag: "btn1",
+        mini: true,
+        child: Icon(Icons.image),
+        onPressed: () {
+          changePfp(false);
+        },
+      ),
+      FloatingActionButton(
+        heroTag: "btn2",
+        mini: true,
+        child: Icon(Icons.camera),
+        onPressed: () {
+          changePfp(true);
+        },
+      ),
+    ];
+
     return Container(
       width: avatarRad * 2,
       height: avatarRad * 2,
       child: Stack(
         children: <Widget>[
           avatarPic,
-          new Align(
+          Align(
             alignment: Alignment.bottomRight,
-            child: FloatingActionButton(
-              mini: true,
-              child: Icon(Icons.image),
-              onPressed: () {
-                debugPrint("pressed change pfp button");
-              },
+            child: FloatingActionMenu(
+              isHorizontal: true,
+              buttonAtEnd: true,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: pfpButtons,
             ),
           ),
         ],
       ),
     );
+  }
+
+  void changePfp(bool isCam) async {
+    debugPrint("changePfp: attempting to change profile picture.");
+
+    // choose image
+    final PickedFile pickedImage = await ImagePicker().getImage(
+        source: isCam ? ImageSource.camera : ImageSource.gallery,
+        imageQuality: 100);
+    if (pickedImage == null) {
+      debugPrint("changePfp: user canceled the pfp change.");
+      return;
+    }
+
+    try {
+      final File image = File(pickedImage.path);
+
+      // upload image
+      final String path = "userpfp/" + FirebaseAuth.instance.currentUser.uid;
+      await FirebaseStorage.instance.ref(path).putFile(image);
+
+      final Reference urlRef = FirebaseStorage.instance.ref(path);
+      final String url = (await urlRef.getDownloadURL()).toString();
+      await user.updateProfile(photoURL: url);
+
+      // update pic
+      setState(() {
+        this._currImage = image;
+      });
+    } catch (e) {
+      debugPrint("changePfp: " + e.toString());
+    }
   }
 
   List<Widget> header(BuildContext context) {

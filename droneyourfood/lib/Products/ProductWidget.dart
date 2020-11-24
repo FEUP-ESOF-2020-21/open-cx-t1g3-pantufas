@@ -267,8 +267,8 @@ class _ProductWidgetState extends State<ProductWidget> {
   }
 
   Future<dynamic> getImageUrl() async {
-    String path = "products/" + widget.product.image;
-    StorageReference ref = FirebaseStorage.instance.ref().child(path);
+    final String path = "products/" + widget.product.image;
+    final Reference ref = FirebaseStorage.instance.ref(path);
     return ref.getDownloadURL();
   }
 }
