@@ -115,7 +115,6 @@ class _SignInState extends AuthState<SignIn> {
         // Only works if the user is verified
         navigateToHomeScreen(context);
       }
-      navigateToHomeScreen(context);
     } on FirebaseAuthException catch (e) {
       setState(() {
         if (e.code == 'user-not-found')
