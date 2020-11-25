@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:droneyourfood/Authentication/Profile.dart';
+import 'package:droneyourfood/Profile/Profile.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
 
 class Tools {
