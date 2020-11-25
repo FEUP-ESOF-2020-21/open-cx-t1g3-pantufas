@@ -23,12 +23,13 @@ class MyTheme {
       accentColor: swatch.shade800,
       primarySwatch: swatch,
       colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: swatch,
-          primaryColorDark: swatch.shade800,
-          accentColor: swatch.shade50,
-          cardColor: swatch.shade500,
-          backgroundColor: swatch.shade800,
-          brightness: Brightness.dark),
+        primarySwatch: swatch,
+        primaryColorDark: swatch.shade800,
+        accentColor: swatch.shade50,
+        cardColor: swatch.shade500,
+        backgroundColor: swatch.shade800,
+        brightness: Brightness.dark,
+      ),
       scaffoldBackgroundColor: swatch.shade900,
     );
   }
