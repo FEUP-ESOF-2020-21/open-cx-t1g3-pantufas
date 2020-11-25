@@ -1,4 +1,5 @@
 import 'dart:io' show File;
+import 'package:droneyourfood/MyAppBar/MyAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -54,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(title: Text(getUsername())),
       body: ScrollColumn(
-        startHeight: Tools.getAppBarHeight(context),
+        startHeight: MyAppBar.getAppBarHeight(context),
         children: header(context) +
             [
               Row(

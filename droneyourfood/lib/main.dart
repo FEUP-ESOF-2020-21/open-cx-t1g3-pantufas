@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:droneyourfood/Authentication/Signin.dart';
 import 'package:droneyourfood/Category/CategoryListScreen.dart';
 import 'package:droneyourfood/Products/ProductScreen.dart';
-import 'package:droneyourfood/Tools.dart';
+import 'package:droneyourfood/MyAppBar/MyAppBar.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-    final MyTheme myTheme = MyTheme();
 
     return FutureBuilder(
       // Initialize FlutterFire:
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
             title: 'Drone your food',
-            theme: myTheme.themeData,
+            theme: MyAppTheme().themeData,
             home: SignIn(),
           );
         }
@@ -88,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Tools.genAppBar(context, widget.title),
+      appBar: MyAppBar(context, widget.title).appBar,
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.

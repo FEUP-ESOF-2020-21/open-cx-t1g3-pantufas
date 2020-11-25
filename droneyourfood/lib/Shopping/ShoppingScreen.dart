@@ -7,9 +7,7 @@ class ShoppingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Shopping Cart',
-        ),
+        title: Text('Shopping Cart'),
       ),
       body: ShoppingListWidget(),
     );

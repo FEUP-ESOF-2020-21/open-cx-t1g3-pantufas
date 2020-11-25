@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'ProductList.dart';
 
 import 'package:droneyourfood/Category/Category.dart';
-import 'package:droneyourfood/Tools.dart';
+import 'package:droneyourfood/MyAppBar/MyAppBar.dart';
 
 class ProductListScreen extends StatelessWidget {
   final textColor = Color(0xFFCFD3D8);
@@ -13,7 +13,7 @@ class ProductListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: Tools.genAppBar(context, "Product List"),
+        appBar: MyAppBar(context, "Product List").appBar,
         body: Column(
           children: [
             getTitle(),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:droneyourfood/main.dart';
 import 'package:droneyourfood/Tools.dart';
-import 'package:droneyourfood/Components/ScrollColumn.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
 
 abstract class AuthState<T extends StatefulWidget> extends State<T> {
