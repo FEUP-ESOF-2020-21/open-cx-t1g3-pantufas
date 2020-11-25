@@ -1,11 +1,11 @@
-import 'dart:io';
+import 'dart:io' show File;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
-import 'package:droneyourfood/Authentication/Authentication.dart';
+import 'package:droneyourfood/Authentication/Signin.dart';
 import 'package:droneyourfood/Components/ScrollColumn.dart';
 import 'package:droneyourfood/Components/FloatingActionMenu.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
