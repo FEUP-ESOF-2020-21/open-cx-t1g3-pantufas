@@ -239,6 +239,8 @@ for example, using t-shirt sizes (XS, S, M, L, XL).
 
 ### Domain model
 
+![Domain Model](images/domain_model.png)
+
 TODO
 To better understand the context of the software system, it is very useful to
 have a simple UML class diagram with all the key concepts (names, attributes)
