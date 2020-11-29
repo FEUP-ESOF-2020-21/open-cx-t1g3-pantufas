@@ -67,7 +67,6 @@ scope and boundaries of the application domain addressed by the project.
 
 ### Use case diagram
 
-![interface mockup](images/use_case_diagram.png)
 
 - **Actor** - Conference participant.
 - **Description** - The actor chooses some products and orders them.
@@ -78,16 +77,19 @@ scope and boundaries of the application domain addressed by the project.
 - **Normal Flow** - TODO Provide a detailed description of the user actions and system responses that will take place during execution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. This is best done as a numbered list of actions performed by the actor, alternating with responses provided by the system.
 - **Alternative Flows and Exceptions** - TODO Document other, legitimate usage scenarios that can take place within this use case, stating any differences in the sequence of steps that take place. In addition, describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions.
 
+<img src="images/use_case_diagram.png" width="500">
+
 ### User stories
 
 #### User story 1
 
-![interface mockup](mockups/interface_mockup.png)
 
 _As a customer, I want to consult the products available for sale._
 
 - **Value = Must Have**
 - **Effort = M**
+
+<img src="mockups/interface_mockup.png" width="500">
 
 ```gherkin
 Feature: Consulting available products.
@@ -98,13 +100,13 @@ Then: I see the available products.
 ```
 
 #### User story 2
-
-![login mockup](mockups/login_mockup.png)
-
 _As a customer, I must log in into my account to place orders._
-
 - **Value = Must Have**
 - **Effort = M**
+
+<img src="mockups/login_mockup.png" width="500">
+
+
 
 ```gherkin
  Feature: Login functionality.
@@ -116,12 +118,12 @@ _As a customer, I must log in into my account to place orders._
 
 #### User story 3
 
-![shopping cart mockup](mockups/shoppingcart_mockup.png)
-
 _As a customer, I want to be able to order food/drinks from the available products._
 
 - **Value = Must Have**
 - **Effort = L**
+
+<img src="mockups/shoppingcart_mockup.png" width="300">
 
 ```gherkin
  Feature: Select orders.
@@ -147,7 +149,7 @@ from my seat._
 
 #### User story 5
 
-_As a customer, I want to be able to check my profile_.
+_As a customer, I want to be able to check my profile._
 
 - **Value = Should Have**
 - **Effort = S**
