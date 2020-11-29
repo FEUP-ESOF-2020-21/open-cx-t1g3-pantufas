@@ -4,8 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:droneyourfood/Authentication/Profile.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
+import 'package:droneyourfood/Drone.dart';
 
 class Tools {
+  static final DroneCommand  dronecmd = DroneCommand(Uri.http("192.168.1.75:8080", ""));
+
+  static void sendDroneCommand(String cmd){
+    dronecmd.sendCommand(cmd);
+  }
+
   static void navigatorPopAll(BuildContext context) {
     Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
     Navigator.pop(context);
