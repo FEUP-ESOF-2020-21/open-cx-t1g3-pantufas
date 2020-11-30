@@ -89,7 +89,7 @@ _As a customer, I want to consult the products available for sale._
 - **Value = Must Have**
 - **Effort = M**
 
-<img src="mockups/interface_mockup.png" width="500">
+<img src="mockups/products_mockup.png" width="500">
 
 ```gherkin
 Feature: Consulting available products.
