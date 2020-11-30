@@ -77,7 +77,7 @@ scope and boundaries of the application domain addressed by the project.
 - **Normal Flow** - TODO Provide a detailed description of the user actions and system responses that will take place during execution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. This is best done as a numbered list of actions performed by the actor, alternating with responses provided by the system.
 - **Alternative Flows and Exceptions** - TODO Document other, legitimate usage scenarios that can take place within this use case, stating any differences in the sequence of steps that take place. In addition, describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions.
 
-<img src="images/use_case_diagram.png" width="500">
+<img src="images/use_case_diagram.png" width="450">
 
 ### User stories
 
@@ -104,9 +104,7 @@ _As a customer, I must log in into my account to place orders._
 - **Value = Must Have**
 - **Effort = M**
 
-<img src="mockups/login_mockup.png" width="500">
-
-
+<img src="mockups/login_mockup.png" width="700">
 
 ```gherkin
  Feature: Login functionality.
@@ -123,10 +121,10 @@ _As a customer, I want to be able to order food/drinks from the available produc
 - **Value = Must Have**
 - **Effort = L**
 
-<img src="mockups/shoppingcart_mockup.png" width="300">
+<img src="mockups/shoppingcart_mockup.png" width="400">
 
 ```gherkin
- Feature: Select orders.
+ Feature: Add products to cart.
  Given: I am logged in.
  When: I am on the products page.
  Then: Selected products must be added to cart.
@@ -139,6 +137,8 @@ from my seat._
 
 - **Value = Should Have**
 - **Effort = XL**
+
+<img src="mockups/delivery_mockup.png" width="400">>
 
 ```gherkin
  Feature: Deliver the order.
@@ -154,11 +154,13 @@ _As a customer, I want to be able to check my profile._
 - **Value = Should Have**
 - **Effort = S**
 
+<img src="mockups/profile_mockup.png" width="400">
+
 ```gherkin
- Feature: Cancel order.
- Given: I have placed an order.
- When: I am on the checkout page.
- Then: I cancel my order.
+ Feature: Check profile.
+ Given: I am logged in.
+ When: I press the profile button.
+ Then: My profile's page is loaded.
 ```
 
 #### User story 6
@@ -167,6 +169,8 @@ _As a customer, I want to have multiple payment methods available to me._
 
 - **Value = Won't Have**
 - **Effort = XL**
+
+<img src="mockups/payment_mockup.png" width="400">
 
 ```gherkin
  Feature: Select payment method.
@@ -183,6 +187,8 @@ _As a customer, I want to be able to choose the delivery spot for my orders._
 - **Value = Could Have**
 - **Effort = M**
 
+<img src="mockups/method_mockup.png" width="400">
+
 ```gherkin
  Feature: Select delivery place.
  Given: I have finished selecting all the products I want to order.
@@ -197,6 +203,8 @@ _As a customer, I want to be able to change my order._
 - **Value = Could Have**
 - **Effort = S**
 
+<img src="mockups/history_mockup.png" width="400">
+
 ```gherkin
  Feature: Change order.
  Given: I have placed an order.
@@ -206,10 +214,12 @@ _As a customer, I want to be able to change my order._
 
 #### User story 9
 
+_As a customer, I want to be able to cancel my order._
+
 - **Value = Could Have**
 - **Effort = S**
 
-_As a customer, I want to be able to cancel my order._
+<img src="mockups/history_mockup.png" width="400">
 
 ```gherkin
  Feature: Cancel order.
@@ -304,8 +314,6 @@ made, we usually implement a vertical prototype, a thin vertical slice of the sy
 In this subsection please describe in more detail which, and how, user(s)
 story(ies) were implemented.
 
-- _As a customer, I want to have food delivered to me, so I don't have to get up
-  from my seat_.
 
 ## Implementation
 
