@@ -7,7 +7,7 @@ import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:droneyourfood/Drone.dart';
 
 class Tools {
-  static final DroneCommand  dronecmd = DroneCommand(Uri.http("192.168.1.75:8080", ""));
+  static final DroneCommand  dronecmd = DroneCommand(Uri.http("192.168.1.171:8080", ""));
 
   static void sendDroneCommand(String cmd){
     dronecmd.sendCommand(cmd);

@@ -28,11 +28,13 @@ class Tello:
     def getRes(self):
         while True:
             response, ip = self.sock.recvfrom(1024)
+            response = response.decode("utf-8")
             if response == "ok":
                 self.debugPrint("Got OK!")
                 return
             else:
-                self.debugPrint("Tello State:\n" + response)
+                out = response.replace(";", ";\n")
+                self.debugPrint("Tello State:\n" + out)
             sleep(self.INTERVAL)
 
     def sendCmd(self, cmd):
@@ -57,7 +59,12 @@ class Tello:
 
 
 class HandleRequests(BaseHTTPRequestHandler):
+    def __init__(self, request, client_address, server):
+        self.initDrone()
+        super().__init__(request, client_address, server)
+
     def initDrone(self):
+        print("uwu")
         self.drone = Tello()
         self.drone.init()
 
@@ -75,7 +82,13 @@ class HandleRequests(BaseHTTPRequestHandler):
         content_len = int(self.headers.get("content-length", 0))
         post_body = self.rfile.read(content_len)
         request = bytes.decode(post_body)
-        print(request)
+
+        print("got request: " + request)
+        try:
+            self.drone.sendCmd(request)
+        except OSError:
+            self.initDrone()
+            self.drone.sendCmd(request)
 
     def do_PUT(self):
         self.do_POST()
