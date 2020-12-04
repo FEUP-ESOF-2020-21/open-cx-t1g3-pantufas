@@ -79,6 +79,7 @@ class _SignInState extends AuthState<SignIn> {
     return [
       /* LOGIN BUTTON */
       ElevatedButton(
+        key: Key("loginButton"),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
           minimumSize:

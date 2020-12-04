@@ -40,7 +40,8 @@ class _RegisterState extends AuthState<Register> {
     return <Widget>[
           SizedBox(
             width: fieldWidth,
-            child: genInputField(context, _userNameField, "Username", false),
+            child: genInputField(context, _userNameField, "Username", false,
+                Key("usernameInput")),
           )
         ] +
         super.genInputs(context, fieldWidth);
@@ -87,4 +88,3 @@ class _RegisterState extends AuthState<Register> {
     );
   }
 }
-

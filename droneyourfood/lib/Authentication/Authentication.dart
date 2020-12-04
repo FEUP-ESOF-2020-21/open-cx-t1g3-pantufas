@@ -22,8 +22,9 @@ abstract class AuthState<T extends StatefulWidget> extends State<T> {
   }
 
   Widget genInputField(BuildContext context, TextEditingController ctrl,
-      String txt, bool isObscure) {
+      String txt, bool isObscure, final Key k) {
     return TextFormField(
+      key: k, // usefull for gherkin tests
       style: TextStyle(color: Colors.white),
       controller: ctrl,
       obscureText: isObscure,
@@ -40,11 +41,13 @@ abstract class AuthState<T extends StatefulWidget> extends State<T> {
     return [
       SizedBox(
         width: fieldWidth,
-        child: genInputField(context, emailField, "Email", false),
+        child: genInputField(
+            context, emailField, "Email", false, Key("emailInput")),
       ),
       SizedBox(
         width: fieldWidth,
-        child: genInputField(context, passwordField, "Password", true),
+        child: genInputField(
+            context, passwordField, "Password", true, Key("passInput")),
       ),
     ];
   }

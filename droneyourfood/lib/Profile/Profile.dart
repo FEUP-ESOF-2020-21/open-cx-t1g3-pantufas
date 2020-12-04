@@ -24,6 +24,7 @@ class ProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     // pantufa n é fat >:(
     return IconButton(
+      key: Key("profile"),
       icon: Icon(Icons.person),
       onPressed: () {
         openProfile(context);
