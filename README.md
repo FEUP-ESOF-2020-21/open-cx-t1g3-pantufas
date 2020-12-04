@@ -93,11 +93,26 @@ _As a customer, I want to consult the products available for sale._
 
 ```gherkin
 Feature: Consulting available products.
-Given: I am a DroneYourFood user.
-And: I am logged in.
-When: I am on the products page.
-Then: I see the available products.
+
+  Scenario: Available products are present when the user taps the products list button
+  Given I am logged in
+  And I am in the "home" page
+  When I am tap the "products list" button
+  Then I expect the available products to be present
+
+  Scenario: Product categories are present when the user taps the category list button
+  Given I am logged in
+  And I am in the "home" page
+  When I tap the "category list" button
+  Then I expect the "available products" categories to be present
+
+  Scenario: Products of a certain category are present when I tap the button of that category
+  Given I am logged in
+  And I am on the "category list" page
+  When I tap a "category" button
+  Then I expect the available products from that category to be present
 ```
+
 
 #### User story 2
 _As a customer, I must log in into my account to place orders._
@@ -107,11 +122,21 @@ _As a customer, I must log in into my account to place orders._
 <img src="mockups/login_mockup.png" width="700">
 
 ```gherkin
- Feature: Login functionality.
- Given: I have a registered account in DroneYourFood.
- When: I enter username as username.
- And: I enter the password as the password
- Then: I should be redirected to the products page of DroneYourFood.
+ Feature: Log In 
+ Scenario: The user inputs his email and password to log in
+ Given: I have a registered account in DroneYourFood
+ When: I enter my email.
+ And: I enter my password
+ Then: I should be redirected to the "home" page
+```
+
+```gherkin
+ Feature: Sign In 
+ Scenario: The user inputs his email and password to sign in
+ Given I am not logged in
+ When I enter an email
+ And I enter an password
+ Then my account should be created
 ```
 
 #### User story 3
@@ -125,9 +150,12 @@ _As a customer, I want to be able to order food/drinks from the available produc
 
 ```gherkin
  Feature: Add products to cart.
- Given: I am logged in.
- When: I am on the products page.
- Then: Selected products must be added to cart.
+ Scenario: the product is added to the user's cart when it is tapped
+ Given I am logged in
+ And I am on the "products list" page
+ When I tap a "product" card
+ Then that product should be added to my cart
+ And the text "Added product to cart" should be present
 ```
 
 #### User story 4
@@ -141,10 +169,11 @@ from my seat._
 <img src="mockups/delivery_mockup.png" width="400">>
 
 ```gherkin
- Feature: Deliver the order.
- Given: The order has been placed.
- When: The order is ready for delivery.
- Then: The drone brings the food to the selected place.
+ Feature: Receive the order.
+ Scenario: the user receives the food after the order has been placed
+ Given the order has been placed
+ When the order is ready for delivery
+ Then the drone brings the food to the selected place
 ```
 
 #### User story 5
@@ -158,9 +187,10 @@ _As a customer, I want to be able to check my profile._
 
 ```gherkin
  Feature: Check profile.
- Given: I am logged in.
- When: I press the profile button.
- Then: My profile's page is loaded.
+ Scenario: User can navigate to his profile page by tapping the profile button
+ Given I am logged in
+ When I press the profile button
+ Then my profile's page is loaded
 ```
 
 #### User story 6
@@ -174,12 +204,11 @@ _As a customer, I want to have multiple payment methods available to me._
 
 ```gherkin
  Feature: Select payment method.
- Given: I have specified my order details.
- When: I am on the checkout page.
- Then: I can select the payment method.
- And: I can finish paying for my order.
+ Scenario: The user selects a payment method by tapping the desired method 
+ Given I have specified my order details
+ When I tap a payment method
+ Then I can use that method to pay for my order
 ```
-
 #### User story 7
 
 _As a customer, I want to be able to choose the delivery spot for my orders._
@@ -191,9 +220,10 @@ _As a customer, I want to be able to choose the delivery spot for my orders._
 
 ```gherkin
  Feature: Select delivery place.
- Given: I have finished selecting all the products I want to order.
- When: I am on the checkout page.
- Then: I register the order delivery spot.
+ Scenario: The user selects a place 
+ Given I have placed an order
+ When I am on the checkout page
+ Then I select the order delivery spot
 ```
 
 #### User story 8
@@ -207,9 +237,10 @@ _As a customer, I want to be able to change my order._
 
 ```gherkin
  Feature: Change order.
- Given: I have placed an order.
- When: I am on the checkout page.
- Then: I go back to the objects page.
+ Scenario: The user changes the order after placing one 
+ Given I have placed an order
+ When I am on the checkout page
+ Then I go back to the cart page
 ```
 
 #### User story 9
@@ -223,9 +254,10 @@ _As a customer, I want to be able to cancel my order._
 
 ```gherkin
  Feature: Cancel order.
- Given: I have placed an order.
- When: I am on the checkout page.
- Then: I cancel my order.
+ Scenario: The user cancels the order after placing one
+ Given I have placed an order.
+ When I am on the checkout page
+ Then I cancel my order
 ```
 
 TODO
