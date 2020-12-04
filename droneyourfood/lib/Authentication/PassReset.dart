@@ -37,7 +37,7 @@ class _ResetPasswordState extends AuthState<ResetPassword> {
     return <Widget>[
       SizedBox(
         width: fieldWidth,
-        child: genInputField(context, emailField, "Email", false),
+        child: genInputField(context, emailField, "Email", false, Key("emailInput")),
       )
     ];
   }
