@@ -264,6 +264,58 @@ _As a customer, I want to be able to cancel my order._
  Then I cancel my order
 ```
 
+#### User story 10 
+
+_As a user, I want to be able to recover my password._
+
+```gherkin
+ Feature: Recover password.
+ Scenario: My password is updated when I input a new password.
+ Given I have pressed the "Recover my password" button
+ When I input my new password
+ Then I my password is updated
+```
+
+#### User story 11 
+
+_As a user, I want to change my profile picture._
+
+```gherkin
+ Feature: Change profile picture.
+ Scenario: The profile picture is updated when user uploads a different one.
+ Given I have pressed the "Change my profile picture" button
+ When I upload a new picture
+ Then my profile picture is updated
+```
+
+#### User story 12 
+
+_As a user, I want to be able to see my purchase history._
+
+<img src="mockups/history_mockup.png" width="400">
+
+```gherkin
+ Feature: Purchase history.
+ Scenario: The purchase history is displayed when the user goes to the history page.
+ Given I have made purchases in the past
+ When I go to the purchases page
+ Then I can see my purchase history
+```
+
+#### User story 13 
+
+_As a user, I want to filter products by category._
+
+<img src="mockups/products_mockup.png" width="500">
+
+```gherkin
+ Feature: Filter products by category.
+ Scenario: The available products from a certain category are shown to the user.
+ Given I am on the "Category List" page
+ When I press a category
+ Then I can see the available products of that category 
+```
+
 ### Domain model
 
 ![Domain Model](images/domain_model.png)
@@ -311,17 +363,14 @@ decomposition:
 
 ### Physical architecture
 
-The goal of this subsection is to document the high-level physical structure
-of the software system (machines, connections, software components installed,
-and their dependencies) using UML deployment diagrams or component diagrams
-(separate or integrated), showing the physical structure of the system.
+![physical architecure diagram](images/physical_architecture.png)
 
-It should describe also the technologies considered and justify the selections
-made. Examples of technologies relevant for openCX are, for example, frameworks
-for mobile applications (Flutter vs ReactNative vs ...), languages to program
-with microbit, and communication with things (beacons, sensors, etc.).
+Regarding the phyical architecure of our project, it is divided in the following parts:
 
-### Prototype
+* A **Flutter** app that runs on the attendant *smartphone*
+* To store *authentication* and *product* data we use Google's **Firebase**
+* A **python** webserver to manage the orders and send commands to the **drone**
+* A **Tello drone** to deliver the food to the attendant
 
 Regarding the technologies we'll be using on the development of the application,
 we decided to use [Flutter](https://www.flutter.com/) because it speed up the
@@ -330,8 +379,9 @@ It is also used in [open-cx](https://github.com/open-cx/open-cx) making the app
 easier to integrate with, if necessary. We decided to go with Firebase for
 storage and authentication application, because it is free, provides all the
 functionalities needed and Flutter integrates well with it. The drones will
-be controlled using a python server but the implementation details are
-still being discussed.
+be controlled using a python server. We chose Python because of our familiarity with the language and due to the *Tello sdk* provides code examples in this language. Finally, we were provided a *Tello drone* by the university.  
+
+### Prototype
 
 At the end of our [first iteration](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/releases/tag/v0.1),
 we have implemented the user story
