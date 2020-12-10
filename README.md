@@ -67,7 +67,6 @@ scope and boundaries of the application domain addressed by the project.
 
 ### Use case diagram
 
-![interface mockup](images/use_case_diagram.png)
 
 - **Actor** - Conference participant.
 - **Description** - The actor chooses some products and orders them.
@@ -78,56 +77,85 @@ scope and boundaries of the application domain addressed by the project.
 - **Normal Flow** - TODO Provide a detailed description of the user actions and system responses that will take place during execution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. This is best done as a numbered list of actions performed by the actor, alternating with responses provided by the system.
 - **Alternative Flows and Exceptions** - TODO Document other, legitimate usage scenarios that can take place within this use case, stating any differences in the sequence of steps that take place. In addition, describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions.
 
+<img src="images/use_case_diagram.png" width="450">
+
 ### User stories
 
 #### User story 1
 
-![interface mockup](mockups/interface_mockup.png)
 
 _As a customer, I want to consult the products available for sale._
 
 - **Value = Must Have**
 - **Effort = M**
 
+<img src="mockups/products_mockup.png" width="500">
+
 ```gherkin
 Feature: Consulting available products.
-Given: I am a DroneYourFood user.
-And: I am logged in.
-When: I am on the products page.
-Then: I see the available products.
+
+  Scenario: Available products are present when the user taps the products list button
+  Given I am logged in
+  And I am in the "home" page
+  When I am tap the "products list" button
+  Then I expect the available products to be present
+
+  Scenario: Product categories are present when the user taps the category list button
+  Given I am logged in
+  And I am in the "home" page
+  When I tap the "category list" button
+  Then I expect the "available products" categories to be present
+
+  Scenario: Products of a certain category are present when I tap the button of that category
+  Given I am logged in
+  And I am on the "category list" page
+  When I tap a "category" button
+  Then I expect the available products from that category to be present
 ```
 
+
 #### User story 2
-
-![login mockup](mockups/login_mockup.png)
-
 _As a customer, I must log in into my account to place orders._
-
 - **Value = Must Have**
 - **Effort = M**
 
+<img src="mockups/login_mockup.png" width="700">
+
 ```gherkin
- Feature: Login functionality.
- Given: I have a registered account in DroneYourFood.
- When: I enter username as username.
- And: I enter the password as the password
- Then: I should be redirected to the products page of DroneYourFood.
+ Feature: Log In 
+ Scenario: The user inputs his email and password to log in
+ Given: I have a registered account in DroneYourFood
+ When: I enter my email.
+ And: I enter my password
+ Then: I should be redirected to the "home" page
+```
+
+```gherkin
+ Feature: Sign In 
+ Scenario: The user inputs his email and password to sign in
+ Given I am not logged in
+ When I enter an email
+ And I enter an password
+ Then my account should be created
 ```
 
 #### User story 3
-
-![shopping cart mockup](mockups/shoppingcart_mockup.png)
 
 _As a customer, I want to be able to order food/drinks from the available products._
 
 - **Value = Must Have**
 - **Effort = L**
 
+<img src="mockups/shoppingcart_mockup.png" width="400">
+
 ```gherkin
- Feature: Select orders.
- Given: I am logged in.
- When: I am on the products page.
- Then: Selected products must be added to cart.
+ Feature: Add products to cart.
+ Scenario: the product is added to the user's cart when it is tapped
+ Given I am logged in
+ And I am on the "products list" page
+ When I tap a "product" card
+ Then that product should be added to my cart
+ And the text "Added product to cart" should be present
 ```
 
 #### User story 4
@@ -138,68 +166,98 @@ from my seat._
 - **Value = Should Have**
 - **Effort = XL**
 
+<img src="mockups/delivery_mockup.png" width="400">>
+
 ```gherkin
- Feature: Deliver the order.
- Given: The order has been placed.
- When: The order is ready for delivery.
- Then: The drone brings the food to the selected place.
+ Feature: Receive the order.
+ Scenario: the user receives the food after the order has been placed
+ Given the order has been placed
+ When the order is ready for delivery
+ Then the drone brings the food to the selected place
 ```
 
 #### User story 5
+
+_As a customer, I want to be able to check my profile._
+
+- **Value = Should Have**
+- **Effort = S**
+
+<img src="mockups/profile_mockup.png" width="400">
+
+```gherkin
+ Feature: Check profile.
+ Scenario: User can navigate to his profile page by tapping the profile button
+ Given I am logged in
+ When I press the profile button
+ Then my profile's page is loaded
+```
+
+#### User story 6
 
 _As a customer, I want to have multiple payment methods available to me._
 
 - **Value = Won't Have**
 - **Effort = XL**
 
+<img src="mockups/payment_mockup.png" width="400">
+
 ```gherkin
  Feature: Select payment method.
- Given: I have specified my order details.
- When: I am on the checkout page.
- Then: I can select the payment method.
- And: I can finish paying for my order.
+ Scenario: The user selects a payment method by tapping the desired method 
+ Given I have specified my order details
+ When I tap a payment method
+ Then I can use that method to pay for my order
 ```
-
-#### User story 6
+#### User story 7
 
 _As a customer, I want to be able to choose the delivery spot for my orders._
 
 - **Value = Could Have**
 - **Effort = M**
 
+<img src="mockups/method_mockup.png" width="400">
+
 ```gherkin
  Feature: Select delivery place.
- Given: I have finished selecting all the products I want to order.
- When: I am on the checkout page.
- Then: I register the order delivery spot.
+ Scenario: The user selects a place 
+ Given I have placed an order
+ When I am on the checkout page
+ Then I select the order delivery spot
 ```
 
-#### User story 7
+#### User story 8
 
 _As a customer, I want to be able to change my order._
 
 - **Value = Could Have**
 - **Effort = S**
 
+<img src="mockups/history_mockup.png" width="400">
+
 ```gherkin
  Feature: Change order.
- Given: I have placed an order.
- When: I am on the checkout page.
- Then: I go back to the objects page.
+ Scenario: The user changes the order after placing one 
+ Given I have placed an order
+ When I am on the checkout page
+ Then I go back to the cart page
 ```
 
-#### User story 8
+#### User story 9
+
+_As a customer, I want to be able to cancel my order._
 
 - **Value = Could Have**
 - **Effort = S**
 
-_As a customer, I want to be able to cancel my order._
+<img src="mockups/history_mockup.png" width="400">
 
 ```gherkin
  Feature: Cancel order.
- Given: I have placed an order.
- When: I am on the checkout page.
- Then: I cancel my order.
+ Scenario: The user cancels the order after placing one
+ Given I have placed an order.
+ When I am on the checkout page
+ Then I cancel my order
 ```
 
 TODO
@@ -224,6 +282,8 @@ method) and the team should add an estimation of the effort to implement it,
 for example, using t-shirt sizes (XS, S, M, L, XL).
 
 ### Domain model
+
+![Domain Model](images/domain_model.png)
 
 TODO
 To better understand the context of the software system, it is very useful to
