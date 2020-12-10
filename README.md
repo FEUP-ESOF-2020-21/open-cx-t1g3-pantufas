@@ -67,7 +67,6 @@ scope and boundaries of the application domain addressed by the project.
 
 ### Use case diagram
 
-
 - **Actor** - Conference participant.
 - **Description** - The actor chooses some products and orders them.
 - **Preconditions** - The actor has to have an account on our service and be
@@ -80,6 +79,10 @@ scope and boundaries of the application domain addressed by the project.
 <img src="images/use_case_diagram.png" width="450">
 
 ### User stories
+
+#### User story map
+
+![User story map](images/user_story_map.png)
 
 #### User story 1
 
@@ -209,6 +212,7 @@ _As a customer, I want to have multiple payment methods available to me._
  When I tap a payment method
  Then I can use that method to pay for my order
 ```
+
 #### User story 7
 
 _As a customer, I want to be able to choose the delivery spot for my orders._
@@ -259,27 +263,6 @@ _As a customer, I want to be able to cancel my order._
  When I am on the checkout page
  Then I cancel my order
 ```
-
-TODO
-**INVEST in good user stories**.
-You may add more details after, but the shorter and complete, the better. In
-order to decide if the user story is good, please follow the
-[INVEST guidelines](https://xp123.com/articles/invest-in-good-stories-and-smart-tasks/).
-
-**User interface mockups**.
-After the user story text, you should add a draft of the corresponding user
-interfaces, a simple mockup or draft, if applicable.
-
-**Acceptance tests**.
-For each user story you should write also the acceptance tests (textually in
-Gherkin), i.e., a description of scenarios (situations) that will help to
-confirm that the system satisfies the requirements addressed by the user story.
-
-**Value and effort**.
-At the end, it is good to add a rough indication of the value of the user story
-to the customers (e.g. [MoSCoW](https://en.wikipedia.org/wiki/MoSCoW_method)
-method) and the team should add an estimation of the effort to implement it,
-for example, using t-shirt sizes (XS, S, M, L, XL).
 
 ### Domain model
 
@@ -340,10 +323,24 @@ with microbit, and communication with things (beacons, sensors, etc.).
 
 ### Prototype
 
-Regarding the technologies we will be using on the development of our application, we decided to use Flutter because it is easy to use and easy to learn. It is also used in open-cx making the app easier to integrate if necessary. For the authentication part of the application we decided to go with Firebase because it is free and easy to integrate. It will also be used to store all of the product data. For the drones we will be using a python server but the implementation details are still being discussed.
+Regarding the technologies we'll be using on the development of the application,
+we decided to use [Flutter](https://www.flutter.com/) because it speed up the
+development process and provides an abstraction to android and iOS systems.
+It is also used in [open-cx](https://github.com/open-cx/open-cx) making the app
+easier to integrate with, if necessary. We decided to go with Firebase for
+storage and authentication application, because it is free, provides all the
+functionalities needed and Flutter integrates well with it. The drones will
+be controlled using a python server but the implementation details are
+still being discussed.
 
-At the end of our [first iteration](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/releases/tag/v0.1) we have implemented the user story "As a customer, I want to consult the products available for sale.". This gave us some basic understanding of Flutter and serves as a very early prototype of what the application will be. In this iteration we have used JSON instead of Firebase to store our product data but this will be changed later. The prototype also contains a basic theme we intend to use but still needs some improvements.
-
+At the end of our [first iteration](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/releases/tag/v0.1),
+we have implemented the user story
+[As a customer, I want to consult the products available for sale](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/tree/master#user-story-1).
+This gave us some basic understanding of Flutter and serves as a very early
+example of what the application will be and what it will look like. In this
+iteration we have used a JSON file instead of a Firebase instance to store
+the product's data (this will be changed later). The prototype has the basis
+of the theme we intend to use. This theme will be improved further.
 
 ## Implementation
 
