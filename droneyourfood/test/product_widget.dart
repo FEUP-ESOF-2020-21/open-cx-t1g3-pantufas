@@ -15,10 +15,10 @@ main() {
     expect(titleFinder, findsOneWidget);
   });
 
-  testWidgets("Add/Remove Long Press", (WidgetTester tester) async {
+  testWidgets("Add/Remove Single Press", (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
-            body: ProductWidget(Product("ProdName", "Img", null, 500, null)))));
+            body: ProductWidget(Product("ProdName", "Img", null, 5, null)))));
 
     // Test that Product Count doesnt exist
     final howMany2Add = find.byKey(Key("ToAddCountText"));
@@ -32,30 +32,6 @@ main() {
     expect(howMany2Add, findsOneWidget);
     var howMany2AddText = howMany2Add.evaluate().first.widget as Text;
     // Test that Product Count is set to 1
-    expect(howMany2AddText.data, "1");
-
-    // Add one prod
-    final addButton = find.byKey(Key("Add"));
-    expect(addButton, findsOneWidget);
-    await tester.tap(addButton);
-    await tester.pump();
-
-    // Test that Product Count is set to 2
-    howMany2AddText = howMany2Add.evaluate().first.widget as Text;
-    expect(howMany2AddText.data, "2");
-    // Test that price works with the product
-    final priceText =
-        find.byKey(Key("PriceText")).evaluate().first.widget as Text;
-    expect(priceText.data, "(10.0€)");
-
-    // Remove one prod
-    final remButton = find.byKey(Key("Remove"));
-    expect(remButton, findsOneWidget);
-    await tester.tap(remButton);
-    await tester.pump();
-
-    // Test that Product Count is set back to 1
-    howMany2AddText = howMany2Add.evaluate().first.widget as Text;
     expect(howMany2AddText.data, "1");
   });
 }

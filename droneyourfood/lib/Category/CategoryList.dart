@@ -6,7 +6,13 @@ import 'package:droneyourfood/Products/ProductScreen.dart';
 import 'package:droneyourfood/Category/Category.dart';
 
 class CategoryListWidget extends StatelessWidget {
-  Future<List<Category>> getCategoriesFromFirebase() async {
+  final Future<List<Category>> _categoryPromise;
+
+  CategoryListWidget() : _categoryPromise = getCategoriesFromFirebase();
+  CategoryListWidget.fromPromise(categoryPromise)
+      : _categoryPromise = categoryPromise;
+
+  static Future<List<Category>> getCategoriesFromFirebase() async {
     Future<QuerySnapshot> qShot =
         FirebaseFirestore.instance.collection('categories').get();
 
@@ -20,7 +26,7 @@ class CategoryListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getCategoriesFromFirebase(),
+        future: _categoryPromise,
         builder: (context, categoryPromise) {
           if (categoryPromise.connectionState == ConnectionState.done) {
             return Column(
