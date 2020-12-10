@@ -268,6 +268,15 @@ decomposition:
 
 ### Physical architecture
 
+![physical architecure diagram](images/physical_architecture.png)
+
+Regarding the phyical architecure of our project, it is divided in the following parts:
+
+* A **Flutter** app that runs on the attendant **Android** smartphone
+* To store *authentication* and *product* data we use Google's **Firebase**
+* A **python** webserver to manage the orders and send commands to the **drone**
+* A **Tello drone** to deliver the food the attendant
+
 The goal of this subsection is to document the high-level physical structure
 of the software system (machines, connections, software components installed,
 and their dependencies) using UML deployment diagrams or component diagrams
