@@ -1,69 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'Product.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import 'Product.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
-
-class ProductListWidget extends StatelessWidget {
-  final DocumentReference category; // null => list all
-
-  ProductListWidget(this.category);
-
-  Future<List<Product>> getProductsFromFirebase() async {
-    Future<QuerySnapshot> qShot;
-
-    if (this.category == null) {
-      qShot = FirebaseFirestore.instance.collection('products').get();
-    } else {
-      qShot = FirebaseFirestore.instance
-          .collection('products')
-          .where("category", isEqualTo: this.category)
-          .get();
-    }
-
-    return qShot.then((QuerySnapshot qShot) {
-      return qShot.docs
-          .map((doc) => Product(doc["name"], doc["image"], doc["category"],
-              doc["price"], doc["ref"]))
-          .toList();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getProductsFromFirebase(),
-      builder: (context, productPromise) {
-        if (productPromise.connectionState == ConnectionState.done) {
-          return Column(
-            children: [
-              Expanded(
-                  child: ListView.builder(
-                itemCount: productPromise.data.length,
-                itemBuilder: (context, index) {
-                  Product product = productPromise.data[index];
-                  return ProductWidget(product);
-                },
-              ))
-            ],
-          );
-        } else if (productPromise.connectionState == ConnectionState.waiting) {
-          return Text(
-            "Loading...",
-            textAlign: TextAlign.center,
-          );
-        } else {
-          return Text(
-            "Died...",
-            textAlign: TextAlign.center,
-          );
-        }
-      },
-    );
-  }
-}
 
 class ProductWidget extends StatefulWidget {
   final Product product;
@@ -110,35 +50,38 @@ class _ProductWidgetState extends State<ProductWidget> {
       padding: EdgeInsets.all(8.0),
       height: 76.0, // 60 + 8 + 8
       child: Center(
-          child: Text(
-        "Added " + widget.product.name,
-        style: TextStyle(
-            color: Color(0xFFCFD3D8),
-            fontSize: 20,
-            fontWeight: FontWeight.bold),
-      )),
+        child: Text(
+          "Added " + widget.product.name,
+          style: TextStyle(
+              color: Color(0xFFCFD3D8),
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 
   Widget buildNormalState(BuildContext context) {
     return Container(
-        margin: EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                  Theme.of(context).primaryColor),
-              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  EdgeInsets.all(8.0))),
-          child: getContent(),
-          onPressed: addItem,
-          onLongPress: addMultipleItem,
-        ));
+      margin: EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(
+                Theme.of(context).primaryColor),
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                EdgeInsets.all(8.0))),
+        child: getContent(),
+        onPressed: addItem,
+        onLongPress: addMultipleItem,
+      ),
+    );
   }
 
   Widget buildLongClickedState(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-        margin: EdgeInsets.all(8.0),
+      margin: EdgeInsets.all(8.0),
+      child: Ink(
+        color: Theme.of(context).primaryColor,
         padding: EdgeInsets.all(4.0),
         height: 76.0, // 60 + 8 + 8
         child: Row(
@@ -201,7 +144,9 @@ class _ProductWidgetState extends State<ProductWidget> {
               },
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   @override
@@ -223,16 +168,14 @@ class _ProductWidgetState extends State<ProductWidget> {
             height: 60.0,
             child: FutureBuilder(
               future: getImageUrl(),
-              builder: (context, snapshot){
+              builder: (context, snapshot) {
                 ImageProvider image;
-                if(snapshot.hasData){
+                if (snapshot.hasData) {
                   image = NetworkImage(snapshot.data.toString());
-                }
-                else if (snapshot.hasError){
+                } else if (snapshot.hasError) {
                   print(snapshot.error);
                   image = AssetImage("resources/logo.png");
-                }
-                else{
+                } else {
                   image = AssetImage("resources/logo.png");
                 }
 

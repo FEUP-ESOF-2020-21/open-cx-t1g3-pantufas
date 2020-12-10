@@ -47,3 +47,5 @@ app.*.map.json
 
 # Ya n gosto de merges com isto
 pubspec.lock
+
+test_driver/report.json

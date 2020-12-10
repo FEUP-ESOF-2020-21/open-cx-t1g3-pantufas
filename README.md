@@ -280,13 +280,10 @@ with microbit, and communication with things (beacons, sensors, etc.).
 
 ### Prototype
 
-To help on validating all the architectural, design and technological decisions
-made, we usually implement a vertical prototype, a thin vertical slice of the system.
+Regarding the technologies we will be using on the development of our application, we decided to use Flutter because it is easy to use and easy to learn. It is also used in open-cx making the app easier to integrate if necessary. For the authentication part of the application we decided to go with Firebase because it is free and easy to integrate. It will also be used to store all of the product data. For the drones we will be using a python server but the implementation details are still being discussed.
 
-In this subsection please describe in more detail which, and how, user(s)
-story(ies) were implemented.
+At the end of our [first iteration](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/releases/tag/v0.1) we have implemented the user story "As a customer, I want to consult the products available for sale.". This gave us some basic understanding of Flutter and serves as a very early prototype of what the application will be. In this iteration we have used JSON instead of Firebase to store our product data but this will be changed later. The prototype also contains a basic theme we intend to use but still needs some improvements.
 
----
 
 ## Implementation
 

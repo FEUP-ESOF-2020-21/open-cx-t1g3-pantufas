@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'CategoryList.dart';
 
-import 'package:droneyourfood/Tools.dart';
+import 'package:droneyourfood/MyAppBar/MyAppBar.dart';
 
 class CategoryListScreen extends StatelessWidget {
   @override
@@ -9,7 +9,7 @@ class CategoryListScreen extends StatelessWidget {
     final textColor = Color(0xFFCFD3D8);
 
     return Scaffold(
-        appBar: Tools.genAppBar(context, "Category List"),
+        appBar: MyAppBar(context, "Category List").appBar,
         body: Column(
           children: [
             Container(
