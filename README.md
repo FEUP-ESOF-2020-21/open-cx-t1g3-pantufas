@@ -315,22 +315,10 @@ decomposition:
 
 Regarding the phyical architecure of our project, it is divided in the following parts:
 
-* A **Flutter** app that runs on the attendant **Android** smartphone
+* A **Flutter** app that runs on the attendant *smartphone*
 * To store *authentication* and *product* data we use Google's **Firebase**
 * A **python** webserver to manage the orders and send commands to the **drone**
 * A **Tello drone** to deliver the food the attendant
-
-The goal of this subsection is to document the high-level physical structure
-of the software system (machines, connections, software components installed,
-and their dependencies) using UML deployment diagrams or component diagrams
-(separate or integrated), showing the physical structure of the system.
-
-It should describe also the technologies considered and justify the selections
-made. Examples of technologies relevant for openCX are, for example, frameworks
-for mobile applications (Flutter vs ReactNative vs ...), languages to program
-with microbit, and communication with things (beacons, sensors, etc.).
-
-### Prototype
 
 Regarding the technologies we'll be using on the development of the application,
 we decided to use [Flutter](https://www.flutter.com/) because it speed up the
@@ -339,8 +327,9 @@ It is also used in [open-cx](https://github.com/open-cx/open-cx) making the app
 easier to integrate with, if necessary. We decided to go with Firebase for
 storage and authentication application, because it is free, provides all the
 functionalities needed and Flutter integrates well with it. The drones will
-be controlled using a python server but the implementation details are
-still being discussed.
+be controlled using a python server. We chose Python because of our familiarity with the language and due to the *Tello sdk* provides code examples in this language. Finally, we were provided a *Tello drone* by the university.  
+
+### Prototype
 
 At the end of our [first iteration](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/releases/tag/v0.1),
 we have implemented the user story
