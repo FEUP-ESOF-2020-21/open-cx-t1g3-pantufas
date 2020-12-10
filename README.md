@@ -344,6 +344,35 @@ of the theme we intend to use. This theme will be improved further.
 
 ## Implementation
 
+### [ScrollColumn](droneyourfood/lib/Components/ScrollColumn.dart)
+
+This component was created for pages that have their layout based on a _main_
+`Column`. `Columns` can overflow the screen, which is a big problem for smaller
+devices. This component wraps a `Column` and gives it a scrollbar when it
+would overflow the screen. This way, the user can scroll in order to see all
+the information and the overflow is avoided.
+
+### [ShoppingCart](droneyourfood/lib/Shopping/Shopping.dart)
+
+The code works around the user's [`ShoppingCart` instance](droneyourfood/lib/Shopping/Shopping.dart).
+This class is a [singleton](https://refactoring.guru/design-patterns/singleton),
+which means it can be easily accessed from everywhere on the code, both to
+get information (avoiding some requeries/parsing from the Firebase instance)
+and inserting new information (the formatting and uploading is handled
+internally).  
+Since this class holds most of the core information of the application, it is
+possible to register yourself as an [observer](https://refactoring.guru/design-patterns/observer)
+(by passing a funtion to the `notifyWhenLoaded` method), that will be run when
+the ShoppingCart loading process is done. The project uses this in conjunction
+with the `setState` method of Flutter's stateful widgets in order to show
+loading screens/placeholders while the information is not ready, e.g.: list of
+products on the shopping cart (`ShoppingListWidget` class, `getShoppingItems`
+method).
+
+### Tests mock injection
+
+TODO
+
 Regular product increments are a good practice of product management.
 
 While not necessary, sometimes it might be useful to explain a few aspects
