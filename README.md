@@ -370,7 +370,7 @@ Regarding the phyical architecure of our project, it is divided in the following
 * A **Flutter** app that runs on the attendant *smartphone*
 * To store *authentication* and *product* data we use Google's **Firebase**
 * A **python** webserver to manage the orders and send commands to the **drone**
-* A **Tello drone** to deliver the food the attendant
+* A **Tello drone** to deliver the food to the attendant
 
 Regarding the technologies we'll be using on the development of the application,
 we decided to use [Flutter](https://www.flutter.com/) because it speed up the
