@@ -67,8 +67,6 @@ scope and boundaries of the application domain addressed by the project.
 
 ### Use case diagram
 
-![interface mockup](images/use_case_diagram.png)
-
 - **Actor** - Conference participant.
 - **Description** - The actor chooses some products and orders them.
 - **Preconditions** - The actor has to have an account on our service and be
@@ -78,56 +76,89 @@ scope and boundaries of the application domain addressed by the project.
 - **Normal Flow** - TODO Provide a detailed description of the user actions and system responses that will take place during execution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. This is best done as a numbered list of actions performed by the actor, alternating with responses provided by the system.
 - **Alternative Flows and Exceptions** - TODO Document other, legitimate usage scenarios that can take place within this use case, stating any differences in the sequence of steps that take place. In addition, describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions.
 
+<img src="images/use_case_diagram.png" width="450">
+
 ### User stories
+
+#### User story map
+
+![User story map](images/user_story_map.png)
 
 #### User story 1
 
-![interface mockup](mockups/interface_mockup.png)
 
 _As a customer, I want to consult the products available for sale._
 
 - **Value = Must Have**
 - **Effort = M**
 
+<img src="mockups/products_mockup.png" width="500">
+
 ```gherkin
 Feature: Consulting available products.
-Given: I am a DroneYourFood user.
-And: I am logged in.
-When: I am on the products page.
-Then: I see the available products.
+
+  Scenario: Available products are present when the user taps the products list button
+  Given I am logged in
+  And I am in the "home" page
+  When I am tap the "products list" button
+  Then I expect the available products to be present
+
+  Scenario: Product categories are present when the user taps the category list button
+  Given I am logged in
+  And I am in the "home" page
+  When I tap the "category list" button
+  Then I expect the "available products" categories to be present
+
+  Scenario: Products of a certain category are present when I tap the button of that category
+  Given I am logged in
+  And I am on the "category list" page
+  When I tap a "category" button
+  Then I expect the available products from that category to be present
 ```
 
+
 #### User story 2
-
-![login mockup](mockups/login_mockup.png)
-
 _As a customer, I must log in into my account to place orders._
-
 - **Value = Must Have**
 - **Effort = M**
 
+<img src="mockups/login_mockup.png" width="700">
+
 ```gherkin
- Feature: Login functionality.
- Given: I have a registered account in DroneYourFood.
- When: I enter username as username.
- And: I enter the password as the password
- Then: I should be redirected to the products page of DroneYourFood.
+ Feature: Log In 
+ Scenario: The user inputs his email and password to log in
+ Given: I have a registered account in DroneYourFood
+ When: I enter my email.
+ And: I enter my password
+ Then: I should be redirected to the "home" page
+```
+
+```gherkin
+ Feature: Sign In 
+ Scenario: The user inputs his email and password to sign in
+ Given I am not logged in
+ When I enter an email
+ And I enter an password
+ Then my account should be created
 ```
 
 #### User story 3
-
-![shopping cart mockup](mockups/shoppingcart_mockup.png)
 
 _As a customer, I want to be able to order food/drinks from the available products._
 
 - **Value = Must Have**
 - **Effort = L**
 
+<img src="mockups/shoppingcart_mockup.png" width="400">
+
 ```gherkin
- Feature: Select orders.
- Given: I am logged in.
- When: I am on the products page.
- Then: Selected products must be added to cart.
+ Feature: Add products to cart.
+ Scenario: the product is added to the user's cart when it is tapped
+ Given I am logged in
+ And I am on the "products list" page
+ When I tap a "product" card
+ Then that product should be added to my cart
+ And the text "Added product to cart" should be present
 ```
 
 #### User story 4
@@ -138,92 +169,156 @@ from my seat._
 - **Value = Should Have**
 - **Effort = XL**
 
+<img src="mockups/delivery_mockup.png" width="400">>
+
 ```gherkin
- Feature: Deliver the order.
- Given: The order has been placed.
- When: The order is ready for delivery.
- Then: The drone brings the food to the selected place.
+ Feature: Receive the order.
+ Scenario: the user receives the food after the order has been placed
+ Given the order has been placed
+ When the order is ready for delivery
+ Then the drone brings the food to the selected place
 ```
 
 #### User story 5
+
+_As a customer, I want to be able to check my profile._
+
+- **Value = Should Have**
+- **Effort = S**
+
+<img src="mockups/profile_mockup.png" width="400">
+
+```gherkin
+ Feature: Check profile.
+ Scenario: User can navigate to his profile page by tapping the profile button
+ Given I am logged in
+ When I press the profile button
+ Then my profile's page is loaded
+```
+
+#### User story 6
 
 _As a customer, I want to have multiple payment methods available to me._
 
 - **Value = Won't Have**
 - **Effort = XL**
 
+<img src="mockups/payment_mockup.png" width="400">
+
 ```gherkin
  Feature: Select payment method.
- Given: I have specified my order details.
- When: I am on the checkout page.
- Then: I can select the payment method.
- And: I can finish paying for my order.
+ Scenario: The user selects a payment method by tapping the desired method 
+ Given I have specified my order details
+ When I tap a payment method
+ Then I can use that method to pay for my order
 ```
 
-#### User story 6
+#### User story 7
 
 _As a customer, I want to be able to choose the delivery spot for my orders._
 
 - **Value = Could Have**
 - **Effort = M**
 
+<img src="mockups/method_mockup.png" width="400">
+
 ```gherkin
  Feature: Select delivery place.
- Given: I have finished selecting all the products I want to order.
- When: I am on the checkout page.
- Then: I register the order delivery spot.
+ Scenario: The user selects a place 
+ Given I have placed an order
+ When I am on the checkout page
+ Then I select the order delivery spot
 ```
 
-#### User story 7
+#### User story 8
 
 _As a customer, I want to be able to change my order._
 
 - **Value = Could Have**
 - **Effort = S**
 
+<img src="mockups/history_mockup.png" width="400">
+
 ```gherkin
  Feature: Change order.
- Given: I have placed an order.
- When: I am on the checkout page.
- Then: I go back to the objects page.
+ Scenario: The user changes the order after placing one 
+ Given I have placed an order
+ When I am on the checkout page
+ Then I go back to the cart page
 ```
 
-#### User story 8
+#### User story 9
+
+_As a customer, I want to be able to cancel my order._
 
 - **Value = Could Have**
 - **Effort = S**
 
-_As a customer, I want to be able to cancel my order._
+<img src="mockups/history_mockup.png" width="400">
 
 ```gherkin
  Feature: Cancel order.
- Given: I have placed an order.
- When: I am on the checkout page.
- Then: I cancel my order.
+ Scenario: The user cancels the order after placing one
+ Given I have placed an order.
+ When I am on the checkout page
+ Then I cancel my order
 ```
 
-TODO
-**INVEST in good user stories**.
-You may add more details after, but the shorter and complete, the better. In
-order to decide if the user story is good, please follow the
-[INVEST guidelines](https://xp123.com/articles/invest-in-good-stories-and-smart-tasks/).
+#### User story 10 
 
-**User interface mockups**.
-After the user story text, you should add a draft of the corresponding user
-interfaces, a simple mockup or draft, if applicable.
+_As a user, I want to be able to recover my password._
 
-**Acceptance tests**.
-For each user story you should write also the acceptance tests (textually in
-Gherkin), i.e., a description of scenarios (situations) that will help to
-confirm that the system satisfies the requirements addressed by the user story.
+```gherkin
+ Feature: Recover password.
+ Scenario: My password is updated when I input a new password.
+ Given I have pressed the "Recover my password" button
+ When I input my new password
+ Then I my password is updated
+```
 
-**Value and effort**.
-At the end, it is good to add a rough indication of the value of the user story
-to the customers (e.g. [MoSCoW](https://en.wikipedia.org/wiki/MoSCoW_method)
-method) and the team should add an estimation of the effort to implement it,
-for example, using t-shirt sizes (XS, S, M, L, XL).
+#### User story 11 
+
+_As a user, I want to change my profile picture._
+
+```gherkin
+ Feature: Change profile picture.
+ Scenario: The profile picture is updated when user uploads a different one.
+ Given I have pressed the "Change my profile picture" button
+ When I upload a new picture
+ Then my profile picture is updated
+```
+
+#### User story 12 
+
+_As a user, I want to be able to see my purchase history._
+
+<img src="mockups/history_mockup.png" width="400">
+
+```gherkin
+ Feature: Purchase history.
+ Scenario: The purchase history is displayed when the user goes to the history page.
+ Given I have made purchases in the past
+ When I go to the purchases page
+ Then I can see my purchase history
+```
+
+#### User story 13 
+
+_As a user, I want to filter products by category._
+
+<img src="mockups/products_mockup.png" width="500">
+
+```gherkin
+ Feature: Filter products by category.
+ Scenario: The available products from a certain category are shown to the user.
+ Given I am on the "Category List" page
+ When I press a category
+ Then I can see the available products of that category 
+```
 
 ### Domain model
+
+![Domain Model](images/domain_model.png)
 
 TODO
 To better understand the context of the software system, it is very useful to
@@ -268,25 +363,34 @@ decomposition:
 
 ### Physical architecture
 
-The goal of this subsection is to document the high-level physical structure
-of the software system (machines, connections, software components installed,
-and their dependencies) using UML deployment diagrams or component diagrams
-(separate or integrated), showing the physical structure of the system.
+![physical architecure diagram](images/physical_architecture.png)
 
-It should describe also the technologies considered and justify the selections
-made. Examples of technologies relevant for openCX are, for example, frameworks
-for mobile applications (Flutter vs ReactNative vs ...), languages to program
-with microbit, and communication with things (beacons, sensors, etc.).
+Regarding the phyical architecure of our project, it is divided in the following parts:
+
+* A **Flutter** app that runs on the attendant *smartphone*
+* To store *authentication* and *product* data we use Google's **Firebase**
+* A **python** webserver to manage the orders and send commands to the **drone**
+* A **Tello drone** to deliver the food to the attendant
+
+Regarding the technologies we'll be using on the development of the application,
+we decided to use [Flutter](https://www.flutter.com/) because it speed up the
+development process and provides an abstraction to android and iOS systems.
+It is also used in [open-cx](https://github.com/open-cx/open-cx) making the app
+easier to integrate with, if necessary. We decided to go with Firebase for
+storage and authentication application, because it is free, provides all the
+functionalities needed and Flutter integrates well with it. The drones will
+be controlled using a python server. We chose Python because of our familiarity with the language and due to the *Tello sdk* provides code examples in this language. Finally, we were provided a *Tello drone* by the university.  
 
 ### Prototype
 
-To help on validating all the architectural, design and technological decisions
-made, we usually implement a vertical prototype, a thin vertical slice of the system.
-
-In this subsection please describe in more detail which, and how, user(s)
-story(ies) were implemented.
-
----
+At the end of our [first iteration](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/releases/tag/v0.1),
+we have implemented the user story
+[As a customer, I want to consult the products available for sale](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/tree/master#user-story-1).
+This gave us some basic understanding of Flutter and serves as a very early
+example of what the application will be and what it will look like. In this
+iteration we have used a JSON file instead of a Firebase instance to store
+the product's data (this will be changed later). The prototype has the basis
+of the theme we intend to use. This theme will be improved further.
 
 ## Implementation
 
