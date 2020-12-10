@@ -264,6 +264,58 @@ _As a customer, I want to be able to cancel my order._
  Then I cancel my order
 ```
 
+#### User story 10 
+
+_As a user, I want to be able to recover my password._
+
+```gherkin
+ Feature: Recover password.
+ Scenario: My password is updated when I input a new password.
+ Given I have pressed the "Recover my password" button
+ When I input my new password
+ Then I my password is updated
+```
+
+#### User story 11 
+
+_As a user, I want to change my profile picture._
+
+```gherkin
+ Feature: Change profile picture.
+ Scenario: The profile picture is updated when user uploads a different one.
+ Given I have pressed the "Change my profile picture" button
+ When I upload a new picture
+ Then my profile picture is updated
+```
+
+#### User story 12 
+
+_As a user, I want to be able to see my purchase history._
+
+<img src="mockups/history_mockup.png" width="400">
+
+```gherkin
+ Feature: Purchase history.
+ Scenario: The purchase history is displayed when the user goes to the history page.
+ Given I have made purchases in the past
+ When I go to the purchases page
+ Then I can see my purchase history
+```
+
+#### User story 13 
+
+_As a user, I want to filter products by category._
+
+<img src="mockups/products_mockup.png" width="500">
+
+```gherkin
+ Feature: Filter products by category.
+ Scenario: The available products from a certain category are shown to the user.
+ Given I am on the "Category List" page
+ When I press a category
+ Then I can see the available products of that category 
+```
+
 ### Domain model
 
 ![Domain Model](images/domain_model.png)
