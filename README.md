@@ -363,17 +363,14 @@ decomposition:
 
 ### Physical architecture
 
-The goal of this subsection is to document the high-level physical structure
-of the software system (machines, connections, software components installed,
-and their dependencies) using UML deployment diagrams or component diagrams
-(separate or integrated), showing the physical structure of the system.
+![physical architecure diagram](images/physical_architecture.png)
 
-It should describe also the technologies considered and justify the selections
-made. Examples of technologies relevant for openCX are, for example, frameworks
-for mobile applications (Flutter vs ReactNative vs ...), languages to program
-with microbit, and communication with things (beacons, sensors, etc.).
+Regarding the phyical architecure of our project, it is divided in the following parts:
 
-### Prototype
+* A **Flutter** app that runs on the attendant *smartphone*
+* To store *authentication* and *product* data we use Google's **Firebase**
+* A **python** webserver to manage the orders and send commands to the **drone**
+* A **Tello drone** to deliver the food to the attendant
 
 Regarding the technologies we'll be using on the development of the application,
 we decided to use [Flutter](https://www.flutter.com/) because it speed up the
@@ -382,8 +379,9 @@ It is also used in [open-cx](https://github.com/open-cx/open-cx) making the app
 easier to integrate with, if necessary. We decided to go with Firebase for
 storage and authentication application, because it is free, provides all the
 functionalities needed and Flutter integrates well with it. The drones will
-be controlled using a python server but the implementation details are
-still being discussed.
+be controlled using a python server. We chose Python because of our familiarity with the language and due to the *Tello sdk* provides code examples in this language. Finally, we were provided a *Tello drone* by the university.  
+
+### Prototype
 
 At the end of our [first iteration](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/releases/tag/v0.1),
 we have implemented the user story
@@ -395,6 +393,35 @@ the product's data (this will be changed later). The prototype has the basis
 of the theme we intend to use. This theme will be improved further.
 
 ## Implementation
+
+### [ScrollColumn](droneyourfood/lib/Components/ScrollColumn.dart)
+
+This component was created for pages that have their layout based on a _main_
+`Column`. `Columns` can overflow the screen, which is a big problem for smaller
+devices. This component wraps a `Column` and gives it a scrollbar when it
+would overflow the screen. This way, the user can scroll in order to see all
+the information and the overflow is avoided.
+
+### [ShoppingCart](droneyourfood/lib/Shopping/Shopping.dart)
+
+The code works around the user's [`ShoppingCart` instance](droneyourfood/lib/Shopping/Shopping.dart).
+This class is a [singleton](https://refactoring.guru/design-patterns/singleton),
+which means it can be easily accessed from everywhere on the code, both to
+get information (avoiding some requeries/parsing from the Firebase instance)
+and inserting new information (the formatting and uploading is handled
+internally).  
+Since this class holds most of the core information of the application, it is
+possible to register yourself as an [observer](https://refactoring.guru/design-patterns/observer)
+(by passing a funtion to the `notifyWhenLoaded` method), that will be run when
+the ShoppingCart loading process is done. The project uses this in conjunction
+with the `setState` method of Flutter's stateful widgets in order to show
+loading screens/placeholders while the information is not ready, e.g.: list of
+products on the shopping cart (`ShoppingListWidget` class, `getShoppingItems`
+method).
+
+### Tests mock injection
+
+TODO
 
 Regular product increments are a good practice of product management.
 
