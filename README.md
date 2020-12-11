@@ -458,8 +458,8 @@ Tested using [flutter_gherkin](https://pub.dev/packages/flutter_gherkin) package
 
 For each test we check if each widget is being displayed as intended and if it shows the intended information.
 
-- [Products Widget](droneyourfood/test/product_widget.dart
-- [Category Widget](droneyourfood/test/category_widget.dart
+- [Products Widget](droneyourfood/test/product_widget.dart)
+- [Category Widget](droneyourfood/test/category_widget.dart)
 - [Profile Widget](droneyourfood/test/profile_widget.dart)
 
 ---
