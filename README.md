@@ -320,11 +320,6 @@ _As a user, I want to filter products by category._
 
 ![Domain Model](images/domain_model.png)
 
-TODO
-To better understand the context of the software system, it is very useful to
-have a simple UML class diagram with all the key concepts (names, attributes)
-and relationships involved of the problem domain addressed by your module.
-
 ---
 
 ## Architecture and Design
@@ -348,6 +343,17 @@ typical problems you may have encountered, pointing to well-known architectural
 and design patterns, if applicable.
 
 ### Logical architecture
+TODO
+
+Our application is divided into the following packages: 
+
+* **Products** -> responsible for the logic of the product lists
+* **Categories** -> reponsible for the filtering of *products* by categories
+* **Shopping** -> responsible for managing the shopping cart of each user
+* **Profile** -> responsible for displaying and managing user information
+* **Authentication** -> responsible for the authentication of the user
+
+![logical diagram](images/logical_diagram.png)
 
 The purpose of this subsection is to document the high-level logical structure
 of the code, using a UML diagram with logical packages, without the worry of
