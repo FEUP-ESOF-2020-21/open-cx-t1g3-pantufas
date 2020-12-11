@@ -410,21 +410,30 @@ when strictly needed, since they tend to become outdated very soon.
 
 ## Test
 
-There are several ways of documenting testing activities, and quality assurance
-in general, being the most common: a strategy, a plan, test case specifications,
-and test checklists.
+### Test Plan
 
-In this section it is only expected to include the following:
+The features we have decided to test were the ones neither dependent on 
+the drone or Firebase since these are out of our reach. Data classes and getters should be ignored for testing, as well. This meant the test plan should consist of three parts:
 
-- test plan describing the list of features to be tested and the testing methods
-and tools;
-- test case specifications to verify the functionalities, using unit tests and
-acceptance tests.
+- Products Widget
+- Categories Widget
+- Profile Widget
 
-**// TODO ASK SE É MESMO PRECISO UNIT TESTS**
+### Test Case Specification
 
-A good practice is to simplify this, avoiding repetitions, and automating the
-testing actions as much as possible.
+#### Acceptance Tests
+
+Tested using [flutter_gherkin](https://pub.dev/packages/flutter_gherkin) package.
+
+- [Profile](droneyourfood/test_driver/features/profile.feature)
+
+#### Unit Tests
+
+For each test we check if each widget is being displayed as intended and if it shows the intended information.
+
+- [Products Widget](droneyourfood/test/product_widget.dart
+- [Category Widget](droneyourfood/test/category_widget.dart
+- [Profile Widget](droneyourfood/test/profile_widget.dart)
 
 ---
 
