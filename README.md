@@ -460,5 +460,4 @@ to check what we are up to.
 
 ## Evolution - contributions to open-cx
 
-Describe your contribution to open-cx (iteration 5), linking to the appropriate
-pull requests, issues, documentation.
+We did not integrate our application with open-cx.
