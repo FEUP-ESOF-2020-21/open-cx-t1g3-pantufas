@@ -59,15 +59,18 @@ obstacle and make deliveries as fast as possible.
 
 ## Requirements
 
-In this section, you should describe all kinds of requirements for your module:
-functional and non-functional requirements.
+Our application aims to provide the users with the ability to select products, place orders and to have them delievered by a flying drone. 
 
-Start by contextualizing your module, describing the main concepts, terms, roles,
-scope and boundaries of the application domain addressed by the project.
+This application requires:
+  - An android smartphone with internet connection.
+  - A [Tello](https://www.ryzerobotics.com/tello) Drone.
+  - A running server which receives the commands and sends them to the drone.
 
 ### Use case diagram
 
 <img src="images/use_case_diagram.png" width="450">
+
+### Use cases 
 
 #### *Check products database*
 - **Actor** - Conference participant. 
