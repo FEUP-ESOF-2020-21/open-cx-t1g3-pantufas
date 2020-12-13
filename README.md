@@ -466,8 +466,6 @@ method).
 
 ### Tests mock injection
 
-TODO
-
 Regular product increments are a good practice of product management.
 
 While not necessary, sometimes it might be useful to explain a few aspects
@@ -511,12 +509,11 @@ For each test we check if each widget is being displayed as intended and if it s
 
 ## Configuration and change management
 
-Configuration and change management are key activities to control change to,
-and maintain the integrity of, a project’s artifacts (code, models, documents).
-
-For the purpose of ESOF, we will use a very simple approach, just to manage
+For the purpose of ESOF, we used a very simple approach, just to manage
 feature requests, bug fixes, and improvements, using GitHub issues and
 following the [GitHub flow](https://guides.github.com/introduction/flow/).
+
+- [Development branches](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/network)
 
 ---
 
