@@ -50,7 +50,8 @@ class _SignInState extends AuthState<SignIn> {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
-              email: emailField.text, password: passwordField.text);
+              email: "nachosuwu@protonmail.com", password: "nachosnomnom");
+              // email: emailField.text, password: passwordField.text);
 
       if (!userCredential.user.emailVerified) {
         setState(() {

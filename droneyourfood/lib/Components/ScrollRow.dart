@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class ScrollRow extends StatelessWidget {
   final double startWidth;
@@ -19,9 +20,10 @@ class ScrollRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       child: ConstrainedBox(
         constraints: BoxConstraints(minWidth: this.startWidth),
-        child: IntrinsicHeight(
+        child: IntrinsicWidth(
           child: Row(
             mainAxisAlignment: this.mainAxisAlignment,
             crossAxisAlignment: this.crossAxisAlignment,
