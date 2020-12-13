@@ -396,17 +396,9 @@ method).
 
 ### Tests mock injection
 
-TODO
-
-Regular product increments are a good practice of product management.
-
-While not necessary, sometimes it might be useful to explain a few aspects
-of the code that have the greatest potential to confuse software engineers
-about how it works. Since the code should speak by itself, try to keep this
-section as short and simple as possible.
-
-Use cross-links to the code repository and only embed real fragments of code
-when strictly needed, since they tend to become outdated very soon.
+There are places where we have used/created an extra class so we can inject
+mocks (using [Mockito](https://flutter.dev/docs/cookbook/testing/unit/mocking)).
+This helps writting better unit tests.
 
 ---
 
@@ -414,8 +406,10 @@ when strictly needed, since they tend to become outdated very soon.
 
 ### Test Plan
 
-The features we have decided to test were the ones neither dependent on 
-the drone or Firebase since these are out of our reach. Data classes and getters should be ignored for testing, as well. This meant the test plan should consist of three parts:
+The features we have decided to test were the ones neither dependent on
+the drone or Firebase since these are out of our reach. Data classes and
+getters should be ignored for testing, as well. This meant the test plan
+should consist of three parts:
 
 - Products Widget
 - Categories Widget
@@ -431,7 +425,8 @@ Tested using [flutter_gherkin](https://pub.dev/packages/flutter_gherkin) package
 
 #### Unit Tests
 
-For each test we check if each widget is being displayed as intended and if it shows the intended information.
+For each test we check if each widget is being displayed as intended
+and if it shows the intended information.
 
 - [Products Widget](droneyourfood/test/product_widget.dart)
 - [Category Widget](droneyourfood/test/category_widget.dart)
