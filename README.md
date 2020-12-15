@@ -59,24 +59,94 @@ obstacle and make deliveries as fast as possible.
 
 ## Requirements
 
-In this section, you should describe all kinds of requirements for your module:
-functional and non-functional requirements.
+Our application aims to provide the users with the ability to select products, place orders and to have them delievered by a flying drone. 
 
-Start by contextualizing your module, describing the main concepts, terms, roles,
-scope and boundaries of the application domain addressed by the project.
+This application requires:
+  - An android smartphone with internet connection.
+  - A [Tello](https://www.ryzerobotics.com/tello) Drone.
+  - A running server which receives the commands and sends them to the drone.
 
 ### Use case diagram
 
+<img src="images/use_case_diagram.png" width="450">
+
+### Use cases 
+
+#### *Check products database*
+- **Actor** - Conference participant. 
+- **Description** - Allows the actor to check which products are available for ordering.
+- **Preconditions** - The user must be logged in and must click the Products List button.
+- **Postconditions** - The available products are displayed to the user.
+- **Normal Flow**
+  - Actor taps the Products list button.
+  - Products are displayed.
+- **Alternative Flows and Exceptions**
+  - Actor taps the Categories list button.
+  - Products categories are displayed.
+  - The actor taps the wanted category of products to be displayed.
+  - Products of that category are displayed.
+
+#### *Make Order*
 - **Actor** - Conference participant.
 - **Description** - The actor chooses some products and orders them.
-- **Preconditions** - The actor has to have an account on our service and be
-  able to pay for the order.
-- **Postconditions** - A drone will receive instructions to deliver the
-  order to the actor.
-- **Normal Flow** - TODO Provide a detailed description of the user actions and system responses that will take place during execution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. This is best done as a numbered list of actions performed by the actor, alternating with responses provided by the system.
-- **Alternative Flows and Exceptions** - TODO Document other, legitimate usage scenarios that can take place within this use case, stating any differences in the sequence of steps that take place. In addition, describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions.
+- **Preconditions** - The actor must be logged in.
+- **Postconditions** - The order is placed.
+- **Normal Flow**
+  - The user goes to the products list page.
+  - The available products are displayed.
+  - The user proceeds to tap the products to add to the cart.
+  - The user goes to the cart page.
+  - The user taps the checkout button.
+  - The payment methods are displayed.
+  - The user selects a payment method.
+  - The application asks for confirmation.
+  - The user agrees to pay for the order.
+  - The order is placed.
+- **Alternative Flows and Exceptions** 
+  - The user selects a payment method.
+  - The transaction fails.
+  - The user retries.
 
-<img src="images/use_case_diagram.png" width="450">
+#### *Change Order*
+- **Actor** - Conference participant. 
+- **Description** - Allows the user to change an order.
+- **Preconditions** - The user must be logged in and must have products added to the cart.
+- **Postconditions** - Products and quantities on the user's cart change. 
+- **Normal Flow** 
+  - The actor goes to the cart page.
+  - The actor taps the trash icon next to the unwanted products.
+  - The unwanted products are removed from the cart.
+- **Alternative Flows and Exceptions**
+  - The actor taps the '+' sign next to a product.
+  - The quantity of the product to be ordered increases. 
+  - The actor taps the '-' sign next to a product.
+  - The quantity of the product to be ordered decreases.
+
+#### *Cancel Order*
+- **Actor** - Conference participant. 
+- **Description** - Allows the actor to cancel an order.
+- **Preconditions** - The user must be logged in and must have placed an order.
+- **Postconditions** - The order is cancelled.
+- **Normal Flow**
+  - The user is on the checkout page. 
+  - The user taps the button to cancel the order.
+  - The order is cancelled. 
+- **Alternative Flows and Exceptions**
+  - None
+
+#### *Deliever Order*
+- **Actor** - Admin. 
+- **Description** - The drone brings the order to the selected place.
+- **Preconditions** - An order has been placed and has not been delievered already. 
+- **Postconditions** - The drone arrives at the selected place with the user's order.
+- **Normal Flow** 
+  - The admin receives and prepares the order.
+  - The admin sends the drone with the order.
+  - The drone delievers the order to the user.
+  - The admin waits for the drone to return.
+- **Alternative Flows and Exceptions**
+  - The drone is not able to deliever the order to the user.
+  - The drone returns to the admin with the order.
 
 ### User stories
 
@@ -396,9 +466,10 @@ method).
 
 ### Tests mock injection
 
-There are places where we have used/created an extra class so we can inject
-mocks (using [Mockito](https://flutter.dev/docs/cookbook/testing/unit/mocking)).
-This helps writting better unit tests.
+There are places (e.g.: profile) where we have used/created an extra class,
+so we can inject mocks (using
+[Mockito](https://flutter.dev/docs/cookbook/testing/unit/mocking)).
+This helps writting better unit tests quickly.
 
 ---
 
@@ -436,12 +507,11 @@ and if it shows the intended information.
 
 ## Configuration and change management
 
-Configuration and change management are key activities to control change to,
-and maintain the integrity of, a project’s artifacts (code, models, documents).
-
-For the purpose of ESOF, we will use a very simple approach, just to manage
+For the purpose of ESOF, we used a very simple approach, just to manage
 feature requests, bug fixes, and improvements, using GitHub issues and
 following the [GitHub flow](https://guides.github.com/introduction/flow/).
+
+- [Development branches](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/network)
 
 ---
 
