@@ -387,6 +387,21 @@ _As a user, I want to filter products by category._
  Then I can see the available products of that category 
 ```
 
+
+#### User story 14 
+
+_As a user, I want to be able to sign out of my account._
+
+<img src="mockups/login_mockup.png" width="700">
+
+```gherkin
+ Feature: Sign Out
+ Scenario: The user can logout when logged in.
+ Given I am logged in
+ When I press sign out button
+ Then I log out
+```
+
 ### Domain model
 
 ![Domain Model](images/domain_model.png)
