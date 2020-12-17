@@ -65,6 +65,7 @@ class _ProductWidgetState extends State<ProductWidget> {
     return Container(
       margin: EdgeInsets.all(8.0),
       child: ElevatedButton(
+        key: Key("NormalStateButton"),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
                 Theme.of(context).primaryColor),
@@ -88,50 +89,36 @@ class _ProductWidgetState extends State<ProductWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-              icon: Icon(Icons.remove),
-              onPressed: () {
-                setState(() {
-                  --this.howMany2Add;
-                  if (this.howMany2Add <= 0) this.isLongClicked = false;
-                });
-              },
-            ),
+                key: Key("Remove"),
+                icon: Icon(Icons.remove),
+                onPressed: this.decreaseProducts),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   this.howMany2Add.toString(),
+                  key: Key("ToAddCountText"),
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 SizedBox(height: 2.0),
                 Text(
                   "(" + getPrice() + ")",
+                  key: Key("PriceText"),
                   style: TextStyle(color: Color(0xFFCFD3D8), fontSize: 12),
                 ),
               ],
             ),
             IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                setState(() {
-                  ++this.howMany2Add;
-                });
-              },
-            ),
+                key: Key("Add"),
+                icon: Icon(Icons.add),
+                onPressed: this.increaseProducts),
             ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.green)),
-              child: Text("Add"),
-              onPressed: () {
-                setState(() {
-                  ShoppingCart.instance
-                      .addItem(widget.product, this.howMany2Add);
-                  this.isLongClicked = false;
-                });
-              },
-            ),
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.green)),
+                child: Text("Add"),
+                onPressed: this.addToShoppingCart),
             ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
@@ -199,8 +186,28 @@ class _ProductWidgetState extends State<ProductWidget> {
     );
   }
 
+  void increaseProducts() {
+    setState(() {
+      ++this.howMany2Add;
+    });
+  }
+
+  void decreaseProducts() {
+    setState(() {
+      --this.howMany2Add;
+      if (this.howMany2Add <= 0) this.isLongClicked = false;
+    });
+  }
+
   String getPrice() {
     return (widget.product.getPrice(this.howMany2Add) / 100.0).toString() + "€";
+  }
+
+  void addToShoppingCart() {
+    setState(() {
+      ShoppingCart.instance.addItem(widget.product, this.howMany2Add);
+      this.isLongClicked = false;
+    });
   }
 
   @override

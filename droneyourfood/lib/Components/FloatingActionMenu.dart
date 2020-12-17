@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:droneyourfood/Components/ScrollColumn.dart';
+import 'package:droneyourfood/Components/ScrollRow.dart';
 
 class FloatingActionMenu extends StatefulWidget {
   // final bool startOpen;
@@ -59,14 +61,14 @@ class _FloatingActionMenuState extends State<FloatingActionMenu> {
         newchildren = <Widget>[mainButton] + widget.children;
 
       if (widget.isHorizontal)
-        ret = Row(
+        ret = ScrollRow(
           mainAxisAlignment: widget.mainAxisAlignment,
           crossAxisAlignment: widget.crossAxisAlignment,
           verticalDirection: widget.verticalDirection,
           children: newchildren,
         );
       else
-        ret = Column(
+        ret = ScrollColumn(
           mainAxisAlignment: widget.mainAxisAlignment,
           crossAxisAlignment: widget.crossAxisAlignment,
           verticalDirection: widget.verticalDirection,
