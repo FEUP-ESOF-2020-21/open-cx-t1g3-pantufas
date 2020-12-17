@@ -466,9 +466,10 @@ method).
 
 ### Tests mock injection
 
-In some places of the code (e.g.: profile), there are some extra classes that
-exist to allow us to inject mocks into the code while testing. This allows us
-to write better tests quickly.
+There are places (e.g.: profile) where we have used/created an extra class,
+so we can inject mocks (using
+[Mockito](https://flutter.dev/docs/cookbook/testing/unit/mocking)).
+This helps writting better unit tests quickly.
 
 ---
 
