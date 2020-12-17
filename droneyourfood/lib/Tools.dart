@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:droneyourfood/Authentication/Profile.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
 import 'package:droneyourfood/Drone.dart';
 
@@ -21,30 +20,6 @@ class Tools {
   static void navigatorPushAsRoot(BuildContext context, Route route) {
     navigatorPopAll(context);
     Navigator.push(context, route);
-  }
-
-  static double getAppBarHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-  }
-
-  static AppBar genAppBar(BuildContext context, String title) {
-    return AppBar(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ShoppingCart().getButton(context),
-              ProfileButton(),
-            ],
-          )
-        ],
-      ),
-    );
   }
 
   static void signout(BuildContext context) async {

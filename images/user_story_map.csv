@@ -1,0 +1,20 @@
+﻿Journey,Step,Story,Story Description,Status,Size,Release,Label,Tags,Journey Personas,Step Personas,Story Personas
+Authentication,Sign in/up,"As a customer, I must log in into my account to place orders.",https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas#user-story-2,Done,,Iteration 2,,"enhancement
+iteration2",,,
+Authentication,Recover password,"As a user, I want to be able to recover my password.",,Done,,Iteration 3,,,,,
+Profile,Sign out,"As a user, I want to be able to sign out of my account.",,Done,,Iteration 2,,,,,
+Profile,Open profile,"As a customer, I want to be able to check my profile.",https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas#user-story-5,Done,,Iteration 3,,"enhancement
+iteration3",,,
+Profile,Change profile picture,"As a user, I want to change my profile picture.",Allow the user to change his profile picture inside de app (either from the gallery or the camera).,Done,,Iteration 3,,"enhancement
+iteration3",,,
+Profile,View purchase history,"As a user, I want to be able to see my purchase history.",We saved the user's purchases history but haven't implemented a way to show it yet.,Done,,Iteration 3,,"enhancement
+iteration3",,,
+Product search,Filter by category,"As a customer, I want to filter products by category.",,Done,,Iteration 2,,iteration2,,,
+Product search,List all products,"As a customer, I want to consult the products available for sale.",https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas#user-story-1,Done,,Iteration 1,,"enhancement
+iteration1",,,
+Product page,Add to cart,"As a customer, I want to be able to order food/drinks from the available products.",https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas#user-story-3,Done,,Iteration 2,,"enhancement
+iteration2",,,
+Checkout,Buy products,"As a customer, I want to have multiple payment methods available to me.",,Ready,,Unplanned,,,,,
+Checkout,Delivery,"As a customer, I want to have food delivered to me, so I don't have to get up from my seat.",,Done,,Iteration 4,,,,,
+Checkout,Edit order,"As a customer, I want to be able to change my order.",,Ready,,Unplanned,,,,,
+Checkout,Edit order,"As a customer, I want to be able to cancel my order.",,Ready,,Unplanned,,,,,

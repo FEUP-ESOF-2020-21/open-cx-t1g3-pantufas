@@ -1,11 +1,12 @@
-import 'dart:io';
+import 'dart:io' show File;
+import 'package:droneyourfood/MyAppBar/MyAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
-import 'package:droneyourfood/Authentication/Authentication.dart';
+import 'package:droneyourfood/Authentication/Signin.dart';
 import 'package:droneyourfood/Components/ScrollColumn.dart';
 import 'package:droneyourfood/Components/FloatingActionMenu.dart';
 import 'package:droneyourfood/Shopping/Shopping.dart';
@@ -23,6 +24,7 @@ class ProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     // pantufa n é fat >:(
     return IconButton(
+      key: Key("profile"),
       icon: Icon(Icons.person),
       onPressed: () {
         openProfile(context);
@@ -32,15 +34,27 @@ class ProfileButton extends StatelessWidget {
 }
 
 class ProfilePage extends StatefulWidget {
+// Used for injection testing
+  final User _user;
+
+  ProfilePage.fromUser(this._user);
+  ProfilePage() : _user = null;
+
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _ProfilePageState createState() =>
+      _user == null ? _ProfilePageState() : _ProfilePageState.fromUser(_user);
 }
 
 class _ProfilePageState extends State<ProfilePage> {
   File _currImage;
-  User user = FirebaseAuth.instance.currentUser;
-  Future<List<Map<String, int>>> purscHist =
-      ShoppingCart.instance.getPurchaseHist();
+  User user;
+  Future<List<Map<String, int>>> purscHist;
+
+  _ProfilePageState.fromUser(this.user);
+  _ProfilePageState() {
+    this.user = FirebaseAuth.instance.currentUser;
+    purscHist = ShoppingCart.instance.getPurchaseHist();
+  }
 
   String getUsername() {
     if (user == null || user.displayName == null)
@@ -52,9 +66,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(getUsername())),
+      appBar: AppBar(title: Text(getUsername(), key: Key("UsernameText"))),
       body: ScrollColumn(
-        startHeight: Tools.getAppBarHeight(context),
+        startHeight: MyAppBar.getAppBarHeight(context),
         children: header(context) +
             [
               Row(
@@ -149,6 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
       final initials = getUsername()[0];
       avatarPic = CircleAvatar(
         radius: avatarRad,
+        key: Key("UserPhoto" + initials + "Text"),
         backgroundColor: Colors.green.shade200,
         child: Text(initials, style: TextStyle(fontSize: avatarRad)),
       );
@@ -238,7 +253,7 @@ class _ProfilePageState extends State<ProfilePage> {
       SizedBox(height: 8),
       Text(getUsername(),
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-      Text(user.email),
+      Text(user.email, key: Key("UserEmailText")),
       Spacer(),
     ];
   }
@@ -263,6 +278,7 @@ class _ProfilePageState extends State<ProfilePage> {
           signoutButton(context),
           Text(
             "UID: " + user.uid,
+            key: Key("UserUIDText"),
             style: TextStyle(color: Colors.grey, fontSize: 12),
           ),
         ],

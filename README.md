@@ -59,75 +59,177 @@ obstacle and make deliveries as fast as possible.
 
 ## Requirements
 
-In this section, you should describe all kinds of requirements for your module:
-functional and non-functional requirements.
+Our application aims to provide the users with the ability to select products,
+place orders and to have them delievered by a flying drone. 
 
-Start by contextualizing your module, describing the main concepts, terms, roles,
-scope and boundaries of the application domain addressed by the project.
+This application requires:
+  - An android smartphone with internet connection.
+  - A [Tello](https://www.ryzerobotics.com/tello) Drone.
+  - A running server which receives the commands and sends them to the drone.
 
 ### Use case diagram
 
-![interface mockup](images/use_case_diagram.png)
+<img src="images/use_case_diagram.png" width="450">
 
+### Use cases 
+
+#### *Check products database*
+- **Actor** - Conference participant. 
+- **Description** - Allows the actor to check which products are available for ordering.
+- **Preconditions** - The user must be logged in and must click the Products List button.
+- **Postconditions** - The available products are displayed to the user.
+- **Normal Flow**
+  - Actor taps the Products list button.
+  - Products are displayed.
+- **Alternative Flows and Exceptions**
+  - Actor taps the Categories list button.
+  - Products categories are displayed.
+  - The actor taps the wanted category of products to be displayed.
+  - Products of that category are displayed.
+
+#### *Make Order*
 - **Actor** - Conference participant.
 - **Description** - The actor chooses some products and orders them.
-- **Preconditions** - The actor has to have an account on our service and be
-  able to pay for the order.
-- **Postconditions** - A drone will receive instructions to deliver the
-  order to the actor.
-- **Normal Flow** - TODO Provide a detailed description of the user actions and system responses that will take place during execution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. This is best done as a numbered list of actions performed by the actor, alternating with responses provided by the system.
-- **Alternative Flows and Exceptions** - TODO Document other, legitimate usage scenarios that can take place within this use case, stating any differences in the sequence of steps that take place. In addition, describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions.
+- **Preconditions** - The actor must be logged in.
+- **Postconditions** - The order is placed.
+- **Normal Flow**
+  - The user goes to the products list page.
+  - The available products are displayed.
+  - The user proceeds to tap the products to add to the cart.
+  - The user goes to the cart page.
+  - The user taps the checkout button.
+  - The payment methods are displayed.
+  - The user selects a payment method.
+  - The application asks for confirmation.
+  - The user agrees to pay for the order.
+  - The order is placed.
+- **Alternative Flows and Exceptions** 
+  - The user selects a payment method.
+  - The transaction fails.
+  - The user retries.
+
+#### *Change Order*
+- **Actor** - Conference participant. 
+- **Description** - Allows the user to change an order.
+- **Preconditions** - The user must be logged in and must have products added to the cart.
+- **Postconditions** - Products and quantities on the user's cart change. 
+- **Normal Flow** 
+  - The actor goes to the cart page.
+  - The actor taps the trash icon next to the unwanted products.
+  - The unwanted products are removed from the cart.
+- **Alternative Flows and Exceptions**
+  - The actor taps the '+' sign next to a product.
+  - The quantity of the product to be ordered increases. 
+  - The actor taps the '-' sign next to a product.
+  - The quantity of the product to be ordered decreases.
+
+#### *Cancel Order*
+- **Actor** - Conference participant. 
+- **Description** - Allows the actor to cancel an order.
+- **Preconditions** - The user must be logged in and must have placed an order.
+- **Postconditions** - The order is cancelled.
+- **Normal Flow**
+  - The user is on the checkout page. 
+  - The user taps the button to cancel the order.
+  - The order is cancelled. 
+- **Alternative Flows and Exceptions**
+  - None
+
+#### *Deliever Order*
+- **Actor** - Admin. 
+- **Description** - The drone brings the order to the selected place.
+- **Preconditions** - An order has been placed and has not been delievered already. 
+- **Postconditions** - The drone arrives at the selected place with the user's order.
+- **Normal Flow** 
+  - The admin receives and prepares the order.
+  - The admin sends the drone with the order.
+  - The drone delievers the order to the user.
+  - The admin waits for the drone to return.
+- **Alternative Flows and Exceptions**
+  - The drone is not able to deliever the order to the user.
+  - The drone returns to the admin with the order.
 
 ### User stories
 
+#### User story map
+
+![User story map](images/user_story_map.png)
+
 #### User story 1
 
-![interface mockup](mockups/interface_mockup.png)
 
 _As a customer, I want to consult the products available for sale._
 
 - **Value = Must Have**
 - **Effort = M**
 
+<img src="mockups/products_mockup.png" width="500">
+
 ```gherkin
 Feature: Consulting available products.
-Given: I am a DroneYourFood user.
-And: I am logged in.
-When: I am on the products page.
-Then: I see the available products.
+
+  Scenario: Available products are present when the user taps the products list button
+  Given I am logged in
+  And I am in the "home" page
+  When I am tap the "products list" button
+  Then I expect the available products to be present
+
+  Scenario: Product categories are present when the user taps the category list button
+  Given I am logged in
+  And I am in the "home" page
+  When I tap the "category list" button
+  Then I expect the "available products" categories to be present
+
+  Scenario: Products of a certain category are present when I tap the button of that category
+  Given I am logged in
+  And I am on the "category list" page
+  When I tap a "category" button
+  Then I expect the available products from that category to be present
 ```
 
+
 #### User story 2
-
-![login mockup](mockups/login_mockup.png)
-
 _As a customer, I must log in into my account to place orders._
-
 - **Value = Must Have**
 - **Effort = M**
 
+<img src="mockups/login_mockup.png" width="700">
+
 ```gherkin
- Feature: Login functionality.
- Given: I have a registered account in DroneYourFood.
- When: I enter username as username.
- And: I enter the password as the password
- Then: I should be redirected to the products page of DroneYourFood.
+ Feature: Log In 
+ Scenario: The user inputs his email and password to log in
+ Given: I have a registered account in DroneYourFood
+ When: I enter my email.
+ And: I enter my password
+ Then: I should be redirected to the "home" page
+```
+
+```gherkin
+ Feature: Sign In 
+ Scenario: The user inputs his email and password to sign in
+ Given I am not logged in
+ When I enter an email
+ And I enter an password
+ Then my account should be created
 ```
 
 #### User story 3
-
-![shopping cart mockup](mockups/shoppingcart_mockup.png)
 
 _As a customer, I want to be able to order food/drinks from the available products._
 
 - **Value = Must Have**
 - **Effort = L**
 
+<img src="mockups/shoppingcart_mockup.png" width="400">
+
 ```gherkin
- Feature: Select orders.
- Given: I am logged in.
- When: I am on the products page.
- Then: Selected products must be added to cart.
+ Feature: Add products to cart.
+ Scenario: the product is added to the user's cart when it is tapped
+ Given I am logged in
+ And I am on the "products list" page
+ When I tap a "product" card
+ Then that product should be added to my cart
+ And the text "Added product to cart" should be present
 ```
 
 #### User story 4
@@ -138,198 +240,279 @@ from my seat._
 - **Value = Should Have**
 - **Effort = XL**
 
+<img src="mockups/delivery_mockup.png" width="400">>
+
 ```gherkin
- Feature: Deliver the order.
- Given: The order has been placed.
- When: The order is ready for delivery.
- Then: The drone brings the food to the selected place.
+ Feature: Receive the order.
+ Scenario: the user receives the food after the order has been placed
+ Given the order has been placed
+ When the order is ready for delivery
+ Then the drone brings the food to the selected place
 ```
 
 #### User story 5
+
+_As a customer, I want to be able to check my profile._
+
+- **Value = Should Have**
+- **Effort = S**
+
+<img src="mockups/profile_mockup.png" width="400">
+
+```gherkin
+ Feature: Check profile.
+ Scenario: User can navigate to his profile page by tapping the profile button
+ Given I am logged in
+ When I press the profile button
+ Then my profile's page is loaded
+```
+
+#### User story 6
 
 _As a customer, I want to have multiple payment methods available to me._
 
 - **Value = Won't Have**
 - **Effort = XL**
 
+<img src="mockups/payment_mockup.png" width="400">
+
 ```gherkin
  Feature: Select payment method.
- Given: I have specified my order details.
- When: I am on the checkout page.
- Then: I can select the payment method.
- And: I can finish paying for my order.
+ Scenario: The user selects a payment method by tapping the desired method 
+ Given I have specified my order details
+ When I tap a payment method
+ Then I can use that method to pay for my order
 ```
 
-#### User story 6
+#### User story 7
 
 _As a customer, I want to be able to choose the delivery spot for my orders._
 
 - **Value = Could Have**
 - **Effort = M**
 
+<img src="mockups/method_mockup.png" width="400">
+
 ```gherkin
  Feature: Select delivery place.
- Given: I have finished selecting all the products I want to order.
- When: I am on the checkout page.
- Then: I register the order delivery spot.
+ Scenario: The user selects a place 
+ Given I have placed an order
+ When I am on the checkout page
+ Then I select the order delivery spot
 ```
 
-#### User story 7
+#### User story 8
 
 _As a customer, I want to be able to change my order._
 
 - **Value = Could Have**
 - **Effort = S**
 
+<img src="mockups/history_mockup.png" width="400">
+
 ```gherkin
  Feature: Change order.
- Given: I have placed an order.
- When: I am on the checkout page.
- Then: I go back to the objects page.
+ Scenario: The user changes the order after placing one 
+ Given I have placed an order
+ When I am on the checkout page
+ Then I go back to the cart page
 ```
 
-#### User story 8
+#### User story 9
+
+_As a customer, I want to be able to cancel my order._
 
 - **Value = Could Have**
 - **Effort = S**
 
-_As a customer, I want to be able to cancel my order._
+<img src="mockups/history_mockup.png" width="400">
 
 ```gherkin
  Feature: Cancel order.
- Given: I have placed an order.
- When: I am on the checkout page.
- Then: I cancel my order.
+ Scenario: The user cancels the order after placing one
+ Given I have placed an order.
+ When I am on the checkout page
+ Then I cancel my order
 ```
 
-TODO
-**INVEST in good user stories**.
-You may add more details after, but the shorter and complete, the better. In
-order to decide if the user story is good, please follow the
-[INVEST guidelines](https://xp123.com/articles/invest-in-good-stories-and-smart-tasks/).
+#### User story 10 
 
-**User interface mockups**.
-After the user story text, you should add a draft of the corresponding user
-interfaces, a simple mockup or draft, if applicable.
+_As a user, I want to be able to recover my password._
 
-**Acceptance tests**.
-For each user story you should write also the acceptance tests (textually in
-Gherkin), i.e., a description of scenarios (situations) that will help to
-confirm that the system satisfies the requirements addressed by the user story.
+```gherkin
+ Feature: Recover password.
+ Scenario: My password is updated when I input a new password.
+ Given I have pressed the "Recover my password" button
+ When I input my new password
+ Then I my password is updated
+```
 
-**Value and effort**.
-At the end, it is good to add a rough indication of the value of the user story
-to the customers (e.g. [MoSCoW](https://en.wikipedia.org/wiki/MoSCoW_method)
-method) and the team should add an estimation of the effort to implement it,
-for example, using t-shirt sizes (XS, S, M, L, XL).
+#### User story 11 
+
+_As a user, I want to change my profile picture._
+
+```gherkin
+ Feature: Change profile picture.
+ Scenario: The profile picture is updated when user uploads a different one.
+ Given I have pressed the "Change my profile picture" button
+ When I upload a new picture
+ Then my profile picture is updated
+```
+
+#### User story 12 
+
+_As a user, I want to be able to see my purchase history._
+
+<img src="mockups/history_mockup.png" width="400">
+
+```gherkin
+ Feature: Purchase history.
+ Scenario: The purchase history is displayed when the user goes to the history page.
+ Given I have made purchases in the past
+ When I go to the purchases page
+ Then I can see my purchase history
+```
+
+#### User story 13 
+
+_As a user, I want to filter products by category._
+
+<img src="mockups/products_mockup.png" width="500">
+
+```gherkin
+ Feature: Filter products by category.
+ Scenario: The available products from a certain category are shown to the user.
+ Given I am on the "Category List" page
+ When I press a category
+ Then I can see the available products of that category 
+```
 
 ### Domain model
 
-TODO
-To better understand the context of the software system, it is very useful to
-have a simple UML class diagram with all the key concepts (names, attributes)
-and relationships involved of the problem domain addressed by your module.
+![Domain Model](images/domain_model.png)
 
 ---
 
 ## Architecture and Design
 
-TODO
-
-The architecture of a software system encompasses the set of key decisions
-about its overall organization.
-
-A well written architecture document is brief but reduces the amount of time
-it takes new programmers to a project to understand the code to feel able to
-make modifications and enhancements.
-
-To document the architecture requires describing the decomposition of the
-system in their parts (high-level components) and the key behaviors and
-collaborations between them.
-
-In this section you should start by briefly describing the overall components
-of the project and their interrelations. You should also describe how you solved
-typical problems you may have encountered, pointing to well-known architectural
-and design patterns, if applicable.
-
 ### Logical architecture
 
-The purpose of this subsection is to document the high-level logical structure
-of the code, using a UML diagram with logical packages, without the worry of
-allocating to components, processes or machines.
+Our application is divided into the following packages: 
 
-It can be beneficial to present the system both in a horizontal or vertical
-decomposition:
+* **Products** -> responsible for the logic of the product lists
+* **Categories** -> reponsible for the filtering of *products* by categories
+* **Shopping** -> responsible for managing the shopping cart of each user
+* **Profile** -> responsible for displaying and managing user information
+* **Authentication** -> responsible for the authentication of the user
 
-- horizontal decomposition may define layers and implementation concepts, such
-  as the user interface, business logic and concepts;
-- vertical decomposition can define a hierarchy of subsystems that cover all
-  layers of implementation.
+![logical diagram](images/logical_diagram.png)
 
 ### Physical architecture
 
-The goal of this subsection is to document the high-level physical structure
-of the software system (machines, connections, software components installed,
-and their dependencies) using UML deployment diagrams or component diagrams
-(separate or integrated), showing the physical structure of the system.
+![physical architecure diagram](images/physical_architecture.png)
 
-It should describe also the technologies considered and justify the selections
-made. Examples of technologies relevant for openCX are, for example, frameworks
-for mobile applications (Flutter vs ReactNative vs ...), languages to program
-with microbit, and communication with things (beacons, sensors, etc.).
+Regarding the phyical architecure of our project, it is divided in the following parts:
+
+* A **Flutter** app that runs on the attendant *smartphone*
+* To store *authentication* and *product* data we use Google's **Firebase**
+* A **python** webserver to manage the orders and send commands to the **drone**
+* A **Tello drone** to deliver the food to the attendant
+
+Regarding the technologies we'll be using on the development of the application,
+we decided to use [Flutter](https://www.flutter.com/) because it speed up the
+development process and provides an abstraction to android and iOS systems.
+It is also used in [open-cx](https://github.com/open-cx/open-cx) making the app
+easier to integrate with, if necessary. We decided to go with Firebase for
+storage and authentication application, because it is free, provides all the
+functionalities needed and Flutter integrates well with it. The drones will
+be controlled using a python server. We chose Python because of our familiarity with the language and due to the *Tello sdk* provides code examples in this language. Finally, we were provided a *Tello drone* by the university.  
 
 ### Prototype
 
-To help on validating all the architectural, design and technological decisions
-made, we usually implement a vertical prototype, a thin vertical slice of the system.
-
-In this subsection please describe in more detail which, and how, user(s)
-story(ies) were implemented.
-
----
+At the end of our [first iteration](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/releases/tag/v0.1),
+we have implemented the user story
+[As a customer, I want to consult the products available for sale](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/tree/master#user-story-1).
+This gave us some basic understanding of Flutter and serves as a very early
+example of what the application will be and what it will look like. In this
+iteration we have used a JSON file instead of a Firebase instance to store
+the product's data (this will be changed later). The prototype has the basis
+of the theme we intend to use. This theme will be improved further.
 
 ## Implementation
 
-Regular product increments are a good practice of product management.
+### [ScrollColumn](droneyourfood/lib/Components/ScrollColumn.dart)
 
-While not necessary, sometimes it might be useful to explain a few aspects
-of the code that have the greatest potential to confuse software engineers
-about how it works. Since the code should speak by itself, try to keep this
-section as short and simple as possible.
+This component was created for pages that have their layout based on a _main_
+`Column`. `Columns` can overflow the screen, which is a big problem for smaller
+devices. This component wraps a `Column` and gives it a scrollbar when it
+would overflow the screen. This way, the user can scroll in order to see all
+the information and the overflow is avoided.
 
-Use cross-links to the code repository and only embed real fragments of code
-when strictly needed, since they tend to become outdated very soon.
+### [ShoppingCart](droneyourfood/lib/Shopping/Shopping.dart)
+
+The code works around the user's [`ShoppingCart` instance](droneyourfood/lib/Shopping/Shopping.dart).
+This class is a [singleton](https://refactoring.guru/design-patterns/singleton),
+which means it can be easily accessed from everywhere on the code, both to
+get information (avoiding some requeries/parsing from the Firebase instance)
+and inserting new information (the formatting and uploading is handled
+internally).  
+Since this class holds most of the core information of the application, it is
+possible to register yourself as an [observer](https://refactoring.guru/design-patterns/observer)
+(by passing a funtion to the `notifyWhenLoaded` method), that will be run when
+the ShoppingCart loading process is done. The project uses this in conjunction
+with the `setState` method of Flutter's stateful widgets in order to show
+loading screens/placeholders while the information is not ready, e.g.: list of
+products on the shopping cart (`ShoppingListWidget` class, `getShoppingItems`
+method).
+
+### Tests mock injection
+
+There are places (e.g.: profile) where we have used/created an extra class,
+so we can inject mocks (using
+[Mockito](https://flutter.dev/docs/cookbook/testing/unit/mocking)).
+This helps writting better unit tests quickly.
 
 ---
 
 ## Test
 
-There are several ways of documenting testing activities, and quality assurance
-in general, being the most common: a strategy, a plan, test case specifications,
-and test checklists.
+### Test Plan
 
-In this section it is only expected to include the following:
+The features we have decided to test were the ones neither dependent on
+the drone or Firebase since these are out of our reach. Data classes and
+getters should be ignored for testing, as well. This meant the test plan
+should consist of three parts:
 
-- test plan describing the list of features to be tested and the testing methods
-and tools;
-- test case specifications to verify the functionalities, using unit tests and
-acceptance tests.
+- Products Widget
+- Categories Widget
+- Profile Widget
 
-**// TODO ASK SE É MESMO PRECISO UNIT TESTS**
+### Test Case Specification
 
-A good practice is to simplify this, avoiding repetitions, and automating the
-testing actions as much as possible.
+#### Acceptance Tests
+
+Tested using [flutter_gherkin](https://pub.dev/packages/flutter_gherkin) package.
+
+- [Profile](droneyourfood/test_driver/features/profile.feature)
+
+#### Unit Tests
+
+For each test we check if each widget is being displayed as intended
+and if it shows the intended information.
+
+- [Products Widget](droneyourfood/test/product_widget.dart)
+- [Category Widget](droneyourfood/test/category_widget.dart)
+- [Profile Widget](droneyourfood/test/profile_widget.dart)
 
 ---
 
 ## Configuration and change management
 
-Configuration and change management are key activities to control change to,
-and maintain the integrity of, a project’s artifacts (code, models, documents).
-
-For the purpose of ESOF, we will use a very simple approach, just to manage
+For the purpose of ESOF, we used a very simple approach, just to manage
 feature requests, bug fixes, and improvements, using GitHub issues and
 following the [GitHub flow](https://guides.github.com/introduction/flow/).
+
+- [Development branches](https://github.com/FEUP-ESOF-2020-21/open-cx-t1g3-pantufas/network)
 
 ---
 
@@ -343,5 +526,4 @@ to check what we are up to.
 
 ## Evolution - contributions to open-cx
 
-Describe your contribution to open-cx (iteration 5), linking to the appropriate
-pull requests, issues, documentation.
+We did not integrate our application with open-cx.
