@@ -59,7 +59,8 @@ obstacle and make deliveries as fast as possible.
 
 ## Requirements
 
-Our application aims to provide the users with the ability to select products, place orders and to have them delievered by a flying drone. 
+Our application aims to provide the users with the ability to select products,
+place orders and to have them delievered by a flying drone. 
 
 This application requires:
   - An android smartphone with internet connection.
