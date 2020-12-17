@@ -71,7 +71,7 @@ This application requires:
 
 <img src="images/use_case_diagram.png" width="450">
 
-### Use cases 
+### Use cases
 
 #### *Check products database*
 - **Actor** - Conference participant. 
@@ -335,7 +335,7 @@ _As a customer, I want to be able to cancel my order._
  Then I cancel my order
 ```
 
-#### User story 10 
+#### User story 10
 
 _As a user, I want to be able to recover my password._
 
@@ -347,7 +347,7 @@ _As a user, I want to be able to recover my password._
  Then I my password is updated
 ```
 
-#### User story 11 
+#### User story 11
 
 _As a user, I want to change my profile picture._
 
@@ -359,7 +359,7 @@ _As a user, I want to change my profile picture._
  Then my profile picture is updated
 ```
 
-#### User story 12 
+#### User story 12
 
 _As a user, I want to be able to see my purchase history._
 
@@ -373,7 +373,7 @@ _As a user, I want to be able to see my purchase history._
  Then I can see my purchase history
 ```
 
-#### User story 13 
+#### User story 13
 
 _As a user, I want to filter products by category._
 
@@ -486,6 +486,29 @@ There are places (e.g.: profile) where we have used/created an extra class,
 so we can inject mocks (using
 [Mockito](https://flutter.dev/docs/cookbook/testing/unit/mocking)).
 This helps writting better unit tests quickly.
+
+### Interfacing with drones
+
+Unfortunately, the drones we had access to during the development of this
+project had no GPS/way-point support. This means the interfacing with
+[Tello](https://www.ryzerobotics.com/tello) drones exists, but is not used
+in the app's code.
+
+There is a [`DroneCommand`](/droneyourfood/lib/Drone.dart) class that sends
+commands to a drone. There is a wrapper to interface with this class in
+the [`Tools`](/droneyourfood/lib/Tools.dart) class. This class has a final
+field that should contain the **ip address/domain and port** to communicate
+with the server.
+
+The [`server`](/droneyourfood/dyf_server.py) is written in python. It responds
+to **POST** requests containing commands (in plain text). The server class
+contains an instance of the `Tello` class. This class takes care of the lower
+level drone interaction, logs every interaction and allows an **admin** user
+to send commands directly to the drone thought the standard input (**stdin**).
+The main missing feature of this server is the limitation of working with a
+single drone. This can be easily improved by having a queue of `Tello` class
+instances, each interfacing with a single drone. We didn't take care of this
+because, we wouldn't be able to test the feature.
 
 ---
 
