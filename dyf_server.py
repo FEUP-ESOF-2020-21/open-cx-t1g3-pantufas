@@ -3,6 +3,7 @@
 import socket
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from time import sleep
+import threading
 
 
 class Tello:
@@ -20,6 +21,9 @@ class Tello:
         tello_ip = "192.168.10.1"
         tello_port = 8889
         self.tello_address = (tello_ip, tello_port)
+
+        self.adminThr = threading.Thread(target=self.adminInputThread, args=())
+        self.adminThr.start()
 
     def debugPrint(self, msg):
         if self.debug:
@@ -43,6 +47,14 @@ class Tello:
         self.log.append(cmd)
         self.sock.sendto(cmd.encode("utf-8"), self.tello_address)
         self.getRes()
+
+    def adminInputThread(self):
+        cmd = ""
+        while cmd != "quit":
+            cmd = input()
+            self.log.append("Admin CMD: " + cmd)
+            self.sendCmd(cmd)
+        exit(0)
 
     def init(self):
         self.sendCmd("command")
