@@ -404,6 +404,12 @@ _As a user, I want to be able to sign out of my account._
 
 ### Domain model
 
+Our app allows for the registration of **users** so that we can store their **orders**.
+
+Each **order** contains **products** which the **user** can choose.
+
+**Orders** are then managed by the **server** that mediates the communication with the delivery drones.
+
 ![Domain Model](images/domain_model.png)
 
 ---
